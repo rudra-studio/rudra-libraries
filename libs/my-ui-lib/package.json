@@ -1,6 +1,9 @@
 {
   "name": "@simo-rudra/my-ui-lib",
   "version": "0.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "./index.cjs",
   "module": "./index.es.js",
   "jsdelivr": "./index.umd.js",
