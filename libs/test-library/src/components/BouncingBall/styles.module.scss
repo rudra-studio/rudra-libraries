@@ -1,0 +1,46 @@
+.container {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: 150px;
+  padding: 20px;
+}
+
+.ball {
+  border-radius: 50%;
+  animation: bounce ease-in-out infinite alternate;
+  box-shadow: inset -5px -5px 10px rgba(0,0,0,0.2);
+}
+
+.shadow {
+  height: 5px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 50%;
+  margin-top: 10px;
+  filter: blur(2px);
+  animation: shadowShrink ease-in-out infinite alternate;
+}
+
+@keyframes bounce {
+  from {
+    transform: translateY(0) scaleX(1.1) scaleY(0.9);
+  }
+  10% {
+    transform: translateY(0) scaleX(1) scaleY(1);
+  }
+  to {
+    transform: translateY(-100px);
+  }
+}
+
+@keyframes shadowShrink {
+  from {
+    transform: scale(1.2);
+    opacity: 0.4;
+  }
+  to {
+    transform: scale(0.4);
+    opacity: 0.1;
+  }
+}

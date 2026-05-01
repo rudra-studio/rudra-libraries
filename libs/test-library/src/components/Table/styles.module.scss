@@ -1,0 +1,57 @@
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin: 1rem 0;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  min-width: 600px;
+
+  thead {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #e0e0e0;
+
+    th {
+      padding: 14px 16px;
+      font-weight: 600;
+      color: #333;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid #eee;
+      transition: background-color 0.2s ease;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &:hover {
+        background-color: #f9fafb;
+      }
+
+      td {
+        padding: 14px 16px;
+        color: #4b5563;
+        font-size: 0.875rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .table {
+    min-width: unset;
+  }
+}

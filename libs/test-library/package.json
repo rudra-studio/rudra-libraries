@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "axios": "1.6.8"
+  },
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "require": "./src/index.ts"
+    },
+    "./*": {
+      "import": "./src/*.ts",
+      "require": "./src/*.ts"
+    }
+  },
+  "jsdelivr": "./index.umd.js",
+  "main": "./index.js",
+  "name": "@simo-rudra/test-library",
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "types": "./index.d.ts",
+  "unpkg": "./index.umd.js",
+  "version": "0.0.1"
+}
