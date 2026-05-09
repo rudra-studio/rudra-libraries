@@ -1,0 +1,9 @@
+{
+  "name": "rudra-core",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/rudra-core/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project rudra-core --web",
+  "targets": {}
+}

@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "tailwind": "latest"
+  },
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "require": "./src/index.ts"
+    },
+    "./*": {
+      "import": "./src/*.ts",
+      "require": "./src/*.ts"
+    }
+  },
+  "jsdelivr": "./index.umd.js",
+  "main": "./index.js",
+  "name": "@simo-rudra/rudra-core",
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "types": "./index.d.ts",
+  "unpkg": "./index.umd.js",
+  "version": "0.0.1"
+}

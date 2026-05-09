@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "paths": {
       "@rudra/my-ui-lib": ["./libs/my-ui-lib/src/index.ts"],
-      "@rudra/my-uii-lib": ["./libs/my-uii-lib/src/index.ts"]
+      "@rudra/my-uii-lib": ["./libs/my-uii-lib/src/index.ts"],
+      "@rudra-libraries/rudra-core": ["./libs/rudra-core/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
