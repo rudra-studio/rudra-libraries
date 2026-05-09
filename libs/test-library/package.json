@@ -19,6 +19,9 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "types": "./index.d.ts",
   "unpkg": "./index.umd.js",
   "version": "0.0.1"

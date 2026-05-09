@@ -15,7 +15,7 @@ export interface CarouselProps {
 }
 
 const dummyItems: CarouselItem[] = [
-  { id: 1, image: 'https://picsum.photos/id/10/800/400', title: 'Majestic Mountains', description: 'Experience the serenity of the high peaks.' },
+  { id: 1, image: 'https://picsum.photos/id/10/800/400', title: 'Majestic Mountains', description: 'Experiences the serenity of the high peaks.' },
   { id: 2, image: 'https://picsum.photos/id/20/800/400', title: 'Urban Exploration', description: 'Discover the rhythm of city life.' },
   { id: 3, image: 'https://picsum.photos/id/30/800/400', title: 'Coastal Retreat', description: 'Feel the ocean breeze on your face.' },
 ];
