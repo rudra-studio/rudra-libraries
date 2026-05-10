@@ -3,7 +3,7 @@ import React from 'react';
 export interface ButtonProps {
   ariaLabel: string;
   children: React.ReactNode;
-  onClick: (event: any) => void;
+  onClick: (event:  any) => void;
   className: string;
 }
 
