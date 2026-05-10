@@ -5,6 +5,8 @@ import dts from 'vite-plugin-dts';
 import * as path from 'path';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
+// ---> 1. ADD THIS IMPORT <---
+import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 
 export default defineConfig(() => ({
   root: import.meta.dirname,
@@ -18,6 +20,8 @@ export default defineConfig(() => ({
       tsconfigPath: path.join(import.meta.dirname, 'tsconfig.lib.json'),
       pathsToAliases: false,
     }),
+    // ---> 2. INITIALIZE THE PLUGIN <---
+    cssInjectedByJsPlugin(),
   ],
   build: {
     outDir: '../../dist/libs/rudra-core',
@@ -32,8 +36,7 @@ export default defineConfig(() => ({
     },
     rollupOptions: {
       external: ['react', 'react-dom', 'react/jsx-runtime'  ],
-	  output: {
-        // ---> THIS IS THE MAGIC FOR PERFECT CODE SPLITTING <---
+      output: {
         preserveModules: true, 
         preserveModulesRoot: 'src',
         entryFileNames: '[name].js',
