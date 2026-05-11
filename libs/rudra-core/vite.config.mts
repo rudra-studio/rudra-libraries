@@ -8,7 +8,6 @@ import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
 import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 
-// ---> 1. THE HELPER <---
 // This recursively maps every file in 'src' to be its own standalone entry point
 function getEntries(dir) {
   const entries = {};
@@ -50,19 +49,18 @@ export default defineConfig(() => ({
     emptyOutDir: true,
     reportCompressedSize: true,
     
-    // ---> 2. FORCE CSS SPLITTING <---
+    // 1. Force CSS splitting
     cssCodeSplit: true, 
 
-    commonjsOptions: { transformMixedEsModules: true },
-    lib: {
-      // ---> 3. FEED THE MULTI-ENTRY MAP TO VITE <---
-      entry: getEntries(path.resolve(import.meta.dirname, 'src')),
-      formats: ['es'],
-    },
+    // 2. NO 'lib: {}' BLOCK HERE! We bypass Vite's library mode restriction.
+    
     rollupOptions: {
+      // 3. Move the entries directly into Rollup's inputs
+      input: getEntries(path.resolve(import.meta.dirname, 'src')),
       external: ['react', 'react-dom', 'react/jsx-runtime'  ],
       output: {
-        // ---> 4. REMOVE preserveModules (No longer needed!) <---
+        // 4. Explicitly tell Rollup to output ES modules
+        format: 'es',
         entryFileNames: '[name].js',
         chunkFileNames: 'chunks/[name].[hash].js',
       },
