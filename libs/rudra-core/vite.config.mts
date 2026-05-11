@@ -52,17 +52,21 @@ export default defineConfig(() => ({
     // 1. Force CSS splitting
     cssCodeSplit: true, 
 
-    // 2. NO 'lib: {}' BLOCK HERE! We bypass Vite's library mode restriction.
+    commonjsOptions: { transformMixedEsModules: true },
+    
+    // 2. BRING BACK LIBRARY MODE! 
+    lib: {
+      // 3. Feed the dynamic multi-entry object directly into lib.entry
+      entry: getEntries(path.resolve(import.meta.dirname, 'src')),
+      formats: ['es'],
+    },
     
     rollupOptions: {
-      // 3. Move the entries directly into Rollup's inputs
-      input: getEntries(path.resolve(import.meta.dirname, 'src')),
       external: ['react', 'react-dom', 'react/jsx-runtime'  ],
       output: {
-        // 4. Explicitly tell Rollup to output ES modules
-        format: 'es',
         entryFileNames: '[name].js',
         chunkFileNames: 'chunks/[name].[hash].js',
+        assetFileNames: 'assets/[name].[hash].[ext]',
       },
     },
   },
