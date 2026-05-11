@@ -23,8 +23,8 @@ const injectCssPlugin = () => {
               // Convert the CSS to a safe string
               const css = cssAsset.source.toString().replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '');
               // Create the injection logic
-              const injectCode = '\ntry{if(typeof document!=="undefined"){const e=document.createElement("style");e.textContent="' + css + '";document.head.appendChild(e);}}catch(err){}\n';
-              // Append to the JS file
+              const injectCode = '\ntry{if(typeof document!=="undefined"){const e=document.createElement("style");e.textContent="' + css + '";const target = window.__RUDRA_SHADOW_ROOT__ || document.head; target.appendChild(e);}}catch(err){}\n'; 
+			  // Append to the JS file
               chunk.code += injectCode;
               // Delete the standalone CSS file
               delete bundle[cssId];
