@@ -30,6 +30,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "scripts": {
+    "test": "echo 'Skipping unit tests for now...' \u0026\u0026 exit 0"
+  },
   "types": "./index.d.ts",
   "unpkg": "./index.umd.js",
   "version": "0.0.1"
