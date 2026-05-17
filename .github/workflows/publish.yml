@@ -105,3 +105,10 @@ jobs:
           cd dist/libs/${{ steps.extract.outputs.project }}
           npm config set //registry.npmjs.org/:_authToken $NODE_AUTH_TOKEN
           npm publish --access public
+
+      - name: Notify Backend
+        run: |
+          curl -X POST https://rudra-backend-qzbu.onrender.com/api/webhooks/github-deploy \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer ${{ secrets.WEBHOOK_SECRET }}" \
+          -d '{"status": "success", "repository": "rudra-libraries", "commit": "${{ github.sha }}"}'
