@@ -1,12 +1,12 @@
 name: Verify Library PR
 on:
   pull_request:
-    branches: [ main, master ] # Ensures it triggers regardless of your default branch name
+    branches: [ main, master ]
 
-# IMPORTANT: These permissions are required for the GitHub token to merge the PR
 permissions:
   contents: write
   pull-requests: write
+  actions: write # <-- REQUIRED to trigger other workflows
 
 jobs:
   verify:
@@ -21,16 +21,36 @@ jobs:
       - run: npm ci
 
       # 1. Run the build to ensure the React/SCSS syntax is perfectly valid
-      # (Added --passWithNoTests to prevent Jest from crashing if no tests exist)
-      - run: npx nx run-many -t build
+      - run: npx nx run-many -t build test --passWithNoTests
 
-      # 2. Automatically merge the PR if it was created by our Go backend
-      - name: Auto-merge Publishing PRs
-        # Only run this step if the branch starts with "feature/publish-"
+      # 2. Automatically merge the PR and trigger Publish!
+      - name: Auto-merge and Trigger Publish
         if: startsWith(github.head_ref, 'feature/publish-')
         env:
-          # Use the built-in GitHub token to authenticate the CLI
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "Build passed! Merging PR #${{ github.event.pull_request.number }}..."
+          echo "1. Merging PR #${{ github.event.pull_request.number }}..."
           gh pr merge ${{ github.event.pull_request.number }} --merge --delete-branch
+
+          echo "2. Extracting Data from PR..."
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          PR_BODY="${{ github.event.pull_request.body }}"
+
+          PROJECT=$(echo "$PR_TITLE" | awk '{print $3}')
+          VERSION=$(echo "$PR_TITLE" | awk '{print $5}')
+
+          # FIX: Added '|| true' so the script doesn't crash if JobID isn't found
+          JOB_ID=$(echo "$PR_BODY" | grep -oP 'JobID: \K.*' || true)
+
+          echo "Target Project: $PROJECT"
+          echo "Target Version: $VERSION"
+          echo "Target Job ID: $JOB_ID"
+
+          echo "3. Triggering Publish Pipeline..."
+
+          # FIX: Added '--ref' to specify the branch, and quotes to prevent bash errors
+          gh workflow run publish.yml \
+            --ref ${{ github.base_ref }} \
+            -f project_name="$PROJECT" \
+            -f version="$VERSION" \
+            -f job_id="$JOB_ID"
