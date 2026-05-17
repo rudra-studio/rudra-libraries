@@ -114,16 +114,18 @@ jobs:
       - name: Notify Backend (Success)
         if: success() && inputs.job_id != ''
         run: |
-          curl -X POST https://rudra-backend-qzbu.onrender.com/api/webhooks/github \
+          curl -X POST ${{ vars.BACKEND_WEBHOOK_URL }} \
+          -w "\nHTTP Status: %{http_code}\n" \
           -H "Content-Type: application/json" \
-          -H "Authorization: Bearer ${{ secrets.WEBHOOK_SECRET }}" \
+          -H "x-auth-code: ${{ secrets.WEBHOOK_SECRET }}" \
           -d '{"jobId": "${{ inputs.job_id }}", "status": "success"}'
 
       # 🔥 Notify Backend of Failure
       - name: Notify Backend (Failure)
         if: failure() && inputs.job_id != ''
         run: |
-          curl -X POST https://rudra-backend-qzbu.onrender.com/api/webhooks/github \
+          curl -X POST ${{ vars.BACKEND_WEBHOOK_URL }} \
+          -w "\nHTTP Status: %{http_code}\n" \
           -H "Content-Type: application/json" \
-          -H "Authorization: Bearer ${{ secrets.WEBHOOK_SECRET }}" \
+          -H "x-auth-code: ${{ secrets.WEBHOOK_SECRET }}" \
           -d '{"jobId": "${{ inputs.job_id }}", "status": "failed", "error": "Publish pipeline failed. Check GitHub Actions logs."}'
