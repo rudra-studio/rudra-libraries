@@ -16,6 +16,10 @@ on:
         description: 'Version (e.g., 1.0.0)'
         required: false
         type: string
+      job_id:
+        description: 'Job ID from the Go Backend (for webhook tracking)'
+        required: false
+        type: string
 
 jobs:
   build-and-publish:
@@ -106,9 +110,20 @@ jobs:
           npm config set //registry.npmjs.org/:_authToken $NODE_AUTH_TOKEN
           npm publish --access public
 
-      - name: Notify Backend
+      # 🔥 Notify Backend of Success
+      - name: Notify Backend (Success)
+        if: success() && inputs.job_id != ''
         run: |
-          curl -X POST https://rudra-backend-qzbu.onrender.com/api/webhooks/github-deploy \
+          curl -X POST https://rudra-backend-1.onrender.com/api/webhooks/github \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer ${{ secrets.WEBHOOK_SECRET }}" \
-          -d '{"status": "success", "repository": "rudra-libraries", "commit": "${{ github.sha }}"}'
+          -d '{"jobId": "${{ inputs.job_id }}", "status": "success"}'
+
+      # 🔥 Notify Backend of Failure
+      - name: Notify Backend (Failure)
+        if: failure() && inputs.job_id != ''
+        run: |
+          curl -X POST https://rudra-backend-1.onrender.com/api/webhooks/github \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer ${{ secrets.WEBHOOK_SECRET }}" \
+          -d '{"jobId": "${{ inputs.job_id }}", "status": "failed", "error": "Publish pipeline failed. Check GitHub Actions logs."}'
