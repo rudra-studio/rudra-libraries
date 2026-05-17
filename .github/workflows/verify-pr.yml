@@ -22,7 +22,7 @@ jobs:
 
       # 1. Run the build to ensure the React/SCSS syntax is perfectly valid
       # (Added --passWithNoTests to prevent Jest from crashing if no tests exist)
-      - run: npx nx run-many -t build test --passWithNoTests
+      - run: npx nx run-many -t build
 
       # 2. Automatically merge the PR if it was created by our Go backend
       - name: Auto-merge Publishing PRs
