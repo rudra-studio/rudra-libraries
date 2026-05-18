@@ -1,0 +1,130 @@
+.rootContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  font-family: inherit;
+}
+
+.tableWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.thead {
+  background-color: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  z-index: 10;
+  position: relative;
+}
+
+.scrollArea {
+  overflow-y: auto;
+  position: relative;
+  width: 100%;
+  
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 4px;
+  }
+}
+
+.virtualContent {
+  position: relative;
+  width: 100%;
+}
+
+.tr {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.tbodyRow {
+  border-bottom: 1px solid #f3f4f6;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: #f9fafb;
+    cursor: pointer;
+  }
+}
+
+.th {
+  padding: 12px 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+}
+
+.td {
+  padding: 0 16px;
+  font-size: 0.875rem;
+  color: #374151;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+}
+
+.headerSlot, .filterSlot, .footerSlot, .paginationSlot {
+  padding: 12px 16px;
+}
+
+.filterSlot {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.defaultPagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 12px 16px;
+  border-top: 1px solid #e5e7eb;
+  background: #f9fafb;
+
+  button {
+    padding: 4px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 0.875rem;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &:hover:not(:disabled) {
+      background: #f3f4f6;
+    }
+  }
+
+  span {
+    font-size: 0.875rem;
+    color: #4b5563;
+  }
+}
