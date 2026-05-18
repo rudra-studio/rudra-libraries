@@ -10,8 +10,43 @@ export interface Employee {
   status?: 'Active' | 'Inactive';
 }
 
+const MOCK_EMPLOYEES: Employee[] = [
+  {
+    id: 1,
+    name: 'John Doe',
+    position: 'Software Engineer',
+    department: 'Engineering',
+    email: 'john.doe@example.com',
+    status: 'Active'
+  },
+  {
+    id: 2,
+    name: 'Jane Smitho',
+    position: 'Product Manager',
+    department: 'Product',
+    email: 'jane.smith@example.com',
+    status: 'Active'
+  },
+  {
+    id: 3,
+    name: 'Robert Brown',
+    position: 'UI/UX Designer',
+    department: 'Design',
+    email: 'robert.b@example.com',
+    status: 'Inactive'
+  },
+  {
+    id: 4,
+    name: 'Emily Davis',
+    position: 'Marketing Lead',
+    department: 'Marketing',
+    email: 'emily.d@example.com',
+    status: 'Active'
+  }
+];
+
 export interface EmployeeTableProps {
-  employees: Employee[];
+  employees?: Employee[];
   onRowClick?: (employee: Employee) => void;
   headerSlot?: React.ReactNode;
   footerSlot?: React.ReactNode;
@@ -22,7 +57,7 @@ export interface EmployeeTableProps {
 }
 
 export default function EmployeeTable({
-  employees = [],
+  employees = MOCK_EMPLOYEES,
   onRowClick,
   headerSlot,
   footerSlot,
@@ -48,7 +83,7 @@ export default function EmployeeTable({
             </tr>
           </thead>
           <tbody>
-            {employees.length > 0 ? (
+            {employees && employees.length > 0 ? (
               employees.map((employee) => (
                 <tr 
                   key={employee.id} 
