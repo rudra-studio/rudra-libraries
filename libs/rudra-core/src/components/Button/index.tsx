@@ -1,6 +1,5 @@
 import styles from "./styles.module.scss";
 import React from 'react';
-
 export interface ButtonProps {
   ariaLabel: string;
   text: string;
