@@ -29,8 +29,8 @@ export default function RecordList({
   return (
     <div className={`${styles.container} ${className}`} style={style}>
       <AnimatePresence mode="popLayout">
-        {items.length > 0 ? (
-          items.map((item) => (
+        {items?.length > 0 ? (
+          items?.map((item) => (
             <motion.div
               key={item.id}
               layout
