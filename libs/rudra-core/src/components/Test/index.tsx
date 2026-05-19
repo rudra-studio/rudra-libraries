@@ -1,7 +1,7 @@
 import React, { useState, useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 
-// --- 1. THE 3D TARGET COMPONENT ----
+// --- 1. THE 3D TARGET COMPONENT --
 function Target({ id, position, color, onHit, onMiss }) {
   const meshRef = useRef<any>(null);
   const scaleRef = useRef(1);
@@ -25,7 +25,6 @@ function Target({ id, position, color, onHit, onMiss }) {
     <mesh 
       ref={meshRef} 
       position={position} 
-      // R3F handles the complex 3D Raycasting for us here!
       onClick={(e) => {
         e.stopPropagation(); // Prevents clicking objects behind this one
         onHit(id);

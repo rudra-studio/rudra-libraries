@@ -15,12 +15,14 @@
   },
   "exports": {
     ".": {
-      "import": "./src/index.ts",
-      "require": "./src/index.ts"
+      "import": "./index.js",
+      "require": "./index.js",
+      "types": "./index.d.ts"
     },
     "./*": {
-      "import": "./src/*.ts",
-      "require": "./src/*.ts"
+      "import": "./*.js",
+      "require": "./*.js",
+      "types": "./*.d.ts"
     }
   },
   "jsdelivr": "./index.umd.js",
