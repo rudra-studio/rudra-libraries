@@ -1,11 +1,10 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import styles from './styles.module.scss';
 
 export interface FlipTileProps {
   frontSlot: React.ReactNode;
   backSlot: React.ReactNode;
-  children?: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
   duration?: number;
@@ -15,44 +14,70 @@ export interface FlipTileProps {
 export default function FlipTile({
   frontSlot,
   backSlot,
-  children,
   className = '',
   style,
   duration = 0.6,
   onClick
 }: FlipTileProps) {
   const tileRef = useRef<HTMLDivElement>(null);
-  const isFlipped = useRef(false);
+  
+  // 1. Use React State instead of a mutable ref
+  const [isFlipped, setIsFlipped] = useState(false);
 
-  const handleFlip = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (onClick) onClick(e);
-    
-    isFlipped.current = !isFlipped.current;
-    
+  // 2. Trigger GSAP *after* React finishes rendering
+  useEffect(() => {
     if (tileRef.current) {
       gsap.to(tileRef.current, {
-        rotateY: isFlipped.current ? 180 : 0,
+        rotateY: isFlipped ? 180 : 0,
         duration: duration,
         ease: "power2.inOut"
       });
     }
+  }, [isFlipped, duration]);
+
+  const handleFlip = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Let the event bubble up so the Module Builder can select it!
+    if (onClick) onClick(e);
+    
+    // Update state, which triggers a re-render, which triggers the useEffect
+    setIsFlipped(!isFlipped);
   };
 
   return (
     <div 
       className={`${styles.perspectiveContainer} ${className}`} 
-      style={style}
+      style={{ ...style, perspective: '1000px' }}
       onClick={handleFlip}
     >
-      <div ref={tileRef} className={styles.tileInner}>
-        <div className={`${styles.face} ${styles.frontFace}`}>
+      <div 
+        ref={tileRef} 
+        className={styles.tileInner}
+        style={{ 
+          position: 'relative', 
+          width: '100%', 
+          height: '100%', 
+          transformStyle: 'preserve-3d' 
+        }}
+      >
+        <div 
+          className={`${styles.face} ${styles.frontFace}`}
+          style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden' }}
+        >
           {frontSlot}
         </div>
-        <div className={`${styles.face} ${styles.backFace}`}>
+        
+        <div 
+          className={`${styles.face} ${styles.backFace}`}
+          style={{ 
+            position: 'absolute', 
+            inset: 0, 
+            backfaceVisibility: 'hidden',
+            transform: 'rotateY(180deg)' 
+          }}
+        >
           {backSlot}
         </div>
       </div>
-      {children && <div className={styles.extraContent}>{children}</div>}
     </div>
   );
 }
