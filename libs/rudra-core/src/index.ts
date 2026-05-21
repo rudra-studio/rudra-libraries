@@ -7,3 +7,5 @@ export { default as FlipTile } from './components/FlipTile';
 export type { RecordItem, RecordListProps } from './components/RecordList';
 export { default as RecordList } from './components/RecordList';
 export { default as ReactionGame } from './components/Test';
+export type { FormatterProps } from './utils/formatter';
+export { default as formatter } from './utils/formatter';
