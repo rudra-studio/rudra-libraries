@@ -1,5 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
-import gsap from 'gsap';
+import React, { useState } from 'react';
 import styles from './styles.module.scss';
 
 export interface FlipTileProps {
@@ -19,27 +18,11 @@ export default function FlipTile({
   duration = 0.6,
   onClick
 }: FlipTileProps) {
-  const tileRef = useRef<HTMLDivElement>(null);
-  
-  // 1. Use React State instead of a mutable ref
   const [isFlipped, setIsFlipped] = useState(false);
 
-  // 2. Trigger GSAP *after* React finishes rendering
-  useEffect(() => {
-    if (tileRef.current) {
-      gsap.to(tileRef.current, {
-        rotateY: isFlipped ? 180 : 0,
-        duration: duration,
-        ease: "power2.inOut"
-      });
-    }
-  }, [isFlipped, duration]);
-
   const handleFlip = (e: React.MouseEvent<HTMLDivElement>) => {
-    // Let the event bubble up so the Module Builder can select it!
+    // Let the event bubble up to the Builder for selection
     if (onClick) onClick(e);
-    
-    // Update state, which triggers a re-render, which triggers the useEffect
     setIsFlipped(!isFlipped);
   };
 
@@ -50,13 +33,16 @@ export default function FlipTile({
       onClick={handleFlip}
     >
       <div 
-        ref={tileRef} 
         className={styles.tileInner}
         style={{ 
           position: 'relative', 
           width: '100%', 
           height: '100%', 
-          transformStyle: 'preserve-3d' 
+          transformStyle: 'preserve-3d',
+          // 1. Tell the browser to animate any changes to 'transform'
+          transition: `transform ${duration}s cubic-bezier(0.4, 0, 0.2, 1)`,
+          // 2. React natively controls the rotation angle based on state!
+          transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)'
         }}
       >
         <div 
