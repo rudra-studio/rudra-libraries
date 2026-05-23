@@ -13,38 +13,37 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      # Check out the exact PR branch so we can push the lockfile back to it
+      # 1. Standard checkout (prevents the origin/master git error)
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.head_ref }}
+          fetch-depth: 0 # Fetches all history for all branches so Nx and Git don't crash
 
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      # Changed from 'npm ci' to 'npm i' to update the lockfile
+      # 2. Run install to generate the new package-lock.json
       - name: Install Dependencies
         run: npm i
 
-      # Commit and push package-lock.json if npm i caused changes
+      # 3. Commit and explicitly push back to the feature branch
       - name: Commit updated package-lock.json
         run: |
-          git config --global user.name "simo.rudra"
-          git config --global user.email "simo.rudra@gmail.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add package-lock.json
 
           # Only commit and push if the file actually changed
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: update package-lock.json" && git push)
+          # 'HEAD:${{ github.head_ref }}' guarantees it goes to the PR's feature branch
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: update package-lock.json" && git push origin HEAD:${{ github.head_ref }})
 
-      # 1. Run the build to ensure the React/SCSS syntax is perfectly valid
-      # (Added --passWithNoTests to prevent Jest from crashing if no tests exist)
+      # 4. Run the build
       - run: npx nx run-many -t build
 
-      # 2. Automatically merge the PR and trigger Publish!
+      # 5. Automatically merge the PR and trigger Publish
       - name: Auto-merge and Trigger Publish
         if: startsWith(github.head_ref, 'feature/publish-')
         env:
-          # Use the built-in GitHub token to authenticate the CLI
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "1. Merging PR #${{ github.event.pull_request.number }}..."
