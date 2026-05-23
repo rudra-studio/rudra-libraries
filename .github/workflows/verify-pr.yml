@@ -13,13 +13,28 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
+      # Check out the exact PR branch so we can push the lockfile back to it
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
 
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - run: npm ci
+      # Changed from 'npm ci' to 'npm i' to update the lockfile
+      - name: Install Dependencies
+        run: npm i
+
+      # Commit and push package-lock.json if npm i caused changes
+      - name: Commit updated package-lock.json
+        run: |
+          git config --global user.name "simo.rudra"
+          git config --global user.email "simo.rudra@gmail.com"
+          git add package-lock.json
+
+          # Only commit and push if the file actually changed
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: update package-lock.json" && git push)
 
       # 1. Run the build to ensure the React/SCSS syntax is perfectly valid
       # (Added --passWithNoTests to prevent Jest from crashing if no tests exist)
