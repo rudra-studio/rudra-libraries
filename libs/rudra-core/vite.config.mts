@@ -56,7 +56,7 @@ export default defineConfig(() => ({
       formats: ['es' as const],
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'react/jsx-runtime'  ],
+      external: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'clsx', 'gsap', 'tailwindcss', 'motion', 'motion/react', 'framer-motion', 'three', '@react-three/fiber', '@react-three/fiber'],
       output: {
         preserveModules: true, 
         preserveModulesRoot: 'src',

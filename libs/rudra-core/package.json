@@ -1,6 +1,10 @@
 {
   "dependencies": {
-    "tailwind": "latest"
+    "@react-three/fiber": "9.6.1",
+    "gsap": "3.12.2",
+    "motion": "12.0.0",
+    "tailwindcss": "3.4.4",
+    "three": "0.184.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.0",
@@ -11,12 +15,14 @@
   },
   "exports": {
     ".": {
-      "import": "./src/index.ts",
-      "require": "./src/index.ts"
+      "import": "./index.js",
+      "require": "./index.js",
+      "types": "./index.d.ts"
     },
     "./*": {
-      "import": "./src/*.ts",
-      "require": "./src/*.ts"
+      "import": "./*.js",
+      "require": "./*.js",
+      "types": "./*.d.ts"
     }
   },
   "jsdelivr": "./index.umd.js",
