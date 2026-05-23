@@ -44,7 +44,7 @@ jobs:
       - name: Auto-merge and Trigger Publish
         if: startsWith(github.head_ref, 'feature/publish-')
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GIT_PAT }}
         run: |
           echo "1. Merging PR #${{ github.event.pull_request.number }}..."
           gh pr merge ${{ github.event.pull_request.number }} --merge --delete-branch
