@@ -1,0 +1,9 @@
+{
+  "name": "rudra-layout",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/rudra-layout/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project rudra-layout --web",
+  "targets": {}
+}
