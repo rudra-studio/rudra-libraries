@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import styles from './styles.module.scss';
 
 export interface RecordItem {
@@ -28,26 +27,11 @@ export default function RecordList({
 }: RecordListProps) {
   return (
     <div className={`${styles.container} ${className}`} style={style}>
-      <AnimatePresence mode="popLayout">
         {items?.length > 0 ? (
           items?.map((item) => (
-            <motion.div
+            <div
               key={item.id}
-              layout
-              initial={{ opacity: 0, x: -20, scale: 0.95 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              exit={{ 
-                opacity: 0, 
-                x: 100, 
-                scale: 0.9, 
-                transition: { duration: 0.2 } 
-              }}
-              transition={{
-                type: "spring",
-                stiffness: 500,
-                damping: 30,
-                mass: 1
-              }}
+              
               className={styles.recordRow}
             >
               <div className={styles.content}>
@@ -87,20 +71,11 @@ export default function RecordList({
                   <line x1="14" y1="11" x2="14" y2="17" />
                 </svg>
               </button>
-            </motion.div>
+            </div>
           ))
-        ) : (
-          <motion.div
-            key="empty"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className={styles.emptyState}
-          >
-            {emptySlot || 'No records to display'}
-          </motion.div>
-        )}
-      </AnimatePresence>
-      {children}
+        ) :<p> {emptySlot || 'No records to display'}</p> 
+           
+        }
     </div>
   );
 }
