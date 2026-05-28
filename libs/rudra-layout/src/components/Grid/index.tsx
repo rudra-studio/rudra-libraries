@@ -1,80 +1,40 @@
+import styles from "./styles.module.scss";
 import React from 'react';
-import styles from './styles.module.scss';
 
-export interface GridItemProps {
-  span?: number | string;
-  mobileSpan?: number | string;
-  tabletSpan?: number | string;
+export interface GridProps extends React.HTMLAttributes<HTMLDivElement> {
+  columns?: '1' | '2' | '3' | '4' | 'auto-fit'; /* @select|1|2|3|4|auto-fit */
+  gap?: 'sm' | 'md' | 'lg' | 'xl'; /* @select|sm|md|lg|xl */
   children?: React.ReactNode;
-  className?: string;
-  style?: React.CSSProperties;
-}
-
-export function GridItem({ 
-  span = 1, 
-  mobileSpan, 
-  tabletSpan, 
-  children, 
-  className = '', 
-  style 
-}: GridItemProps) {
-  const classes = [
-    styles.item,
-    styles[`span-${span}`],
-    mobileSpan ? styles[`sm-span-${mobileSpan}`] : '',
-    tabletSpan ? styles[`md-span-${tabletSpan}`] : '',
-    className
-  ].filter(Boolean).join(' ');
-
-  return (
-    <div className={classes} style={style}>
-      {children}
-    </div>
-  );
-}
-
-export interface GridProps {
-  cols?: number;
-  mobileCols?: number;
-  tabletCols?: number;
-  gap?: string | number;
-  columnGap?: string | number;
-  rowGap?: string | number;
-  children?: React.ReactNode;
-  className?: string;
-  style?: React.CSSProperties;
-  onClick?: (e: any) => void;
 }
 
 export default function Grid({
-  cols = 12,
-  mobileCols,
-  tabletCols,
-  gap = '1rem',
-  columnGap,
-  rowGap,
-  children,
+  columns = '3',
+  gap = 'md',
   className = '',
-  style,
-  onClick
+  children,
+  ...props
 }: GridProps) {
-  const gridClasses = [
-    styles.grid,
-    styles[`cols-${cols}`],
-    mobileCols ? styles[`sm-cols-${mobileCols}`] : '',
-    tabletCols ? styles[`md-cols-${tabletCols}`] : '',
-    className
-  ].filter(Boolean).join(' ');
+  
+  const gapClasses = {
+    sm: 'gap-4',
+    md: 'gap-6',
+    lg: 'gap-8',
+    xl: 'gap-12',
+  };
 
-  const gridStyles: React.CSSProperties = {
-    gap: gap,
-    columnGap: columnGap,
-    rowGap: rowGap,
-    ...style
+  const columnClasses: Record<string, string> = {
+    '1': 'grid-cols-1',
+    '2': 'grid-cols-1 md:grid-cols-2',
+    '3': 'grid-cols-1 md:grid-cols-3',
+    '4': 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4',
+    'auto-fit': 'grid-cols-[repeat(auto-fit,minmax(250px,1fr))]', // Great for responsive cards
   };
 
   return (
-    <div className={gridClasses} style={gridStyles} onClick={onClick}>
+    <div 
+      className={`grid w-full ${columnClasses[columns]} ${gapClasses[gap]} ${className}`}
+      {...props}
+    >
       {children}
     </div>
   );
