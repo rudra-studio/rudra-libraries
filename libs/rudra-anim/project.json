@@ -1,0 +1,9 @@
+{
+  "name": "rudra-anim",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/rudra-anim/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project rudra-anim --web",
+  "targets": {}
+}
