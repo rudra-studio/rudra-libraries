@@ -1,0 +1,9 @@
+{
+  "name": "rudra-form",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/rudra-form/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project rudra-form --web",
+  "targets": {}
+}
