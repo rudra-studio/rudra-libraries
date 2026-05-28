@@ -12,7 +12,7 @@ export interface RepeaterProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
 }
 
-export function Repeater({
+export default function Repeater({
   items = [],
   layout = 'grid',
   columns = '3',
@@ -46,10 +46,9 @@ export function Repeater({
   if (safeItems.length === 0) {
     return (
       <div className={`w-full p-8 border-2 border-dashed border-purple-200 bg-purple-50 rounded-lg flex flex-col items-center justify-center text-purple-600 ${className}`}>
-        <span className="font-semibold text-sm">Empty Repeater</span>
-        <span className="text-xs mt-1">Bind an array to the 'items' prop to see content</span>
+       
         <div className="mt-4 w-full p-4 border border-dashed border-purple-300 rounded bg-white">
-           {children || <span className="text-xs text-zinc-400">Drag template component here</span>}
+           {children}
         </div>
       </div>
     );
