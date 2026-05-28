@@ -20,7 +20,8 @@
       "@rudra-libraries/rudra-layout": ["./libs/rudra-layout/src/index.ts"],
       "@rudra-libraries/rudra-form": ["./libs/rudra-form/src/index.ts"],
       "@rudra-libraries/rudra-anim": ["./libs/rudra-anim/src/index.ts"],
-      "@rudra-libraries/rudra-loader": ["./libs/rudra-loader/src/index.ts"]
+      "@rudra-libraries/rudra-loader": ["./libs/rudra-loader/src/index.ts"],
+      "@rudra-libraries/rudra-three": ["./libs/rudra-three/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
