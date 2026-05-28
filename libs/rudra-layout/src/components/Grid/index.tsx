@@ -1,4 +1,4 @@
-import styles from "./styles.module.scss";
+
 import React from 'react';
 
 export interface GridProps extends React.HTMLAttributes<HTMLDivElement> {
