@@ -1,73 +1,57 @@
 import React from 'react';
-import styles from './styles.module.scss';
 
-export interface StackProps {
-  direction?: 'row' | 'column' | 'row-reverse' | 'column-reverse';
-  gap?: number | string;
-  align?: 'start' | 'center' | 'end' | 'baseline' | 'stretch';
-  justify?: 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly';
-  wrap?: boolean | 'wrap' | 'nowrap' | 'wrap-reverse';
-  as?: any;
+export interface StackProps extends React.HTMLAttributes<HTMLDivElement> {
+  direction?: 'row' | 'col'; /* @select|row|col */
+  align?: 'start' | 'center' | 'end' | 'stretch'; /* @select|start|center|end|stretch */
+  justify?: 'start' | 'center' | 'end' | 'between' | 'around'; /* @select|start|center|end|between|around */
+  gap?: 'none' | 'sm' | 'md' | 'lg' | 'xl'; /* @select|none|sm|md|lg|xl */
+  wrap?: boolean;
   children?: React.ReactNode;
-  className?: string;
-  style?: React.CSSProperties;
-  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 export default function Stack({
-  direction = 'column',
-  gap = 0,
+  direction = 'col',
   align = 'stretch',
   justify = 'start',
+  gap = 'md',
   wrap = false,
-  as: Component = 'div',
-  children,
   className = '',
-  style,
-  onClick
+  children,
+  ...props
 }: StackProps) {
-  const flexWrap = typeof wrap === 'boolean' ? (wrap ? 'wrap' : 'nowrap') : wrap;
-
-  const getJustifyContent = (val: string) => {
-    const map: Record<string, string> = {
-      start: 'flex-start',
-      end: 'flex-end',
-      center: 'center',
-      between: 'space-between',
-      around: 'space-around',
-      evenly: 'space-evenly'
-    };
-    return map[val] || val;
+  const directionClass = direction === 'row' ? 'flex-row' : 'flex-col';
+  const wrapClass = wrap ? 'flex-wrap' : 'flex-nowrap';
+  
+  const alignClasses: Record<string, string> = {
+    start: 'items-start',
+    center: 'items-center',
+    end: 'items-end',
+    stretch: 'items-stretch',
   };
 
-  const getAlignItems = (val: string) => {
-    const map: Record<string, string> = {
-      start: 'flex-start',
-      end: 'flex-end',
-      center: 'center',
-      baseline: 'baseline',
-      stretch: 'stretch'
-    };
-    return map[val] || val;
+  const justifyClasses: Record<string, string> = {
+    start: 'justify-start',
+    center: 'justify-center',
+    end: 'justify-end',
+    between: 'justify-between',
+    around: 'justify-around',
   };
 
-  const stackStyles: React.CSSProperties = {
-    display: 'flex', // Standard flex for layout
-    flexDirection: direction,
-    gap: typeof gap === 'number' ? `${gap}px` : gap,
-    alignItems: getAlignItems(align),
-    justifyContent: getJustifyContent(justify),
-    flexWrap: flexWrap as any,
-    ...style
+  const gapClasses = {
+    none: 'gap-0',
+    sm: 'gap-2',
+    md: 'gap-4',
+    lg: 'gap-8',
+    xl: 'gap-12',
   };
 
   return (
-    <Component
-      className={`${styles.stack} ${className}`}
-      style={stackStyles}
-      onClick={onClick}
+    <div 
+      className={`flex w-full ${directionClass} ${wrapClass} ${alignClasses[align]} ${justifyClasses[justify]} ${gapClasses[gap]} ${className}`}
+      {...props}
     >
+      {/* Builder Dropzone Placeholder */}
       {children}
-    </Component>
+    </div>
   );
 }
