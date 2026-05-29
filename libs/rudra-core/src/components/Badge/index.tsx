@@ -21,7 +21,7 @@ export default function Badge({
   className = '',
   ...props
 }: BadgeProps) {
-  
+
 
   // Inline styles ensure the user's color picker choice applies instantly 
   // without needing arbitrary Tailwind compilation on the fly.
@@ -32,11 +32,11 @@ export default function Badge({
       case 'outline':
         return { backgroundColor: 'transparent', color: customColor, borderColor: customColor };
       case 'glow':
-        return { 
-          backgroundColor: `${customColor}15`, 
-          color: customColor, 
+        return {
+          backgroundColor: `${customColor}15`,
+          color: customColor,
           borderColor: `${customColor}40`,
-          boxShadow: `0 0 16px ${customColor}30` 
+          boxShadow: `0 0 16px ${customColor}30`
         };
       case 'subtle':
       default:
@@ -72,19 +72,19 @@ export default function Badge({
         {/* Pulsing dot for the "Offer" state */}
         {isOffer && (
           <span className="absolute -top-1 -right-1 flex h-3 w-3">
-            <span 
-              className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" 
+            <span
+              className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
               style={{ backgroundColor: customColor }}
             />
-            <span 
-              className="relative inline-flex rounded-full h-3 w-3" 
+            <span
+              className="relative inline-flex rounded-full h-3 w-3"
               style={{ backgroundColor: customColor }}
             />
           </span>
         )}
 
         {icon}
-        
+
         {label}
       </div>
     </div>

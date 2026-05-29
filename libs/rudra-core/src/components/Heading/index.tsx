@@ -2,20 +2,20 @@ import React from 'react';
 
 export interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {
   text: string; /* @translate */
-  level?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'; 
+  level?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
   align?: string; /* @select|left|center|right|justify */
   className?: string
 }
 
-export default function Heading({ 
-  text = 'Heading Text', 
-  level = 'h2', 
-  align = 'left', 
-  className = '', 
-  ...props 
+export default function Heading({
+  text = 'Heading Text',
+  level = 'h2',
+  align = 'left',
+  className = '',
+  ...props
 }: HeadingProps) {
   const Tag = level;
-  
+
   const alignmentClasses: Record<string, string> = {
     left: 'text-left',
     center: 'text-center',
@@ -33,8 +33,8 @@ export default function Heading({
   };
 
   return (
-    <Tag 
-      className={`text-zinc-900 dark:text-white tracking-tight ${sizeClasses[level]} ${alignmentClasses[align] || 'text-left'} ${className}`} 
+    <Tag
+      className={`text-zinc-900 dark:text-white tracking-tight ${sizeClasses[level]} ${alignmentClasses[align] || 'text-left'} ${className}`}
       {...props}
     >
       {text}
