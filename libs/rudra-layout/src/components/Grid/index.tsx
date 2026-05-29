@@ -27,7 +27,7 @@ export default function Grid({
     '2': 'grid-cols-1 md:grid-cols-2',
     '3': 'grid-cols-1 md:grid-cols-3',
     '4': 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4',
-    'auto-fit': 'grid-cols-[repeat(auto-fit,minmax(250px,1fr))]', // Great for responsive cards
+    'auto-fit': 'grid-cols-[repeat(auto-fit,minmax(250px,1fr))]', // Great for responsive card
   };
 
   return (
