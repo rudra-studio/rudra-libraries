@@ -1,61 +1,57 @@
 import React from 'react';
 
-export interface ProgressBarProps extends React.HTMLAttributes<HTMLDivElement> {
-  value?: number; // 0 to 100
-  max?: number;
-  customColor?: string; /* @color */
-  size?: 'sm' | 'md' | 'lg'; /* @select|sm|md|lg */
-  showLabel?: boolean;
-  animated?: boolean;
+export interface StackProps extends React.HTMLAttributes<HTMLDivElement> {
+  direction?: 'row' | 'col'; /* @select|row|col */
+  align?: 'start' | 'center' | 'end' | 'stretch'; /* @select|start|center|end|stretch */
+  justify?: 'start' | 'center' | 'end' | 'between' | 'around'; /* @select|start|center|end|between|around */
+  gap?: 'none' | 'sm' | 'md' | 'lg' | 'xl'; /* @select|none|sm|md|lg|xl */
+  wrap?: boolean;
+  children?: React.ReactNode;
 }
 
-export default function ProgressBar({
-  value = 45,
-  max = 100,
-  customColor = '#10b981', // Default emerald-500
-  size = 'md',
-  showLabel = false,
-  animated = true,
+export default function Stack({
+  direction = 'col',
+  align = 'stretch',
+  justify = 'start',
+  gap = 'md',
+  wrap = false,
   className = '',
+  children,
   ...props
-}: ProgressBarProps) {
-  
-  // Ensure value stays within bounds safely
-  const safeValue = Math.min(Math.max(value, 0), max);
-  const percentage = Math.round((safeValue / max) * 100);
+}: StackProps) {
+  const directionClass = direction === 'row' ? 'flex-row' : 'flex-col';
+  const wrapClass = wrap ? 'flex-wrap' : 'flex-nowrap';
 
-  const sizeClasses = {
-    sm: 'h-1.5 text-[10px]',
-    md: 'h-2.5 text-xs',
-    lg: 'h-4 text-sm',
+  const alignClasses: Record<string, string> = {
+    start: 'items-start',
+    center: 'items-center',
+    end: 'items-end',
+    stretch: 'items-stretch',
+  };
+
+  const justifyClasses: Record<string, string> = {
+    start: 'justify-start',
+    center: 'justify-center',
+    end: 'justify-end',
+    between: 'justify-between',
+    around: 'justify-around',
+  };
+
+  const gapClasses = {
+    none: 'gap-0',
+    sm: 'gap-2',
+    md: 'gap-4',
+    lg: 'gap-8',
+    xl: 'gap-12',
   };
 
   return (
-    <div className={`flex flex-col gap-1.5 w-full ${className}`} {...props}>
-      
-      {showLabel && (
-        <div className="flex justify-between items-center text-zinc-600 dark:text-zinc-400 font-medium">
-          <span className={sizeClasses[size].split(' ')[1]}>Progress</span>
-          <span className={sizeClasses[size].split(' ')[1]}>{percentage}%</span>
-        </div>
-      )}
-
-      <div className={`w-full bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden ${sizeClasses[size].split(' ')[0]}`}>
-        <div 
-          className={`h-full rounded-full transition-all duration-500 ease-out relative overflow-hidden`}
-          style={{ 
-            width: `${percentage}%`, 
-            backgroundColor: customColor 
-          }}
-        >
-          {/* Optional Barber-pole animation overlay */}
-          {animated && (
-            <div className="absolute inset-0 bg-white/20 w-full h-full animate-[progress_2s_linear_infinite]" 
-                 style={{ backgroundImage: 'linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent)', backgroundSize: '1rem 1rem' }} 
-            />
-          )}
-        </div>
-      </div>
+    <div
+      className={`flex w-full ${directionClass} ${wrapClass} ${alignClasses[align]} ${justifyClasses[justify]} ${gapClasses[gap]} ${className}`}
+      {...props}
+    >
+      {/* Builder Dropzone Placeholder */}
+      {children}
     </div>
   );
 }
