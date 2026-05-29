@@ -1,47 +1,4 @@
 .container {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  width: 100%;
-}
-
-.label {
-  font-weight: 600;
-  font-size: 14px;
-  color: #333;
-}
-
-.inputWrapper {
-  display: flex;
-  align-items: center;
-  border: 1px solid #ccc;
-  padding: 8px 12px;
-  border-radius: 4px;
-  background: white;
-
-  &:focus-within {
-    border-color: #007bff;
-  }
-}
-
-.input {
-  border: none;
-  outline: none;
-  flex: 1;
-  font-size: 14px;
-}
-
-.inputError {
-  border-color: #dc3545;
-}
-
-.errorText {
-  color: #dc3545;
-  font-size: 12px;
-}
-
-.icon {
-  display: flex;
-  align-items: center;
-  color: #666;
+  padding: 16px;
+  background-color: #f0f0f0;
 }

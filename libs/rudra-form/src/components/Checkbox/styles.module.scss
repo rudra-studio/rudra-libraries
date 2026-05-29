@@ -1,18 +1,4 @@
 .container {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  user-select: none;
-}
-
-.label {
-  font-size: 14px;
-  color: #333;
-}
-
-.checkbox {
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
+  padding: 16px;
+  background-color: #f0f0f0;
 }
