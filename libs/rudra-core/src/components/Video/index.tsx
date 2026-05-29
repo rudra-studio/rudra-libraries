@@ -5,7 +5,6 @@ export interface VideoProps extends React.VideoHTMLAttributes<HTMLVideoElement> 
   // We don't use @translate here because URLs aren't usually localized
   src?: string; 
   poster?: string; 
-  
   // These will automatically parse as toggle switches in your builder UI!
   autoPlay?: boolean;
   loop?: boolean;
