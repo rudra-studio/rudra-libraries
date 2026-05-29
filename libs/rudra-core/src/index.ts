@@ -10,5 +10,3 @@ export type { TypographyProps } from './components/Typography';
 export { default as Typography } from './components/Typography';
 export type { VideoProps } from './components/Video';
 export { default as Video } from './components/Video';
-export type { FormatterProps } from './utils/formatter';
-export { default as formatter } from './utils/formatter';
