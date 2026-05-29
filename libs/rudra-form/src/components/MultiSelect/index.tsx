@@ -17,7 +17,7 @@ export interface MultiSelectProps extends Omit<React.HTMLAttributes<HTMLDivEleme
 export default function MultiSelect({
   label = 'Select multiple items',
   placeholder = 'Search and select...',
-  options,
+  options = [],
   maxSelected = 10,
   customColor = '#3b82f6',
   className = '',
