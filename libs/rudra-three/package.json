@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@react-three/drei": "latest",
     "@react-three/fiber": "9.6.1",
     "gsap": "3.12.2",
     "lucide-react": "^1.8.0",

@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@monaco-editor/react": "latest",
+    "@react-three/drei": "latest",
     "@react-three/fiber": "9.6.1",
     "@uiw/react-textarea-code-editor": "latest",
     "gsap": "3.12.2",
