@@ -22,7 +22,8 @@
       "@rudra-libraries/rudra-anim": ["./libs/rudra-anim/src/index.ts"],
       "@rudra-libraries/rudra-loader": ["./libs/rudra-loader/src/index.ts"],
       "@rudra-libraries/rudra-three": ["./libs/rudra-three/src/index.ts"],
-      "@rudra-libraries/rudra-editor": ["./libs/rudra-editor/src/index.ts"]
+      "@rudra-libraries/rudra-editor": ["./libs/rudra-editor/src/index.ts"],
+      "@rudra-libraries/rudra-test": ["./libs/rudra-test/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
