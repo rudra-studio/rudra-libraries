@@ -1,0 +1,45 @@
+.viewerContainer {
+  width: 100%;
+  height: 500px;
+  position: relative;
+  background: radial-gradient(circle, #ffffff 0%, #e0e0e0 100%);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+
+.canvas {
+  touch-action: none;
+}
+
+.loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9f9f9;
+  z-index: 10;
+}
+
+.loadingText {
+  font-family: sans-serif;
+  color: #666;
+  font-size: 14px;
+}
+
+.overlaySlot {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  pointer-events: none;
+  z-index: 5;
+
+  & > * {
+    pointer-events: auto;
+  }
+}
