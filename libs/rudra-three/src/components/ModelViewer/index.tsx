@@ -50,8 +50,9 @@ export default function ModelViewer({
             makeDefault 
           />
         </Suspense>
-        {children}
       </Canvas>
+      
+        {children}
     </div>
   );
 }
