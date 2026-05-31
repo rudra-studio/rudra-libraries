@@ -10,3 +10,8 @@ export type { TypographyProps } from './components/Typography';
 export { default as Typography } from './components/Typography';
 export type { VideoProps } from './components/Video';
 export { default as Video } from './components/Video';
+export { default as GetLocalStorage } from './utils/GetLocalStorage';
+export { default as RemoveLocalStorage } from './utils/RemoveLocalStorage';
+export { default as SetLocalStorage } from './utils/SetLocalStorage';
+export type { ToTypeProps } from './utils/ToType';
+export { default as ToType } from './utils/ToType';
