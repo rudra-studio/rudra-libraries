@@ -32,27 +32,35 @@ export default function ModelViewer({
   onModelClick
 }: ModelViewerProps) {
   return (
-    <div className={`${styles.container} ${className}`} style={style}>
-      <Canvas shadows dpr={[1, 2]}>
-        <Suspense fallback={null}>
-          <Stage 
-            intensity={intensity} 
-            environment={environment} 
-            shadows={shadows ? 'contact' : false} 
-            adjustCamera={true}
-          >
-            <Model url={modelUrl} onClick={onModelClick} />
-          </Stage>
-          <OrbitControls 
-            autoRotate={autoRotate} 
-            enablePan={true} 
-            enableZoom={true} 
-            makeDefault 
-          />
-        </Suspense>
-      </Canvas>
-      
-        {children}
-    </div>
+    <Canvas 
+      shadows 
+      dpr={[1, 2]} 
+      // Apply the container styles directly to the Canvas
+      className={`${styles.container} ${className}`} 
+      style={style}
+    >
+      <Suspense fallback={null}>
+        <Stage 
+          intensity={intensity} 
+          environment={environment} 
+          shadows={shadows ? 'contact' : false} 
+          adjustCamera={false} // Disabled to prevent infinite zoom loops
+        >
+          <Model url={modelUrl} onClick={onModelClick} />
+        </Stage>
+        <PerspectiveCamera makeDefault position={[5, 5, 5]} fov={50} />
+        <OrbitControls 
+          autoRotate={autoRotate} 
+          enablePan={true} 
+          enableZoom={true} 
+          makeDefault 
+        />
+      </Suspense>
+      {/* Note: If 'children' are DOM elements, you cannot put them inside <Canvas>. 
+         If they are Three.js components, they belong inside the Suspense.
+         If they are DOM elements, consider using a React Portal or 
+         keeping a minimal wrapper if DOM-to-Canvas layering is required.
+      */}
+    </Canvas>
   );
 }
