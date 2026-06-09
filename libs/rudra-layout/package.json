@@ -27,7 +27,7 @@
   },
   "jsdelivr": "./index.umd.js",
   "main": "./index.js",
-  "name": "@simo-rudra/rudra-layout",
+  "name": "@rudra-studio/rudra-layout",
   "peerDependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
