@@ -6,7 +6,7 @@ export interface CodeEditorProps extends React.HTMLAttributes<HTMLDivElement> {
   language?: 'js' | 'ts' | 'html' | 'css' | 'json' | 'go'; /* @select|js|ts|html|css|json|go */
   theme?: 'dark' | 'light'; /* @select|dark|light */
   readOnly?: boolean;
-  height?: string; // e.g., "400px"
+  height?: string; 
   title?: string;
   onChange?: (value: string) => void;
 }

@@ -28,7 +28,7 @@
   },
   "jsdelivr": "./index.umd.js",
   "main": "./index.js",
-  "name": "@simo-rudra/rudra-editor",
+  "name": "@rudra-studio/rudra-editor",
   "peerDependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
