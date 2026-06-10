@@ -13,7 +13,7 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
 export default function Badge({
   label = 'Special Offer',
   variant = 'glow',
-  customColor = '#8b5cf6', // Default to a striking purple
+  customColor = '#8b5cf6', 
   icon,
   align = 'inline',
   size = 'md',
