@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './styles.module.scss';
 
 export interface InputProps {
-  label?: string;
+  label?: string; /* @translate */
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
