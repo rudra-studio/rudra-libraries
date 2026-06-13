@@ -16,7 +16,7 @@ export default function ToType({ value, type }: ToTypeProps): any {
 
   switch (type) {
     case "string":
-      // Safely stringify objects/arrays
+      // Safely stringify objects
       if (typeof value === "object") {
         try {
           return JSON.stringify(value);
