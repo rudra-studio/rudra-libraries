@@ -1,0 +1,22 @@
+.heroContainer {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+// Specific overrides if tailwind is not sufficient
+:global {
+  .hero-title-active {
+    color: var(--primary-color, #000);
+  }
+}
+.heroContainer {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+// Specific overrides if tailwind is not sufficient
+:global {
+  .hero-title-active {
+    color: var(--primary-color, #000);
+  }
+}

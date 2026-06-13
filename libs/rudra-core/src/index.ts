@@ -2,8 +2,12 @@ import './index.css';
 
 export type { BadgeProps } from './components/Badge';
 export { default as Badge } from './components/Badge';
+export type { ButtonProps } from './components/Button';
+export { default as Button } from './components/Button';
 export type { HeadingProps } from './components/Heading';
 export { default as Heading } from './components/Heading';
+export type { HeroSectionProps } from './components/HeroSection';
+export { default as HeroSection } from './components/HeroSection';
 export type { ImageProps } from './components/Image';
 export { default as Image } from './components/Image';
 export type { TypographyProps } from './components/Typography';
