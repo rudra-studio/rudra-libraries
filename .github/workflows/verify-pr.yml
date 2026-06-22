@@ -47,7 +47,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GIT_PAT }}
         run: |
           echo "1. Merging PR #${{ github.event.pull_request.number }}..."
-          gh pr merge ${{ github.event.pull_request.number }} --merge --delete-branch
+          gh pr merge ${{ github.event.pull_request.number }} --merge --admin --delete-branch
 
           echo "2. Extracting Data from PR..."
           PR_TITLE="${{ github.event.pull_request.title }}"
