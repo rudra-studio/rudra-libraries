@@ -12,14 +12,13 @@ export interface RepeaterProps extends React.HTMLAttributes<HTMLDivElement> {
 export default function Repeater({
   items = [],
   layout = 'grid',
-  columns = '3',
+  columns = '4',
   gap = 'md',
   className = '',
   children,
   ...props
 }: RepeaterProps) {
   
-  // Safe fallback if the binding fails or isn't an array
   const safeItems = Array.isArray(items) ? items : [];
 
   const gapClasses = {
