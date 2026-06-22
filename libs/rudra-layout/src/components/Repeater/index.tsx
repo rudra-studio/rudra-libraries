@@ -1,15 +1,12 @@
-import React, { createContext } from 'react';
+import React from 'react';
 
-// We export this context so child components (like a Heading) 
-// can read the current loop item data using a custom hook in the builder!
-export const RepeaterContext = createContext<any>(null);
-
+// The interface explicitly defines the render function signature and right-side annotations
 export interface RepeaterProps extends React.HTMLAttributes<HTMLDivElement> {
-  items?: any[]; // The data array. Parsed as type: 'array' in Go.
-  layout?: 'grid' | 'stack'; /* @select|grid|stack */
-  columns?: '1' | '2' | '3' | '4'; /* @select|1|2|3|4 */ // Used if layout is grid
-  gap?: 'sm' | 'md' | 'lg'; /* @select|sm|md|lg */
-  children?: React.ReactNode;
+  items?: any[];                   /* @optional */
+  layout?: 'grid' | 'stack';       /* @optional @select|grid|stack */
+  columns?: '1' | '2' | '3' | '4'; /* @optional @select|1|2|3|4 */
+  gap?: 'sm' | 'md' | 'lg';        /* @optional @select|sm|md|lg */
+  children?: React.ReactNode | ((context: { item: any; index: number }) => React.ReactNode);  /* @nodeFunction */
 }
 
 export default function Repeater({
@@ -42,30 +39,26 @@ export default function Repeater({
     ? `grid ${gridCols[columns]} ${gapClasses[gap]}`
     : `flex flex-col w-full ${gapClasses[gap]}`;
 
-  // If no items are bound yet, show a placeholder in the builder
+  // Design-time safety: If no items are bound yet, show a placeholder in the builder canvas
   if (safeItems.length === 0) {
     return (
       <div className={`w-full p-8 border-2 border-dashed border-purple-200 bg-purple-50 rounded-lg flex flex-col items-center justify-center text-purple-600 ${className}`}>
-       
+        <span className="text-sm font-medium mb-2 opacity-70">Repeater (No Data Bound)</span>
         <div className="mt-4 w-full p-4 border border-dashed border-purple-300 rounded bg-white">
-           {children}
+            {/* Execute dummy payload so the builder canvas doesn't crash when elements are dropped inside */}
+           {typeof children === 'function' ? children({ item: null, index: 0 }) : children}
         </div>
       </div>
     );
   }
 
+  // Runtime execution: Pure functional injection, zero Context API overhead
   return (
     <div className={`${containerClass} ${className}`} {...props}>
       {safeItems.map((item, index) => (
-        // We wrap EACH iteration in a context provider.
-        // This allows your builder to bind child component props to `repeaterContext.item.price` etc.
-        <RepeaterContext.Provider key={item.id || index} value={{ item, index }}>
-          {/* React requires keys, but children from the builder might just be a standard element. 
-              We wrap it in a fragment with a key. */}
-          <React.Fragment key={item.id || index}>
-             {children}
-          </React.Fragment>
-        </RepeaterContext.Provider>
+        <React.Fragment key={item?.id || index}>
+           {typeof children === 'function' ? children({ item, index }) : children}
+        </React.Fragment>
       ))}
     </div>
   );

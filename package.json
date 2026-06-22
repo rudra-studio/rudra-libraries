@@ -3,6 +3,7 @@
     "@monaco-editor/react": "latest",
     "@react-three/drei": "latest",
     "@react-three/fiber": "9.6.1",
+    "@tanstack/react-table": "8",
     "@uiw/react-textarea-code-editor": "latest",
     "gsap": "3.12.2",
     "lucide-react": "^1.8.0",
