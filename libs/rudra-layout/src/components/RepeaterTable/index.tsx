@@ -26,7 +26,7 @@ type TableRowPayload = {
 };
 
 export interface RepeaterTableProps {
-  data?: any[];                                 /* @optional */
+  data?: any[];                                /* @optional */
   headerTemplates?: React.ReactNode[];          /* @optional */
   cellTemplates?: (
     | React.ReactNode 
