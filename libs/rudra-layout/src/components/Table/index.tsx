@@ -20,7 +20,7 @@ export interface DataTableProps {
   columns: ColumnDef<any, any>[];
   data: any[];
   pageSize?: number /* @optional */;
-  mode?: "pagination" | "infinite" /* @optional */;
+  mode?: "pagination" | "infinite" /* @optional @select|pagination|infinite*/;
   onLoadMore?: () => void /* @optional */;
   isFetching?: boolean /* @optional */;
   hasMore?: boolean /* @optional */;
