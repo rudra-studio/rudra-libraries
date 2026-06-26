@@ -4,7 +4,7 @@ import React from 'react';
 export interface RepeaterProps extends React.HTMLAttributes<HTMLDivElement> {
   items?: any[];                   /* @optional */
   layout?: 'grid' | 'stack';       /* @optional @select|grid|stack */
-  columns?: number; /* @optional */
+  columns?: number;
   gap?: 'sm' | 'md' | 'lg';        /* @optional @select|sm|md|lg */
   children?: React.ReactNode | ((context: { item: any; index: number }) => React.ReactNode);  /* @nodeFunction */
 }
