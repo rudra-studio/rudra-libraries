@@ -15,27 +15,31 @@ import {
   ChevronsRight, Search, LayoutTemplate
 } from "lucide-react";
 
-// Context is completely removed! Data injection is now pure functional execution.
-
-// Reusable payload type for the builder to pass into functions
-type TableRowPayload = { 
-  item: any; 
-  index: number; 
-  isExpanded: boolean; 
-  toggleExpanded: () => void; 
+type TableRowPayload = {
+  item: any;
+  index: number;
+  isExpanded: boolean;
+  toggleExpanded: () => void;
 };
 
 export interface RepeaterTableProps {
-  data?: any[];                                /* @optional */
-  headerTemplates?: React.ReactNode[];          /* @optional */
+  data?: any[];                                 /* @optional */
+
+  /**
+   * @optional
+   * @type|json
+   * @schema { "type": "array", "items": { "type": "object", "properties": { "label": { "type": "string", "default": "Header" }, "accessor": { "type": "string", "default": "id" } } } }
+   */
+  headers?: { label: string; accessor: string }[];
   cellTemplates?: (
-    | React.ReactNode 
+    | React.ReactNode
     | ((context: TableRowPayload) => React.ReactNode)
   )[];                                          /* @optional @nodeFunction[] */
-  expandedContent?: 
-    | React.ReactNode 
-    | ((context: TableRowPayload) => React.ReactNode); /* @optional  */
-  
+
+  expandedContent?:
+  | React.ReactNode
+  | ((context: TableRowPayload) => React.ReactNode); /* @optional  */
+
   pageSize?: number;                            /* @optional */
   globalFilterPlaceholder?: string;             /* @optional */
   className?: string;                           /* @optional */
@@ -43,7 +47,7 @@ export interface RepeaterTableProps {
 
 export default function RepeaterTable({
   data = [],
-  headerTemplates = [],
+  headers = [],
   cellTemplates = [],
   expandedContent,
   pageSize = 5,
@@ -54,68 +58,66 @@ export default function RepeaterTable({
   const [globalFilter, setGlobalFilter] = useState("");
   const [expanded, setExpanded] = useState<ExpandedState>({});
 
-  // Safely fallback props for the builder
   const safeData = Array.isArray(data) ? data : [];
-  const safeHeaders = Array.isArray(headerTemplates) ? headerTemplates : [];
+  const safeHeaders = Array.isArray(headers) ? headers : [];
   const safeCells = Array.isArray(cellTemplates) ? cellTemplates : [];
 
   const columns = useMemo<ColumnDef<any, any>[]>(() => {
+    // Number of columns is now strictly driven by the JSON headers array!
     const colCount = Math.max(safeHeaders.length, safeCells.length);
-    
-    return Array.from({ length: colCount }).map((_, index) => ({
-      id: `col_${index}`,
-      accessorFn: (row) => row,
-      
-      // 🚀 RENDER HEADER SLOT
-      header: () => {
-        const template = safeHeaders[index];
-        return template ? template : (
-          <div className="py-1 px-2 border border-dashed border-slate-300 dark:border-slate-700 rounded text-slate-400 dark:text-slate-500 text-[10px] font-mono flex items-center gap-1">
-            <LayoutTemplate size={10} /> H-Slot {index + 1}
-          </div>
-        );
-      },
-      
-      // 🚀 RENDER CELL SLOT (Render Props Architecture applied here)
-      cell: ({ row }) => {
-        const item = row.original;
-        const template = safeCells[index];
-        const isFirstCol = index === 0;
-        
-        // Define the runtime payload for this specific cell
-        const contextPayload: TableRowPayload = {
-          item, 
-          index: row.index, 
-          isExpanded: row.getIsExpanded(), 
-          toggleExpanded: row.getToggleExpandedHandler()
-        };
 
-        return (
-          <div className="flex items-center gap-3">
-            {/* Auto-inject expand chevron on the first column if expandedContent exists */}
-            {isFirstCol && expandedContent && (
-              <button 
-                onClick={row.getToggleExpandedHandler()} 
-                className="p-1 hover:bg-slate-200 dark:hover:bg-white/10 rounded text-slate-500 transition-colors shrink-0"
-              >
-                {row.getIsExpanded() ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-              </button>
-            )}
-            
-            <div className="flex-1 w-full min-w-0">
-              {/* Execute the function if it's a render prop, otherwise render the static node */}
-              {typeof template === 'function' 
-                ? template(contextPayload) 
-                : template ? template : (
-                <div className="py-2 px-3 border border-dashed border-slate-300 dark:border-slate-700 rounded text-slate-400 dark:text-slate-500 text-xs italic flex items-center gap-2">
-                  <LayoutTemplate size={12} /> C-Slot {index + 1}
-                </div>
-              )}
-            </div>
+    return Array.from({ length: colCount }).map((_, index) => {
+      const headerObj = safeHeaders[index] || { label: `Column ${index + 1}`, accessor: `col_${index}` };
+
+      return {
+        id: `col_${index}`,
+        accessorFn: (row) => row[headerObj.accessor] ?? row,
+
+        // 🚀 RENDER NATIVE TEXT HEADER (No dropzones needed here anymore!)
+        header: () => (
+          <div className="font-semibold text-slate-700 dark:text-slate-200 uppercase text-xs">
+            {headerObj.label}
           </div>
-        );
-      }
-    }));
+        ),
+
+        // 🚀 RENDER DYNAMIC CELL SLOT
+        cell: ({ row }) => {
+          const item = row.original;
+          const template = safeCells[index];
+          const isFirstCol = index === 0;
+
+          const contextPayload: TableRowPayload = {
+            item,
+            index: row.index,
+            isExpanded: row.getIsExpanded(),
+            toggleExpanded: row.getToggleExpandedHandler()
+          };
+
+          return (
+            <div className="flex items-center gap-3">
+              {isFirstCol && expandedContent && (
+                <button
+                  onClick={row.getToggleExpandedHandler()}
+                  className="p-1 hover:bg-slate-200 dark:hover:bg-white/10 rounded text-slate-500 transition-colors shrink-0"
+                >
+                  {row.getIsExpanded() ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+                </button>
+              )}
+
+              <div className="flex-1 w-full min-w-0">
+                {typeof template === 'function'
+                  ? template(contextPayload)
+                  : template ? template : (
+                    <div className="py-2 px-3 border border-dashed border-slate-300 dark:border-slate-700 rounded text-slate-400 dark:text-slate-500 text-xs italic flex items-center gap-2">
+                      <LayoutTemplate size={12} /> Drop {headerObj.label} Cell
+                    </div>
+                  )}
+              </div>
+            </div>
+          );
+        }
+      };
+    });
   }, [safeHeaders, safeCells, expandedContent]);
 
   const table = useReactTable({
@@ -132,7 +134,7 @@ export default function RepeaterTable({
     getExpandedRowModel: getExpandedRowModel(),
     globalFilterFn: (row, columnId, filterValue) => {
       const searchStr = String(filterValue).toLowerCase();
-      return Object.values(row.original).some(val => 
+      return Object.values(row.original).some(val =>
         String(val).toLowerCase().includes(searchStr)
       );
     },
@@ -145,7 +147,7 @@ export default function RepeaterTable({
       <div className="w-full p-12 border-2 border-dashed border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0A0A0A] rounded-2xl flex flex-col items-center justify-center text-slate-400">
         <LayoutTemplate size={32} className="mb-4 opacity-50" />
         <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Repeater Table Empty</p>
-        <p className="text-xs mt-1 text-slate-500">Provide Data, Header Templates, or Cell Templates to begin.</p>
+        <p className="text-xs mt-1 text-slate-500">Provide Data and configure Headers to begin.</p>
       </div>
     );
   }
@@ -189,13 +191,13 @@ export default function RepeaterTable({
                       </td>
                     ))}
                   </tr>
-                  
+
                   {/* Expanded Content Row (Render Props Architecture applied here) */}
                   {row.getIsExpanded() && expandedContent && (
                     <tr className="bg-slate-50/50 dark:bg-white/[0.02]">
                       <td colSpan={columns.length} className="p-0 border-b border-slate-200 dark:border-white/5">
                         <div className="p-6">
-                          {typeof expandedContent === 'function' 
+                          {typeof expandedContent === 'function'
                             ? expandedContent({ item: row.original, index: row.index, isExpanded: true, toggleExpanded: row.getToggleExpandedHandler() })
                             : expandedContent}
                         </div>
@@ -204,13 +206,13 @@ export default function RepeaterTable({
                   )}
                 </React.Fragment>
               ))}
-              
+
               {table.getRowModel().rows.length === 0 && (
-                 <tr>
-                    <td colSpan={columns.length} className="px-6 py-12 text-center text-slate-500">
-                      No results found matching your filters.
-                    </td>
-                 </tr>
+                <tr>
+                  <td colSpan={columns.length} className="px-6 py-12 text-center text-slate-500">
+                    No results found matching your filters.
+                  </td>
+                </tr>
               )}
             </tbody>
           </table>
