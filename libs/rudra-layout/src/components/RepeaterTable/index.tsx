@@ -31,6 +31,7 @@ export interface RepeaterTableProps {
    * @schema { "type": "array", "items": { "type": "object", "properties": { "label": { "type": "string", "default": "Header" }, "accessor": { "type": "string", "default": "id" } } } }
    */
   headers?: { label: string; accessor: string }[];
+
   cellTemplates?: (
     | React.ReactNode
     | ((context: TableRowPayload) => React.ReactNode)
@@ -63,7 +64,6 @@ export default function RepeaterTable({
   const safeCells = Array.isArray(cellTemplates) ? cellTemplates : [];
 
   const columns = useMemo<ColumnDef<any, any>[]>(() => {
-    // Number of columns is now strictly driven by the JSON headers array!
     const colCount = Math.max(safeHeaders.length, safeCells.length);
 
     return Array.from({ length: colCount }).map((_, index) => {
