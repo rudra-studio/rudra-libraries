@@ -1,55 +1,36 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import {
-  useReactTable,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getExpandedRowModel,
-  flexRender,
-  ColumnDef,
-  SortingState,
-  ExpandedState,
+  useReactTable, getCoreRowModel, getFilteredRowModel,
+  getPaginationRowModel, getExpandedRowModel, flexRender,
+  ColumnDef, SortingState, ExpandedState,
 } from "@tanstack/react-table";
-import {
-  ChevronDown, ChevronRight, ChevronsLeft, ChevronLeft,
-  ChevronsRight, Search, LayoutTemplate
-} from "lucide-react";
+import { ChevronDown, ChevronRight, ChevronsLeft, ChevronLeft, ChevronsRight, Search, LayoutTemplate } from "lucide-react";
 
-type TableRowPayload = {
-  item: any;
-  index: number;
-  isExpanded: boolean;
-  toggleExpanded: () => void;
-};
+type TableRowPayload = { item: any; index: number; isExpanded: boolean; toggleExpanded: () => void; };
 
 export interface RepeaterTableProps {
-  data?: any[];                                 /* @optional */
+  data?: any[];                                 
 
   /**
    * @optional
-   * @type|json
-   * @schema { "type": "array", "items": { "type": "object", "properties": { "label": { "type": "string", "default": "Header" }, "accessor": { "type": "string", "default": "id" } } } }
+   * @type|complex
+   * @schema { "type": "array", "items": { "type": "object", "properties": { "label": { "type": "string", "default": "Header" }, "accessor": { "type": "string", "default": "id" }, "template": { "type": "nodeFunction" } } } }
    */
-  headers?: { label: string; accessor: string }[];
+  columns?: { 
+    label: string; 
+    accessor: string; 
+    template?: (context: TableRowPayload) => React.ReactNode 
+  }[];
 
-  cellTemplates?: (
-    | React.ReactNode
-    | ((context: TableRowPayload) => React.ReactNode)
-  )[];                                          /* @optional @nodeFunction[] */
-
-  expandedContent?:
-    | React.ReactNode
-    | ((context: TableRowPayload) => React.ReactNode); /* @optional  */
-
-  pageSize?: number;                            /* @optional */
-  globalFilterPlaceholder?: string;             /* @optional */
-  className?: string;                           /* @optional */
+  expandedContent?: | React.ReactNode | ((context: TableRowPayload) => React.ReactNode); 
+  pageSize?: number;                            
+  globalFilterPlaceholder?: string;             
+  className?: string;                           
 }
 
 export default function RepeaterTable({
   data = [],
-  headers = [],
-  cellTemplates = [],
+  columns = [],
   expandedContent,
   pageSize = 5,
   globalFilterPlaceholder = "Search anywhere...",
@@ -59,33 +40,27 @@ export default function RepeaterTable({
   const [globalFilter, setGlobalFilter] = useState("");
   const [expanded, setExpanded] = useState<ExpandedState>({});
 
-  // STABILIZATION: Use refs for templates to prevent infinite re-render loops in the builder
-  const headersRef = useRef(headers);
-  const cellsRef = useRef(cellTemplates);
+  // 1. Ref stabilization for the entire complex object
+  const columnsRef = useRef(columns);
+  useEffect(() => { columnsRef.current = columns; }, [columns]);
 
-  useEffect(() => { headersRef.current = headers; }, [headers]);
-  useEffect(() => { cellsRef.current = cellTemplates; }, [cellTemplates]);
+  const tableCols = useMemo<ColumnDef<any, any>[]>(() => {
+    const safeCols = Array.isArray(columnsRef.current) ? columnsRef.current : [];
 
-  const columns = useMemo<ColumnDef<any, any>[]>(() => {
-    // Only re-calculate columns when the structural length changes
-    const colCount = Math.max(headersRef.current.length, cellsRef.current.length);
-
-    return Array.from({ length: colCount }).map((_, index) => {
-      const headerObj = headersRef.current[index] || { label: `Column ${index + 1}`, accessor: `col_${index}` };
-
+    return safeCols.map((col, index) => {
       return {
         id: `col_${index}`,
-        accessorFn: (row) => row[headerObj.accessor] ?? row,
+        accessorFn: (row) => row[col.accessor] ?? row,
 
         header: () => (
           <div className="font-semibold text-slate-700 dark:text-slate-200 uppercase text-xs">
-            {headerObj.label}
+            {col.label}
           </div>
         ),
 
         cell: ({ row }) => {
-          // Access the ref directly so we don't trigger memoization changes
-          const template = cellsRef.current[index];
+          // 2. Safely extract the dynamically injected template slot!
+          const currentTemplate = columnsRef.current?.[index]?.template;
           const isFirstCol = index === 0;
 
           const contextPayload: TableRowPayload = {
@@ -107,11 +82,11 @@ export default function RepeaterTable({
               )}
 
               <div className="flex-1 w-full min-w-0">
-                {typeof template === 'function'
-                  ? template(contextPayload)
-                  : template ? template : (
+                {typeof currentTemplate === 'function'
+                  ? currentTemplate(contextPayload)
+                  : currentTemplate ? currentTemplate : (
                     <div className="py-2 px-3 border border-dashed border-slate-300 dark:border-slate-700 rounded text-slate-400 dark:text-slate-500 text-xs italic flex items-center gap-2">
-                      <LayoutTemplate size={12} /> Drop {headerObj.label} Cell
+                      <LayoutTemplate size={12} /> Drop {col.label} Cell
                     </div>
                   )}
               </div>
@@ -120,11 +95,11 @@ export default function RepeaterTable({
         }
       };
     });
-  }, [headers.length, cellTemplates.length, expandedContent]); // Stable dependencies
+  }, [columns?.length, expandedContent]); // Only depend on length
 
   const table = useReactTable({
     data: Array.isArray(data) ? data : [],
-    columns,
+    columns: tableCols,
     state: { sorting, globalFilter, expanded },
     initialState: { pagination: { pageSize } },
     onSortingChange: setSorting,
@@ -144,12 +119,11 @@ export default function RepeaterTable({
 
   useEffect(() => { table.setPageSize(pageSize); }, [pageSize, table]);
 
-  if (data.length === 0 && headers.length === 0 && cellTemplates.length === 0) {
+  if (data.length === 0 && (!columns || columns.length === 0)) {
     return (
       <div className="w-full p-12 border-2 border-dashed border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0A0A0A] rounded-2xl flex flex-col items-center justify-center text-slate-400">
         <LayoutTemplate size={32} className="mb-4 opacity-50" />
         <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Repeater Table Empty</p>
-        <p className="text-xs mt-1 text-slate-500">Provide Data and configure Headers to begin.</p>
       </div>
     );
   }
@@ -163,12 +137,12 @@ export default function RepeaterTable({
           value={globalFilter ?? ""}
           onChange={(e) => setGlobalFilter(e.target.value)}
           placeholder={globalFilterPlaceholder}
-          className="w-full bg-white dark:bg-[#0A0A0A] border border-slate-200 dark:border-white/10 rounded-xl pl-10 pr-4 py-2 text-sm text-slate-900 dark:text-slate-200 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 transition-colors shadow-sm dark:shadow-none"
+          className="w-full bg-white dark:bg-[#0A0A0A] border border-slate-200 dark:border-white/10 rounded-xl pl-10 pr-4 py-2 text-sm text-slate-900 dark:text-slate-200 placeholder:text-slate-400 outline-none"
         />
       </div>
 
       {/* Table Core */}
-      <div className="rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#0A0A0A] overflow-hidden shadow-sm dark:shadow-none">
+      <div className="rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#0A0A0A] overflow-hidden">
         <div className="overflow-x-auto custom-scrollbar">
           <table className="w-full text-sm text-left">
             <thead className="bg-slate-50 dark:bg-white/5 border-b border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 tracking-wider">
@@ -194,7 +168,7 @@ export default function RepeaterTable({
                   </tr>
                   {row.getIsExpanded() && expandedContent && (
                     <tr className="bg-slate-50/50 dark:bg-white/[0.02]">
-                      <td colSpan={columns.length} className="p-0 border-b border-slate-200 dark:border-white/5">
+                      <td colSpan={tableCols.length} className="p-0 border-b border-slate-200 dark:border-white/5">
                         <div className="p-6">
                           {typeof expandedContent === 'function'
                             ? expandedContent({ item: row.original, index: row.index, isExpanded: true, toggleExpanded: row.getToggleExpandedHandler() })
