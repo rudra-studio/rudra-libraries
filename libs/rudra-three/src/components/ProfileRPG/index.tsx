@@ -23,6 +23,7 @@ export interface ZoneData {
 interface ProfileRPGProps {
   zones?: ZoneData[];
   onExit?: () => void;
+  className?: string;
 }
 
 const DEFAULT_ZONES: ZoneData[] = [
@@ -343,7 +344,7 @@ const HoloPedestal = ({ data, active }: { data: any, active: boolean }) => {
 };
 
 // --- MAIN EXPORT COMPONENT ---
-export const ProfileRPG = ({ zones = DEFAULT_ZONES, onExit }: ProfileRPGProps) => {
+export const ProfileRPG = ({ zones = DEFAULT_ZONES, onExit, className }: ProfileRPGProps) => {
   const [activeZone, setActiveZone] = useState<any>(null);
   const [explored, setExplored] = useState<Set<string>>(new Set());
   const [gameState, setGameState] = useState<'start' | 'explore' | 'done' | 'paused'>('start');
@@ -401,9 +402,9 @@ export const ProfileRPG = ({ zones = DEFAULT_ZONES, onExit }: ProfileRPGProps) =
 
   return (
     <div
-      ref={wrapperRef} tabIndex={0}
+      ref={wrapperRef}
       onClick={() => { if (gameState === 'explore') wrapperRef.current?.focus(); }}
-      className="relative w-full h-[620px] bg-slate-950 rounded-2xl overflow-hidden shadow-2xl font-sans select-none outline-none touch-none"
+      className={`relative w-full h-[620px] bg-slate-950 rounded-2xl overflow-hidden shadow-2xl font-sans select-none outline-none touch-none ${className}`}
     >
       {/* --- HUD --- */}
       <div className="absolute top-5 left-5 right-5 z-10 flex flex-col md:flex-row justify-between items-start pointer-events-none gap-4">
