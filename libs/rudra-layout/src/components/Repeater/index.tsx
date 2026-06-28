@@ -1,19 +1,49 @@
 import React from 'react';
 
-// The interface explicitly defines the render function signature and right-side annotations
 export interface RepeaterProps extends React.HTMLAttributes<HTMLDivElement> {
-  items?: any[];                   /* @optional */
-  layout?: 'grid' | 'stack';       /* @optional @select|grid|stack */
-  columns?: number;
-  gap?: 'sm' | 'md' | 'lg';        /* @optional @select|sm|md|lg */
-  children?: React.ReactNode | ((context: { item: any; index: number }) => React.ReactNode);  /* @nodeFunction */
+  items?: any[]; /* @optional */
+  children?: React.ReactNode | ((context: { item: any; index: number }) => React.ReactNode); /* @nodeFunction */
+  
+  /** * @type|class
+   * @schema [{
+   * "key": "Layout",
+   * "prefix": "",
+   * "type": "select",
+   * "options": [
+   * {"key": "grid", "label": "Grid"},
+   * {"key": "flex flex-col", "label": "Stack (Vertical)"}
+   * ]
+   * },{
+   * "key": "Columns (Grid Only)",
+   * "prefix": "grid-cols",
+   * "type": "select",
+   * "options": [
+   * {"key": "1", "label": "1 Column"},
+   * {"key": "2", "label": "2 Columns"},
+   * {"key": "3", "label": "3 Columns"},
+   * {"key": "4", "label": "4 Columns"},
+   * {"key": "5", "label": "5 Columns"},
+   * {"key": "6", "label": "6 Columns"},
+   * {"key": "[repeat(auto-fit,minmax(250px,1fr))]", "label": "Auto-Fit Cards"}
+   * ]
+   * },{
+   * "key": "Gap",
+   * "prefix": "gap",
+   * "type": "select",
+   * "options": [
+   * {"key": "0", "label": "None (0px)"},
+   * {"key": "4", "label": "Small (16px)"},
+   * {"key": "6", "label": "Medium (24px)"},
+   * {"key": "8", "label": "Large (32px)"},
+   * {"key": "12", "label": "Extra Large (48px)"}
+   * ]
+   * }]
+   */
+  className?: string;
 }
 
 export default function Repeater({
   items = [],
-  layout = 'grid',
-  columns = '4',
-  gap = 'md',
   className = '',
   children,
   ...props
@@ -21,30 +51,14 @@ export default function Repeater({
   
   const safeItems = Array.isArray(items) ? items : [];
 
-  const gapClasses = {
-    sm: 'gap-4',
-    md: 'gap-6',
-    lg: 'gap-8',
-  };
-
-  const gridCols: Record<string, string> = {
-    '1': 'grid-cols-1',
-    '2': 'grid-cols-1 sm:grid-cols-2',
-    '3': 'grid-cols-1 md:grid-cols-3',
-    '4': 'grid-cols-1 md:grid-cols-2 xl:grid-cols-4',
-  };
-
-  const containerClass = layout === 'grid' 
-    ? `grid ${gridCols[columns]} ${gapClasses[gap]}`
-    : `flex flex-col w-full ${gapClasses[gap]}`;
-
   // Design-time safety: If no items are bound yet, show a placeholder in the builder canvas
   if (safeItems.length === 0) {
     return (
-      <div className={`w-full p-8 border-2 border-dashed border-purple-200 bg-purple-50 rounded-lg flex flex-col items-center justify-center text-purple-600 ${className}`}>
+      <div className="w-full p-8 border-2 border-dashed border-purple-200 bg-purple-50 rounded-lg flex flex-col items-center justify-center text-purple-600">
         <span className="text-sm font-medium mb-2 opacity-70">Repeater (No Data Bound)</span>
-        <div className="mt-4 w-full p-4 border border-dashed border-purple-300 rounded bg-white">
-            {/* Execute dummy payload so the builder canvas doesn't crash when elements are dropped inside */}
+        
+        {/* We apply the user's className HERE so the dummy elements preview the exact grid/stack layout */}
+        <div className={`mt-4 w-full p-4 border border-dashed border-purple-300 rounded bg-white ${className}`}>
            {typeof children === 'function' ? children({ item: null, index: 0 }) : children}
         </div>
       </div>
@@ -53,7 +67,7 @@ export default function Repeater({
 
   // Runtime execution: Pure functional injection, zero Context API overhead
   return (
-    <div className={`${containerClass} ${className}`} {...props}>
+    <div className={`w-full ${className}`.trim()} {...props}>
       {safeItems.map((item, index) => (
         <React.Fragment key={item?.id || index}>
            {typeof children === 'function' ? children({ item, index }) : children}

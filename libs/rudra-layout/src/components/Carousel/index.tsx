@@ -1,11 +1,29 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-export interface RudraCarouselProps {
-  children: React.ReactNode[];
-  variant?: 'inline-arrows' | 'bottom-controls'; /* @select|inline-arrows|bottom-controls */
-  itemsPerView?: 'one' | 'multiple' | 'fractional'; /* @select|one|multiple|fractional */
-  gap?: 'none' | 'sm' | 'md' | 'lg'; /* @select|none|sm|md|lg */
+export interface RudraCarouselProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: React.ReactNode;
+  
+  /** * @select|inline-arrows|bottom-controls */
+  variant?: 'inline-arrows' | 'bottom-controls'; 
+  
+  /** * @select|one|multiple|fractional */
+  itemsPerView?: 'one' | 'multiple' | 'fractional'; 
+  
+  /** * @select|none|sm|md|lg */
+  gap?: 'none' | 'sm' | 'md' | 'lg'; 
+
+  /** * @class|[{
+   * "key": "Outer Margin",
+   * "prefix": "m",
+   * "type": "select",
+   * "options": [
+   * {"key": "0", "label": "None"},
+   * {"key": "4", "label": "Medium"},
+   * {"key": "8", "label": "Large"}
+   * ]
+   * }]
+   */
   className?: string;
 }
 
@@ -14,41 +32,29 @@ const RudraCarousel: React.FC<RudraCarouselProps> = ({
   variant = 'inline-arrows',
   itemsPerView = 'one',
   gap = 'md',
-  className
+  className = '',
+  ...props
 }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isAtStart, setIsAtStart] = useState(true);
   const [isAtEnd, setIsAtEnd] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const totalItems = React.Children.count(children);
+  const childrenArray = React.Children.toArray(children);
+  const totalItems = childrenArray.length;
 
-  // --- RESPONSIVE WIDTH CALCULATION ---
-  const getItemWidthClass = () => {
-    switch (itemsPerView) {
-      case 'one':
-        return 'w-full';
-      case 'multiple':
-        // 1 on mobile, 2 on tablet, 3 on desktop, 4 on large screens
-        return 'w-full sm:w-[calc(50%-1rem)] md:w-[calc(33.333%-1rem)] lg:w-[calc(25%-1rem)]';
-      case 'fractional':
-        // 1.1 on mobile, 2.5 on tablet, 4.5 on desktop 
-        // This gives the cool "peek" effect telling users they can scroll
-        return 'w-[85%] sm:w-[38%] md:w-[28%] lg:w-[21%]';
-      default:
-        return 'w-full';
-    }
+  // --- INTERNAL CSS MAPPINGS ---
+  const itemWidthMap: Record<string, string> = {
+    'one': 'w-full',
+    'multiple': 'w-full sm:w-[calc(50%-1rem)] md:w-[calc(33.333%-1rem)] lg:w-[calc(25%-1rem)]',
+    'fractional': 'w-[85%] sm:w-[38%] md:w-[28%] lg:w-[21%]'
   };
 
-  // --- GAP CALCULATION ---
-  const getGapClass = () => {
-    switch (gap) {
-      case 'none': return 'gap-0';
-      case 'sm': return 'gap-2';
-      case 'lg': return 'gap-8';
-      case 'md':
-      default: return 'gap-4';
-    }
+  const gapMap: Record<string, string> = {
+    'none': 'gap-0',
+    'sm': 'gap-2',
+    'md': 'gap-4',
+    'lg': 'gap-8'
   };
 
   // --- SCROLL LOGIC ---
@@ -56,28 +62,19 @@ const RudraCarousel: React.FC<RudraCarouselProps> = ({
     if (!scrollContainerRef.current) return;
     const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
     
-    // Update Arrow States
     setIsAtStart(scrollLeft <= 10);
     setIsAtEnd(Math.ceil(scrollLeft + clientWidth) >= scrollWidth - 10);
 
-    // Update Dot State (Approximation based on scroll percentage)
     const maxScroll = scrollWidth - clientWidth;
-    if (maxScroll > 0) {
-      const scrollProgress = scrollLeft / maxScroll;
-      const index = Math.round(scrollProgress * (totalItems - 1));
-      setActiveIndex(index);
-    } else {
-      setActiveIndex(0);
-    }
+    setActiveIndex(maxScroll > 0 ? Math.round((scrollLeft / maxScroll) * (totalItems - 1)) : 0);
   };
 
   useEffect(() => {
-    handleScroll(); // Init state
+    handleScroll();
   }, [children, itemsPerView]);
 
   const scrollByAmount = (direction: 'left' | 'right') => {
     if (!scrollContainerRef.current) return;
-    // Scroll by the width of the container for a full "page" turn, or a specific item amount
     const scrollAmount = scrollContainerRef.current.clientWidth * 0.8; 
     scrollContainerRef.current.scrollBy({
       left: direction === 'left' ? -scrollAmount : scrollAmount,
@@ -89,40 +86,40 @@ const RudraCarousel: React.FC<RudraCarouselProps> = ({
     if (!scrollContainerRef.current) return;
     const { scrollWidth, clientWidth } = scrollContainerRef.current;
     const maxScroll = scrollWidth - clientWidth;
-    const targetScroll = maxScroll * (index / (totalItems - 1 || 1));
     
     scrollContainerRef.current.scrollTo({
-      left: targetScroll,
+      left: maxScroll * (index / (totalItems - 1 || 1)),
       behavior: 'smooth'
     });
   };
 
-  // Prevent rendering if empty
-  if (!children || totalItems === 0) return null;
+  if (totalItems === 0) return null;
 
   return (
-    <div className={`relative w-full flex flex-col group ${className}`}>
+    <div 
+      // The injected className goes ONLY on the outer wrapper
+      className={`relative w-full flex flex-col group ${className}`.trim()} 
+      {...props}
+    >
       
-      {/* 
-        The Scroll Container 
-        Uses native CSS scroll snapping. The complicated classes hide the scrollbar across all browsers.
-      */}
+      {/* The Scroll Track */}
       <div 
         ref={scrollContainerRef}
         onScroll={handleScroll}
-        className={`flex ${getGapClass()} overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] relative z-10 py-4`}
+        // We apply the gap logic securely to the inner track
+        className={`flex ${gapMap[gap]} overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] relative z-10 py-4`}
       >
-        {React.Children.map(children, (child, index) => (
+        {childrenArray.map((child, index) => (
           <div 
             key={index} 
-            className={`shrink-0 snap-center sm:snap-start transition-transform ${getItemWidthClass()}`}
+            className={`shrink-0 snap-center sm:snap-start transition-transform ${itemWidthMap[itemsPerView] || itemWidthMap['one']}`}
           >
             {child}
           </div>
         ))}
       </div>
 
-      {/* --- VARIANT 1: INLINE ARROWS (Overlapping the content, hiding on edges) --- */}
+      {/* --- VARIANT 1: INLINE ARROWS --- */}
       {variant === 'inline-arrows' && (
         <>
           <button 
@@ -143,10 +140,9 @@ const RudraCarousel: React.FC<RudraCarouselProps> = ({
         </>
       )}
 
-      {/* --- VARIANT 2: BOTTOM CONTROLS (Arrows + Dots underneath) --- */}
+      {/* --- VARIANT 2: BOTTOM CONTROLS --- */}
       {variant === 'bottom-controls' && (
         <div className="flex items-center justify-between w-full mt-4 px-2">
-          
           <button 
             onClick={() => scrollByAmount('left')}
             disabled={isAtStart}
@@ -161,9 +157,7 @@ const RudraCarousel: React.FC<RudraCarouselProps> = ({
                 key={idx}
                 onClick={() => scrollToDot(idx)}
                 className={`transition-all duration-300 rounded-full ${
-                  activeIndex === idx 
-                    ? 'w-6 h-1.5 bg-blue-600' 
-                    : 'w-1.5 h-1.5 bg-slate-300 hover:bg-slate-400'
+                  activeIndex === idx ? 'w-6 h-1.5 bg-blue-600' : 'w-1.5 h-1.5 bg-slate-300 hover:bg-slate-400'
                 }`}
                 aria-label={`Go to slide ${idx + 1}`}
               />
@@ -179,7 +173,6 @@ const RudraCarousel: React.FC<RudraCarouselProps> = ({
           </button>
         </div>
       )}
-      
     </div>
   );
 };
