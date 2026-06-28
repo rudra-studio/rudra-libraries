@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@gsap/react": "latest",
     "@monaco-editor/react": "latest",
     "@react-three/drei": "latest",
     "@react-three/fiber": "9.6.1",
