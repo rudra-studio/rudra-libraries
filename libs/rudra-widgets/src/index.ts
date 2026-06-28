@@ -6,6 +6,8 @@ export type { AccordionItem, DataAccordionProps } from './components/DataAccordi
 export { default as DataAccordion } from './components/DataAccordion';
 export type { RepeaterCarouselProps } from './components/DataCarousel';
 export { default as RepeaterCarousel } from './components/DataCarousel';
+export type { ModalProps } from './components/Modal';
+export { default as Modal } from './components/Modal';
 export type { RepeaterProps } from './components/Repeater';
 export { default as Repeater } from './components/Repeater';
 export type { RepeaterTableProps } from './components/RepeaterTable';
