@@ -1,5 +1,11 @@
 import './index.css';
 
+export type { BoxProps } from './components/Box';
+export { default as Box } from './components/Box';
+export type { RudraCarouselProps } from './components/Carousel';
+export { default as RudraCarousel } from './components/Carousel';
+export type { RepeaterCarouselProps } from './components/DataCarousel';
+export { default as RepeaterCarousel } from './components/DataCarousel';
 export type { GridProps } from './components/Grid';
 export { default as Grid } from './components/Grid';
 export type { RepeaterProps } from './components/Repeater';
@@ -8,5 +14,7 @@ export type { RepeaterTableProps } from './components/RepeaterTable';
 export { default as RepeaterTable } from './components/RepeaterTable';
 export type { StackProps } from './components/Stack';
 export { default as Stack } from './components/Stack';
+export type { ComplexGridProps } from './components/StructuredGrid';
+export { default as ComplexGrid } from './components/StructuredGrid';
 export type { DataTableProps } from './components/Table';
 export { default as DataTable } from './components/Table';
