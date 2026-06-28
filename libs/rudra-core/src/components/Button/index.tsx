@@ -11,6 +11,7 @@ export interface ButtonProps {
   style?: React.CSSProperties;
   disabled?: boolean;
   type?: 'button' | 'submit' | 'reset';
+  additionalAttributes?: any; /* @type|json */
 }
 
 export default function Button({
