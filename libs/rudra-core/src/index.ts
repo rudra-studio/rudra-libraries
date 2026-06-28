@@ -10,6 +10,8 @@ export type { HeroSectionProps } from './components/HeroSection';
 export { default as HeroSection } from './components/HeroSection';
 export type { ImageProps } from './components/Image';
 export { default as Image } from './components/Image';
+export type { LinkProps } from './components/Link';
+export { default as Link } from './components/Link';
 export type { TypographyProps } from './components/Typography';
 export { default as Typography } from './components/Typography';
 export type { VideoProps } from './components/Video';
