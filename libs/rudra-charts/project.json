@@ -1,0 +1,9 @@
+{
+  "name": "rudra-charts",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/rudra-charts/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project rudra-charts --web",
+  "targets": {}
+}
