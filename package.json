@@ -1,12 +1,14 @@
 {
   "dependencies": {
+    "@gsap/react": "latest",
     "@monaco-editor/react": "latest",
     "@react-three/drei": "latest",
     "@react-three/fiber": "9.6.1",
     "@tanstack/react-table": "8",
     "@uiw/react-textarea-code-editor": "latest",
     "d3": "7",
-    "gsap": "3.12.5",
+    "gsap": "3.12.2",
+    "gsap/ScrollTrigger": "latest",
     "lucide-react": "^1.8.0",
     "motion": "12.0.0",
     "react": "^19.0.0",
