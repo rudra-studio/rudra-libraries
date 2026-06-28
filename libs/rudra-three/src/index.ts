@@ -6,3 +6,4 @@ export type { FloatingShapeProps } from './components/FloatingShape';
 export { default as FloatingShape } from './components/FloatingShape';
 export type { ModelViewerProps } from './components/ModelViewer';
 export { default as ModelViewer } from './components/ModelViewer';
+export { default as ProfileRPG } from './components/ProfileRPG';
