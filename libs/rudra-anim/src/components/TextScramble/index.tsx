@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useInView } from 'motion/react';
 
 export interface TextScrambleProps extends React.HTMLAttributes<HTMLElement> {
-  children: string; // The target string to decode
+  text: string; // The target string to decode
   scrambleSpeed?: number; // Milliseconds between each character scramble update (e.g., 40)
   revealDelay?: number; // Delay before it starts locking in the real text (e.g., 300)
   trigger?: 'onMount' | 'onView' | 'onHover'; /* @select|onMount|onView|onHover */
@@ -20,7 +20,7 @@ export interface TextScrambleProps extends React.HTMLAttributes<HTMLElement> {
 const DEFAULT_CHARS = '!<>-_\\/[]{}—=+*^?#________';
 
 export default function TextScramble({
-  children,
+  text = "",
   scrambleSpeed = 40,
   revealDelay = 300,
   trigger = 'onView',
@@ -35,7 +35,7 @@ export default function TextScramble({
   className = '',
   ...props
 }: TextScrambleProps) {
-  const [displayText, setDisplayText] = useState(children);
+  const [displayText, setDisplayText] = useState(text);
   const [isScrambling, setIsScrambling] = useState(false);
   
   const containerRef = useRef<HTMLElement>(null);
@@ -52,14 +52,14 @@ export default function TextScramble({
 
     frameRef.current = window.setInterval(() => {
       setDisplayText((current) => {
-        const newText = children
+        const newText = text
           .split('')
           .map((letter, index) => {
             // 1. If it's a space, keep it a space to preserve word wrapping
             if (letter === ' ') return ' ';
             
             // 2. If the iteration has passed this letter's index, lock in the real letter
-            if (index < iteration) return children[index];
+            if (index < iteration) return text[index];
             
             // 3. Otherwise, return a random character from our set
             return characterSet[Math.floor(Math.random() * characterSet.length)];
@@ -70,13 +70,13 @@ export default function TextScramble({
       });
 
       // Slowly increment the iteration to lock in letters one by one
-      iteration += 1 / (children.length / 3); 
+      iteration += 1 / (text.length / 3); 
 
       // End condition
-      if (iteration >= children.length) {
+      if (iteration >= text.length) {
         clearInterval(frameRef.current!);
         setIsScrambling(false);
-        setDisplayText(children); // Ensure final string is perfect
+        setDisplayText(text); // Ensure final string is perfect
       }
     }, scrambleSpeed);
   };
@@ -157,7 +157,7 @@ export default function TextScramble({
       {...props}
     >
       {/* Accessibility layer: Screen readers read this perfect text */}
-      <span className="sr-only">{children}</span>
+      <span className="sr-only">{text}</span>
       
       {/* Visual layer: Sighted users see this scrambled text. aria-hidden hides it from screen readers */}
       <span aria-hidden="true">{displayText}</span>

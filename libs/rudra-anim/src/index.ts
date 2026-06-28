@@ -17,6 +17,8 @@ export type { InteractiveWrapperProps } from './components/InteractiveWrapper';
 export { default as InteractiveWrapper } from './components/InteractiveWrapper';
 export type { MagneticHoverProps } from './components/MagneticHover';
 export { default as MagneticHover } from './components/MagneticHover';
+export type { MarqueeProps } from './components/Marquee';
+export { default as Marquee } from './components/Marquee';
 export type { MorphingCardProps } from './components/MorphingCard';
 export { default as MorphingCard } from './components/MorphingCard';
 export type { MotionParallaxProps } from './components/MotionParallax';
