@@ -25,7 +25,8 @@
       "@rudra-libraries/rudra-editor": ["./libs/rudra-editor/src/index.ts"],
       "@rudra-libraries/rudra-test": ["./libs/rudra-test/src/index.ts"],
       "@rudra-libraries/rudra-media": ["./libs/rudra-media/src/index.ts"],
-      "@rudra-libraries/rudra-widgets": ["./libs/rudra-widgets/src/index.ts"]
+      "@rudra-libraries/rudra-widgets": ["./libs/rudra-widgets/src/index.ts"],
+      "@rudra-libraries/rudra-charts": ["./libs/rudra-charts/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
