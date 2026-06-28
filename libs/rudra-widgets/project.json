@@ -1,0 +1,9 @@
+{
+  "name": "rudra-widgets",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/rudra-widgets/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project rudra-widgets --web",
+  "targets": {}
+}
