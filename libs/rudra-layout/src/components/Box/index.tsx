@@ -3,9 +3,13 @@ import React from 'react';
 export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
   
-  // The Custom Attributes Dictionary
-  // We use additionalProperties to tell the schema it's a dynamic key-value object
-  customAttributes?: Record<string, string>; /* @complex|{"type":"object"} */
+  /**
+   * The Custom Attributes Dictionary
+   * We use additionalProperties to tell the schema it's a dynamic key-value object
+   * @type|complex
+   * @schema {"type":"object"}
+   */
+  customAttributes?: Record<string, string>; 
   
   /** * @type|class
    * @schema [{
@@ -77,5 +81,6 @@ export const Box: React.FC<BoxProps> = ({
     </div>
   );
 };
+
 
 export default Box;
