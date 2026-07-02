@@ -1,92 +1,84 @@
 import React from 'react';
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
-  label: string; /* @translate */
-  variant?: 'solid' | 'subtle' | 'outline' | 'glow';
-  customColor?: string; /* @color */
-  icon?: React.ReactNode /* @icon */
-  align?: 'inline' | 'left' | 'center' | 'right'; /* @select|inline|left|center|right */
-  size?: 'sm' | 'md' | 'lg'; /* @select|sm|md|lg */
+  label?: string; /* @translate */
+  icon?: React.ReactNode; /* @icon */
   isOffer?: boolean;
+  customColor?: string; /* @color */
+  
+  /**
+   * The Custom Attributes Dictionary
+   * We use additionalProperties to tell the schema it's a dynamic key-value object
+   * @type|complex
+   * @schema {"type":"object"}
+   */
+  customAttributes?: Record<string, string>;
+
+  /** * @type|class
+   * @schema [{
+   * "key": "Display & Alignment",
+   * "prefix": "",
+   * "type": "select",
+   * "options": [
+   * {"key": "inline-flex", "label": "Inline"},
+   * {"key": "flex w-fit mr-auto", "label": "Left"},
+   * {"key": "flex w-fit mx-auto", "label": "Center"},
+   * {"key": "flex w-fit ml-auto", "label": "Right"}
+   * ]
+   * },{
+   * "key": "Size",
+   * "prefix": "",
+   * "type": "select",
+   * "options": [
+   * {"key": "px-2 py-0.5 text-[10px] gap-1", "label": "Small"},
+   * {"key": "px-2.5 py-1 text-xs gap-1.5", "label": "Medium"},
+   * {"key": "px-3.5 py-1.5 text-sm gap-2", "label": "Large"}
+   * ]
+   * },{
+   * "key": "Theme",
+   * "prefix": "bg",
+   * "type": "select",
+   * "options": [
+   * {"key": "purple-100 text-purple-800 border-transparent", "label": "Subtle Purple"},
+   * {"key": "purple-600 text-white border-purple-600", "label": "Solid Purple"},
+   * {"key": "blue-100 text-blue-800 border-transparent", "label": "Subtle Blue"},
+   * {"key": "blue-600 text-white border-blue-600", "label": "Solid Blue"},
+   * {"key": "transparent text-purple-600 border-purple-600", "label": "Outline Purple"}
+   * ]
+   * }]
+   */
+  className?: string;
 }
 
 export default function Badge({
   label = 'Special Offer',
-  variant = 'glow',
-  customColor = '#8b5cf6', 
   icon,
-  align = 'inline',
-  size = 'md',
   isOffer = false,
-  className = '',
+  customColor,
+  customAttributes = {},
+  // Set the "subtle" look with relative positioning as the solid baseline default
+  className = 'relative inline-flex items-center justify-center rounded-full font-bold tracking-wide border transition-all duration-300 px-2.5 py-1 text-xs gap-1.5 bg-purple-100 text-purple-800 border-transparent',
   ...props
 }: BadgeProps) {
 
-
-  // Inline styles ensure the user's color picker choice applies instantly 
-  // without needing arbitrary Tailwind compilation on the fly.
-  const getDynamicStyles = () => {
-    switch (variant) {
-      case 'solid':
-        return { backgroundColor: customColor, color: '#ffffff', borderColor: customColor };
-      case 'outline':
-        return { backgroundColor: 'transparent', color: customColor, borderColor: customColor };
-      case 'glow':
-        return {
-          backgroundColor: `${customColor}15`,
-          color: customColor,
-          borderColor: `${customColor}40`,
-          boxShadow: `0 0 16px ${customColor}30`
-        };
-      case 'subtle':
-      default:
-        return { backgroundColor: `${customColor}20`, color: customColor, borderColor: 'transparent' };
-    }
-  };
-
-  const alignClasses = {
-    inline: 'inline-flex',
-    left: 'flex w-fit mr-auto',
-    center: 'flex w-fit mx-auto',
-    right: 'flex w-fit ml-auto',
-  };
-
-  const sizeClasses = {
-    sm: 'px-2 py-0.5 text-[10px] gap-1',
-    md: 'px-2.5 py-1 text-xs gap-1.5',
-    lg: 'px-3.5 py-1.5 text-sm gap-2',
-  };
-
   return (
-    <div className={alignClasses[align]}>
-      <div
-        className={`
-          relative items-center rounded-full font-bold tracking-wide border transition-all duration-300
-          ${align === 'inline' ? 'inline-flex' : 'flex'}
-          ${sizeClasses[size]} 
-          ${className}
-        `}
-        style={getDynamicStyles()}
-        {...props}
-      >
-        {/* Pulsing dot for the "Offer" state */}
-        {isOffer && (
-          <span className="absolute -top-1 -right-1 flex h-3 w-3">
-            <span
-              className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
-              style={{ backgroundColor: customColor }}
-            />
-            <span
-              className="relative inline-flex rounded-full h-3 w-3"
-              style={{ backgroundColor: customColor }}
-            />
-          </span>
-        )}
+    <div
+      className={className}
+      // If a custom color is picked, it acts as a solid override 
+      style={customColor ? { backgroundColor: customColor, borderColor: customColor, color: '#ffffff' } : undefined}
+      {...customAttributes}
+      {...props}
+    >
+      {/* Pulsing dot for the "Offer" state */}
+      {isOffer && (
+        <span className="absolute -top-1 -right-1 flex h-3 w-3">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-red-500" />
+          <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500" />
+        </span>
+      )}
 
-        {icon}
-
-        {label}
-      </div>
+      {icon}
+      {label && <span>{label}</span>}
     </div>
   );
 }
