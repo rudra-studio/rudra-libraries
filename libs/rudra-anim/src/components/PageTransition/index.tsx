@@ -1,10 +1,39 @@
 import React from 'react';
 import { motion, Variants } from 'motion/react';
 
-export interface PageTransitionProps extends React.HTMLAttributes<HTMLDivElement> {
-  children: React.ReactNode;
+export interface PageTransitionProps extends React.HTMLAttributes<HTMLElement> {
+  children?: React.ReactNode;
   variant?: 'fade' | 'slideUp' | 'slideRight' | 'scale'; /* @select|fade|slideUp|slideRight|scale */
   duration?: number;
+  
+  /**
+   * The Custom Attributes Dictionary
+   * We use additionalProperties to tell the schema it's a dynamic key-value object
+   * @type|complex
+   * @schema {"type":"object"}
+   */
+  customAttributes?: Record<string, string>;
+
+  /** * @type|class
+   * @schema [{
+   * "key": "Dimensions",
+   * "prefix": "",
+   * "type": "select",
+   * "options": [
+   * {"key": "w-full min-h-screen", "label": "Full Width, Min Height Screen"},
+   * {"key": "w-full h-full", "label": "Full Width & Height"},
+   * {"key": "w-full", "label": "Full Width, Auto Height"}
+   * ]
+   * },{
+   * "key": "Layout",
+   * "prefix": "",
+   * "type": "select",
+   * "options": [
+   * {"key": "block", "label": "Block"},
+   * {"key": "flex flex-col", "label": "Flex Column"}
+   * ]
+   * }]
+   */
   className?: string;
 }
 
@@ -12,7 +41,9 @@ export default function PageTransition({
   children,
   variant = 'slideUp',
   duration = 0.4,
-  className = '',
+  customAttributes = {},
+  // Solid Baseline Default for routing root nodes
+  className = 'w-full min-h-screen block',
   ...props
 }: PageTransitionProps) {
   
@@ -50,7 +81,8 @@ export default function PageTransition({
         duration, 
         ease: [0.22, 1, 0.36, 1] // Custom Apple-style ease-out
       }}
-      className={`w-full h-full ${className}`}
+      className={className}
+      {...customAttributes}
       {...props}
     >
       {children}

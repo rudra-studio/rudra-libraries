@@ -1,24 +1,68 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useId } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 
 export interface MorphingCardProps extends React.HTMLAttributes<HTMLDivElement> {
-  id: string; // Must be globally unique on the page to link the layouts
-  thumbnailImage: string;
-  title: string;
+  id?: string; // Must be globally unique to link layouts. Falls back to React.useId()
+  thumbnailImage?: string;
+  title?: string;
   subtitle?: string;
   description?: React.ReactNode;
+
+  /**
+   * The Custom Attributes Dictionary
+   * We use additionalProperties to tell the schema it's a dynamic key-value object
+   * @type|complex
+   * @schema {"type":"object"}
+   */
+  customAttributes?: Record<string, string>;
+
+  /** * @type|class
+   * @schema [{
+   * "key": "Height",
+   * "prefix": "h",
+   * "type": "select",
+   * "options": [
+   * {"key": "64", "label": "Small (16rem)"},
+   * {"key": "80", "label": "Medium (20rem)"},
+   * {"key": "96", "label": "Large (24rem)"}
+   * ]
+   * },{
+   * "key": "Width",
+   * "prefix": "w",
+   * "type": "select",
+   * "options": [
+   * {"key": "full", "label": "Full Width"},
+   * {"key": "fit", "label": "Fit Content"}
+   * ]
+   * },{
+   * "key": "Rounding",
+   * "prefix": "rounded",
+   * "type": "select",
+   * "options": [
+   * {"key": "none", "label": "Square"},
+   * {"key": "xl", "label": "Rounded"},
+   * {"key": "2xl", "label": "Extra Rounded"},
+   * {"key": "3xl", "label": "Pill-like"}
+   * ]
+   * }]
+   */
+  className?: string;
 }
 
 export default function MorphingCard({
   id,
-  thumbnailImage,
-  title,
-  subtitle,
+  thumbnailImage = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop',
+  title = 'Design Systems',
+  subtitle = 'Architecture & Scaling',
   description,
-  className = '',
+  customAttributes = {},
+  // Solid Baseline Defaults: Establishes the thumbnail shape, cursor, and hover states
+  className = 'relative w-full h-64 rounded-2xl overflow-hidden cursor-pointer bg-white shadow-sm hover:shadow-md transition-shadow group',
   ...props
 }: MorphingCardProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const fallbackId = useId();
+  const safeId = id || fallbackId;
 
   // Accessibility: Close on Escape key
   useEffect(() => {
@@ -46,35 +90,36 @@ export default function MorphingCard({
 
   return (
     <>
-      {/* 1. THUMBNAIL STATE (The Trigger) */}
+      {/* 1. THUMBNAIL STATE (The Trigger in standard document flow) */}
       <motion.div
-        layoutId={`card-container-${id}`}
+        layoutId={`card-container-${safeId}`}
         onClick={() => setIsOpen(true)}
-        className={`relative w-full h-64 rounded-2xl overflow-hidden cursor-pointer bg-white shadow-sm hover:shadow-md transition-shadow group ${className}`}
+        className={className}
+        {...customAttributes}
         {...props}
       >
         <motion.img
-          layoutId={`card-image-${id}`}
+          layoutId={`card-image-${safeId}`}
           src={thumbnailImage}
           alt={title}
           className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         {/* Gradient overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
         
         <motion.div 
-          layoutId={`card-text-container-${id}`}
+          layoutId={`card-text-container-${safeId}`}
           className="absolute bottom-0 left-0 p-6 flex flex-col"
         >
           <motion.h3 
-            layoutId={`card-title-${id}`}
+            layoutId={`card-title-${safeId}`}
             className="text-white text-xl font-bold tracking-tight"
           >
             {title}
           </motion.h3>
           {subtitle && (
             <motion.p 
-              layoutId={`card-subtitle-${id}`}
+              layoutId={`card-subtitle-${safeId}`}
               className="text-slate-200 text-sm font-medium mt-1"
             >
               {subtitle}
@@ -83,30 +128,30 @@ export default function MorphingCard({
         </motion.div>
       </motion.div>
 
-      {/* 2. MODAL STATE (The Expanded View) */}
+      {/* 2. MODAL STATE (The Expanded View fixed above the document flow) */}
       <AnimatePresence>
         {isOpen && (
-          <React.Fragment key={`modal-${id}`}>
+          <React.Fragment key={`modal-${safeId}`}>
             {/* The Backdrop Blur */}
             <motion.div
               initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
               animate={{ opacity: 1, backdropFilter: 'blur(8px)' }}
               exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
               onClick={() => setIsOpen(false)}
-              className="fixed inset-0 z-40 bg-slate-900/40 cursor-zoom-out"
+              className="fixed inset-0 z-[100] bg-slate-900/40 cursor-zoom-out"
             />
 
-            {/* The Expanded Card */}
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8 pointer-events-none">
+            {/* The Expanded Card Container */}
+            <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 md:p-8 pointer-events-none">
               <motion.div
-                layoutId={`card-container-${id}`}
+                layoutId={`card-container-${safeId}`}
                 className="w-full max-w-3xl max-h-[90vh] bg-white rounded-3xl overflow-hidden shadow-2xl flex flex-col pointer-events-auto"
                 transition={transition}
               >
                 {/* Header Image Area */}
                 <div className="relative w-full h-64 md:h-80 shrink-0">
                   <motion.img
-                    layoutId={`card-image-${id}`}
+                    layoutId={`card-image-${safeId}`}
                     src={thumbnailImage}
                     alt={title}
                     className="absolute inset-0 w-full h-full object-cover"
@@ -129,9 +174,9 @@ export default function MorphingCard({
 
                 {/* Content Area */}
                 <div className="p-8 md:p-10 overflow-y-auto">
-                  <motion.div layoutId={`card-text-container-${id}`}>
+                  <motion.div layoutId={`card-text-container-${safeId}`}>
                     <motion.h3 
-                      layoutId={`card-title-${id}`}
+                      layoutId={`card-title-${safeId}`}
                       className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight"
                       transition={transition}
                     >
@@ -139,7 +184,7 @@ export default function MorphingCard({
                     </motion.h3>
                     {subtitle && (
                       <motion.p 
-                        layoutId={`card-subtitle-${id}`}
+                        layoutId={`card-subtitle-${safeId}`}
                         className="text-emerald-600 font-semibold text-lg mt-2"
                         transition={transition}
                       >
@@ -159,7 +204,7 @@ export default function MorphingCard({
                     {description || (
                       <p>
                         This is the expanded view. Notice how the image, the title, and the subtitle perfectly morphed from their thumbnail dimensions to their new modal dimensions. 
-                        Because they share a `layoutId`, Framer calculates the CSS transform matrices on the GPU to invert the layout shift.
+                        Because they share a <code>layoutId</code>, Framer calculates the CSS transform matrices on the GPU to invert the layout shift.
                       </p>
                     )}
                   </motion.div>

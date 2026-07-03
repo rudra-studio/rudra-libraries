@@ -1,11 +1,33 @@
 import React, { useRef } from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
+import { motion, useMotionValue, useSpring } from 'motion/react';
 
 export interface MagneticHoverProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
   intensity?: 'light' | 'medium' | 'heavy'; /* @select|light|medium|heavy */
   springStiffness?: number; // Higher is tighter (e.g., 150)
   springDamping?: number;   // Higher is less bouncy (e.g., 15)
+  
+  /**
+   * The Custom Attributes Dictionary
+   * We use additionalProperties to tell the schema it's a dynamic key-value object
+   * @type|complex
+   * @schema {"type":"object"}
+   */
+  customAttributes?: Record<string, string>;
+
+  /** * @type|class
+   * @schema [{
+   * "key": "Display & Layout",
+   * "prefix": "",
+   * "type": "select",
+   * "options": [
+   * {"key": "inline-block w-fit cursor-pointer", "label": "Inline Block (Fit Content)"},
+   * {"key": "block w-full cursor-pointer", "label": "Block (Full Width)"},
+   * {"key": "flex items-center justify-center w-fit cursor-pointer", "label": "Flex Center (Fit Content)"}
+   * ]
+   * }]
+   */
+  className?: string;
 }
 
 export default function MagneticHover({
@@ -13,7 +35,9 @@ export default function MagneticHover({
   intensity = 'medium',
   springStiffness = 150,
   springDamping = 15,
-  className = '',
+  customAttributes = {},
+  // Solid baseline default: wraps content tightly and indicates interactivity
+  className = 'inline-block w-fit cursor-pointer',
   ...props
 }: MagneticHoverProps) {
   const ref = useRef<HTMLDivElement>(null);
@@ -63,7 +87,8 @@ export default function MagneticHover({
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{ x: springX, y: springY }}
-      className={`w-fit ${className}`}
+      className={className}
+      {...customAttributes}
       {...props}
     >
       {children}

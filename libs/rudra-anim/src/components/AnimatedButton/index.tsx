@@ -6,12 +6,87 @@ export type ButtonStatus = 'idle' | 'loading' | 'success' | 'error';
 export interface AnimatedButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children?: React.ReactNode; // The default 'idle' text
   status?: ButtonStatus; /* @select|idle|loading|success|error */
-  variant?: 'primary' | 'secondary' | 'danger' | 'ghost'; /* @select|primary|secondary|danger|ghost */
-  size?: 'sm' | 'md' | 'lg'; /* @select|sm|md|lg */
-  fullWidth?: boolean; /* @select|true|false */
   loadingText?: string;
   successText?: string;
   errorText?: string;
+
+  /**
+   * The Custom Attributes Dictionary
+   * We use additionalProperties to tell the schema it's a dynamic key-value object
+   * @type|complex
+   * @schema {"type":"object"}
+   */
+  customAttributes?: Record<string, string>;
+
+  /** * @type|class
+   * @schema [{
+   * "key": "Theme",
+   * "prefix": "bg",
+   * "type": "select",
+   * "options": [
+   * {"key": "bg-slate-900 text-white hover:bg-slate-800 active:bg-slate-950", "label": "Primary Dark"},
+   * {"key": "bg-slate-100 text-slate-900 hover:bg-slate-200 active:bg-slate-300", "label": "Secondary Light"},
+   * {"key": "bg-rose-600 text-white hover:bg-rose-500 active:bg-rose-700", "label": "Danger Solid"},
+   * {"key": "bg-transparent text-slate-600 hover:bg-slate-100 active:bg-slate-200", "label": "Ghost"}
+   * ]
+   * },{
+   * "key": "Size",
+   * "prefix": "",
+   * "type": "select",
+   * "options": [
+   * {"key": "px-3 py-1.5 text-xs gap-1.5 rounded-md", "label": "Small"},
+   * {"key": "px-4 py-2 text-sm gap-2 rounded-lg", "label": "Medium"},
+   * {"key": "px-6 py-3 text-base gap-2.5 rounded-xl", "label": "Large"}
+   * ]
+   * },{
+   * "key": "Width",
+   * "prefix": "w",
+   * "type": "select",
+   * "options": [
+   * {"key": "w-fit", "label": "Fit Content"},
+   * {"key": "w-full", "label": "Full Width"}
+   * ]
+   * }]
+   */
+  className?: string;
+
+  /** * @type|class
+   * @schema [{
+   * "key": "Loading Override",
+   * "prefix": "",
+   * "type": "select",
+   * "options": [
+   * {"key": "!pointer-events-none !opacity-90", "label": "Default Loading Fade"}
+   * ]
+   * }]
+   */
+  loadingClassName?: string;
+
+  /** * @type|class
+   * @schema [{
+   * "key": "Success Override",
+   * "prefix": "",
+   * "type": "select",
+   * "options": [
+   * {"key": "!bg-emerald-600 !text-white !pointer-events-none", "label": "Solid Emerald"},
+   * {"key": "!bg-green-500 !text-white !pointer-events-none", "label": "Solid Green"}
+   * ]
+   * }]
+   */
+  successClassName?: string;
+
+  /** * @type|class
+   * @schema [{
+   * "key": "Error Override",
+   * "prefix": "",
+   * "type": "select",
+   * "options": [
+   * {"key": "!bg-rose-600 !text-white !pointer-events-none", "label": "Solid Rose"},
+   * {"key": "!bg-red-500 !text-white !pointer-events-none", "label": "Solid Red"}
+   * ]
+   * }]
+   */
+  errorClassName?: string;
 }
 
 // Internal zero-dependency micro-icons
@@ -49,40 +124,20 @@ const AlertIcon = () => (
 export default function AnimatedButton({
   children = 'Submit',
   status = 'idle',
-  variant = 'primary',
-  size = 'md',
-  fullWidth = false,
   loadingText = 'Saving...',
   successText = 'Saved!',
   errorText = 'Failed',
-  className = '',
+  customAttributes = {},
+  // Solid Baseline Defaults
+  className = 'w-fit px-4 py-2 text-sm gap-2 rounded-lg bg-slate-900 text-white hover:bg-slate-800 active:bg-slate-950',
+  loadingClassName = '!pointer-events-none !opacity-90',
+  successClassName = '!bg-emerald-600 !text-white !pointer-events-none',
+  errorClassName = '!bg-rose-600 !text-white !pointer-events-none',
   disabled,
   ...props
 }: AnimatedButtonProps) {
 
-  // 1. Style Dictionaries
-  const sizeClasses = {
-    sm: 'px-3 py-1.5 text-xs gap-1.5 rounded-md',
-    md: 'px-4 py-2 text-sm gap-2 rounded-lg',
-    lg: 'px-6 py-3 text-base gap-2.5 rounded-xl',
-  }[size];
-
-  const variantColors = {
-    primary: 'bg-slate-900 text-white hover:bg-slate-800 active:bg-slate-950',
-    secondary: 'bg-slate-100 text-slate-900 hover:bg-slate-200 active:bg-slate-300',
-    danger: 'bg-rose-600 text-white hover:bg-rose-500 active:bg-rose-700',
-    ghost: 'bg-transparent text-slate-600 hover:bg-slate-100 active:bg-slate-200',
-  }[variant];
-
-  // Override background colors dynamically if resolved into an end-state
-  const getStateColorOverride = () => {
-    if (status === 'success') return '!bg-emerald-600 !text-white pointer-events-none';
-    if (status === 'error') return '!bg-rose-600 !text-white pointer-events-none';
-    if (status === 'loading') return 'pointer-events-none opacity-90';
-    return variantColors;
-  };
-
-  // 2. Resolve Current UI Content
+  // 1. Resolve Current UI Content
   const getContent = () => {
     switch (status) {
       case 'loading':
@@ -111,6 +166,12 @@ export default function AnimatedButton({
     }
   };
 
+  // 2. Resolve Dynamic State Classes
+  const activeStateClass = status === 'success' ? successClassName
+                         : status === 'error' ? errorClassName
+                         : status === 'loading' ? loadingClassName
+                         : '';
+
   return (
     <motion.button
       layout // Instructs Framer to morph the outer shell width smoothly
@@ -122,11 +183,10 @@ export default function AnimatedButton({
       className={`
         relative inline-flex items-center justify-center font-medium
         transition-colors duration-200 select-none overflow-hidden
-        ${fullWidth ? 'w-full' : 'w-fit'}
-        ${sizeClasses}
-        ${getStateColorOverride()}
         ${className}
-      `}
+        ${activeStateClass}
+      `.trim().replace(/\s+/g, ' ')}
+      {...customAttributes}
       {...props}
     >
       {/* popLayout instantly takes exiting text out of document flow so incoming text centers instantly */}

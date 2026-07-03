@@ -9,9 +9,59 @@ export interface StickyScrollItem {
 }
 
 export interface StickyScrollProps extends React.HTMLAttributes<HTMLDivElement> {
-  items?: StickyScrollItem[];
+  items?: StickyScrollItem[]; /* @array */
   contentAlignment?: 'left' | 'right'; /* @select|left|right */
   overlayFade?: boolean; /* @select|true|false */
+
+  /**
+   * The Custom Attributes Dictionary
+   * We use additionalProperties to tell the schema it's a dynamic key-value object
+   * @type|complex
+   * @schema {"type":"object"}
+   */
+  customAttributes?: Record<string, string>;
+
+  /** * @type|class
+   * @schema [{
+   * "key": "Spacing",
+   * "prefix": "gap",
+   * "type": "select",
+   * "options": [
+   * {"key": "gap-10 md:gap-20", "label": "Large Gap"},
+   * {"key": "gap-6 md:gap-10", "label": "Medium Gap"},
+   * {"key": "gap-4", "label": "Small Gap"}
+   * ]
+   * }]
+   */
+  className?: string;
+
+  /** * @type|class
+   * @schema [{
+   * "key": "Text Column Width",
+   * "prefix": "",
+   * "type": "select",
+   * "options": [
+   * {"key": "w-full md:w-1/2 py-[30vh]", "label": "50% Width"},
+   * {"key": "w-full md:w-5/12 py-[30vh]", "label": "41% Width (Slightly narrower)"},
+   * {"key": "w-full md:w-1/3 py-[30vh]", "label": "33% Width"}
+   * ]
+   * }]
+   */
+  textColumnClassName?: string;
+
+  /** * @type|class
+   * @schema [{
+   * "key": "Visual Column Width",
+   * "prefix": "",
+   * "type": "select",
+   * "options": [
+   * {"key": "hidden md:flex w-1/2 h-screen sticky top-0 items-center justify-center", "label": "50% Width"},
+   * {"key": "hidden md:flex w-7/12 h-screen sticky top-0 items-center justify-center", "label": "58% Width (Slightly wider)"},
+   * {"key": "hidden md:flex w-2/3 h-screen sticky top-0 items-center justify-center", "label": "66% Width"}
+   * ]
+   * }]
+   */
+  visualColumnClassName?: string;
 }
 
 export default function StickyScroll({
@@ -37,7 +87,11 @@ export default function StickyScroll({
   ],
   contentAlignment = 'left',
   overlayFade = true,
-  className = '',
+  customAttributes = {},
+  // Solid Baseline Defaults
+  className = 'relative w-full flex items-start gap-10 md:gap-20',
+  textColumnClassName = 'w-full md:w-1/2 py-[30vh]',
+  visualColumnClassName = 'hidden md:flex w-1/2 h-screen sticky top-0 items-center justify-center',
   ...props
 }: StickyScrollProps) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -52,6 +106,8 @@ export default function StickyScroll({
 
   // 2. Derive Active Index from Scroll Progress
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (!items || items.length === 0) return;
+    
     // Divide the scroll progress into equal chunks based on the number of items
     const chunk = 1 / items.length;
     // Calculate which chunk we are currently in
@@ -67,16 +123,18 @@ export default function StickyScroll({
   });
 
   const isLeftAlign = contentAlignment === 'left';
+  const hasItems = items && items.length > 0;
 
   return (
     <div
       ref={containerRef}
-      className={`relative w-full flex items-start gap-10 md:gap-20 ${className}`}
+      className={className}
+      {...customAttributes}
       {...props}
     >
       {/* TEXT COLUMN (Scrolls normally) */}
-      <div className={`w-full md:w-1/2 py-[30vh] ${isLeftAlign ? 'order-1' : 'order-2'}`}>
-        {items.map((item, index) => {
+      <div className={`${textColumnClassName} ${isLeftAlign ? 'order-1' : 'order-2'}`}>
+        {hasItems && items.map((item, index) => {
           const isActive = index === activeIndex;
           
           return (
@@ -97,23 +155,25 @@ export default function StickyScroll({
       </div>
 
       {/* VISUAL COLUMN (Sticky) */}
-      <div className={`hidden md:flex w-1/2 h-screen sticky top-0 items-center justify-center ${isLeftAlign ? 'order-2' : 'order-1'}`}>
+      <div className={`${visualColumnClassName} ${isLeftAlign ? 'order-2' : 'order-1'}`}>
         <div className="relative w-full aspect-square max-h-[600px]">
           {/* mode="popLayout" prevents the new image from stacking below the old one during the crossfade */}
           <AnimatePresence mode="popLayout">
-            <motion.div
-              key={activeIndex}
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -20, scale: 0.95 }}
-              transition={{ 
-                duration: 0.4, 
-                ease: [0.25, 0.1, 0.25, 1] 
-              }}
-              className="absolute inset-0 shadow-2xl rounded-2xl overflow-hidden"
-            >
-              {items[activeIndex].visual}
-            </motion.div>
+            {hasItems && (
+              <motion.div
+                key={activeIndex}
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                transition={{ 
+                  duration: 0.4, 
+                  ease: [0.25, 0.1, 0.25, 1] 
+                }}
+                className="absolute inset-0 shadow-2xl rounded-2xl overflow-hidden"
+              >
+                {items[activeIndex].visual}
+              </motion.div>
+            )}
           </AnimatePresence>
         </div>
       </div>
