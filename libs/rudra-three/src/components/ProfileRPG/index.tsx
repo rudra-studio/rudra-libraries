@@ -20,9 +20,29 @@ export interface ZoneData {
   text: string;
 }
 
-interface ProfileRPGProps {
+export interface ProfileRPGProps extends React.HTMLAttributes<HTMLDivElement> {
   zones?: ZoneData[];
   onExit?: () => void;
+  
+  /**
+   * The Custom Attributes Dictionary
+   * We use additionalProperties to tell the schema it's a dynamic key-value object
+   * @type|complex
+   * @schema {"type":"object"}
+   */
+  customAttributes?: Record<string, string>;
+
+  /** * @type|class
+   * @schema [{
+   * "key": "Dimensions & Background",
+   * "prefix": "",
+   * "type": "select",
+   * "options": [
+   * {"key": "relative w-full h-[620px] bg-slate-950 rounded-2xl overflow-hidden shadow-2xl font-sans select-none outline-none touch-none", "label": "Standard Window"},
+   * {"key": "relative w-full h-screen bg-slate-950 overflow-hidden font-sans select-none outline-none touch-none", "label": "Full Screen"}
+   * ]
+   * }]
+   */
   className?: string;
 }
 
@@ -60,8 +80,6 @@ const generateTraffic = (maxDepth: number) => {
 };
 
 // --- MODELS & SCENERY ---
-
-// THE FIX: Added zIndexRange and a CSS zIndex: 9999 to guarantee it pops over the titles
 const LiveBubble = ({ data, offsetY = 1.8, bg = 'bg-white', text = 'text-slate-950', border = 'border-slate-900', isPaused }: any) => {
   const elRef = useRef<HTMLDivElement>(null);
   useFrame(() => {
@@ -294,21 +312,17 @@ const CitySkyline = ({ maxZDepth }: { maxZDepth: number }) => {
   );
 };
 
-// THE FIX: Set zIndexRange={[10, 0]} on the title so it sits properly in the background layer
 const HoloPedestal = ({ data, active }: { data: any, active: boolean }) => {
   const signRef = useRef<THREE.Group>(null);
 
-  // Smoothly shrink the floating signboard into nothing when the player stands on the pad
   useFrame(() => {
     if (!signRef.current) return;
     const targetScale = active ? 0 : 1;
-    // Lerp handles the smooth transition between scale 1 (visible) and 0 (hidden)
     signRef.current.scale.setScalar(THREE.MathUtils.lerp(signRef.current.scale.x, targetScale, 0.15));
   });
 
   return (
     <group position={data.position as any}>
-      {/* 1. Ground Rings */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 0]}>
         <circleGeometry args={[3, 32]} />
         <meshBasicMaterial color={data.color} transparent opacity={active ? 0.35 : 0.08} />
@@ -318,13 +332,11 @@ const HoloPedestal = ({ data, active }: { data: any, active: boolean }) => {
         <meshBasicMaterial color={data.color} />
       </mesh>
 
-      {/* 2. Light Pillar */}
       <mesh position={[0, 4, 0]}>
         <cylinderGeometry args={[0.05, 3, 8, 16, 1, true]} />
         <meshBasicMaterial color={data.color} transparent opacity={active ? 0.2 : 0.03} side={THREE.DoubleSide} depthWrite={false} />
       </mesh>
 
-      {/* 3. The Floating Signboard (Now inside a scalable group) */}
       <group ref={signRef}>
         <Float speed={2} floatIntensity={0.5} position={[0, 2.5, 0]}>
           <mesh castShadow>
@@ -344,7 +356,13 @@ const HoloPedestal = ({ data, active }: { data: any, active: boolean }) => {
 };
 
 // --- MAIN EXPORT COMPONENT ---
-export const ProfileRPG = ({ zones = DEFAULT_ZONES, onExit, className }: ProfileRPGProps) => {
+export const ProfileRPG = ({ 
+  zones = DEFAULT_ZONES, 
+  onExit, 
+  customAttributes = {},
+  className = 'relative w-full h-[620px] bg-slate-950 rounded-2xl overflow-hidden shadow-2xl font-sans select-none outline-none touch-none',
+  ...props
+}: ProfileRPGProps) => {
   const [activeZone, setActiveZone] = useState<any>(null);
   const [explored, setExplored] = useState<Set<string>>(new Set());
   const [gameState, setGameState] = useState<'start' | 'explore' | 'done' | 'paused'>('start');
@@ -360,7 +378,8 @@ export const ProfileRPG = ({ zones = DEFAULT_ZONES, onExit, className }: Profile
   const maxZDepth = useMemo(() => (processedZones.length * ZONE_GAP) + 50, [processedZones]);
   const roadCenterZ = -(maxZDepth / 2) + 10;
 
-  const trafficData = useRef(generateTraffic(maxZDepth));
+  // Initialize as EMPTY to save memory/rendering on initial load
+  const trafficData = useRef<any[]>([]);
 
   const setT = (k: keyof typeof touch.current, v: boolean) => { touch.current[k] = v; };
   const bindTouch = (k: keyof typeof touch.current) => ({
@@ -381,11 +400,20 @@ export const ProfileRPG = ({ zones = DEFAULT_ZONES, onExit, className }: Profile
     }
   };
 
+  const startGame = () => {
+    // Only generate AI meshes and vectors when the user explicitly clicks start
+    if (trafficData.current.length === 0) {
+      trafficData.current = generateTraffic(maxZDepth);
+    }
+    setGameState('explore');
+  };
+
   const handleExit = () => {
     setGameState('start');
     setExplored(new Set());
     setActiveZone(null);
-    trafficData.current = generateTraffic(maxZDepth); // Reset cars
+    // Erase the traffic map instantly to garbage collect AI nodes from ThreeJS memory
+    trafficData.current = []; 
     if (onExit) onExit();
   };
 
@@ -398,13 +426,19 @@ export const ProfileRPG = ({ zones = DEFAULT_ZONES, onExit, className }: Profile
     { name: 'shift', keys: ['ShiftLeft', 'ShiftRight'] },
   ], []);
 
-  const isPaused = gameState === 'paused';
+  // Globally pause engine calculations unless we are explicitly in "explore" mode
+  const isPaused = gameState !== 'explore';
 
   return (
     <div
       ref={wrapperRef}
-      onClick={() => { if (gameState === 'explore') wrapperRef.current?.focus(); }}
-      className={`relative w-full h-[620px] bg-slate-950 rounded-2xl overflow-hidden shadow-2xl font-sans select-none outline-none touch-none ${className}`}
+      onClick={(e) => { 
+        if (gameState === 'explore') wrapperRef.current?.focus(); 
+        if (props.onClick) props.onClick(e); // Pass inherited click events 
+      }}
+      className={className}
+      {...customAttributes}
+      {...props}
     >
       {/* --- HUD --- */}
       <div className="absolute top-5 left-5 right-5 z-10 flex flex-col md:flex-row justify-between items-start pointer-events-none gap-4">
@@ -450,7 +484,7 @@ export const ProfileRPG = ({ zones = DEFAULT_ZONES, onExit, className }: Profile
           <div className="w-12 h-12 rounded-2xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 mb-4 animate-bounce">▲</div>
           <h2 className="text-3xl font-black text-white tracking-tight">SYSTEM INITIALIZED</h2>
           <p className="text-slate-400 text-sm max-w-xs mt-1 mb-6">Steer [A/D]. Accelerate [W]. Jump traffic [SPACE]. Find the {processedZones.length} databanks.</p>
-          <button onClick={() => setGameState('explore')} className="px-8 py-3.5 bg-sky-500 hover:bg-sky-400 active:scale-95 text-slate-950 font-black text-sm tracking-wider rounded-xl transition shadow-[0_0_25px_rgba(14,165,233,0.4)] cursor-pointer pointer-events-auto">
+          <button onClick={startGame} className="px-8 py-3.5 bg-sky-500 hover:bg-sky-400 active:scale-95 text-slate-950 font-black text-sm tracking-wider rounded-xl transition shadow-[0_0_25px_rgba(14,165,233,0.4)] cursor-pointer pointer-events-auto">
             ENTER DRIVE
           </button>
         </div>
@@ -515,6 +549,7 @@ export const ProfileRPG = ({ zones = DEFAULT_ZONES, onExit, className }: Profile
             <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-11, 0, roadCenterZ]}><planeGeometry args={[0.1, maxZDepth + 30]} /><meshBasicMaterial color="#38bdf8" opacity={0.4} transparent /></mesh>
             <mesh rotation={[-Math.PI / 2, 0, 0]} position={[11, 0, roadCenterZ]}><planeGeometry args={[0.1, maxZDepth + 30]} /><meshBasicMaterial color="#38bdf8" opacity={0.4} transparent /></mesh>
 
+            {/* ONLY renders cars/people when they actually exist in the trafficData map! */}
             {trafficData.current.map((obs: any) => (
               obs.type === 'car' ? <CyberCar key={obs.id} data={obs} isPaused={isPaused} /> : <CyberPerson key={obs.id} data={obs} isPaused={isPaused} />
             ))}
