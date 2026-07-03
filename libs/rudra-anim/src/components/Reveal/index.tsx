@@ -10,6 +10,38 @@ export interface RevealProps extends React.HTMLAttributes<HTMLDivElement> {
   distance?: number; // How far it slides from
   cascade?: boolean; // If true and siblings exist, stagger them sequentially /* @select|true|false */
   staggerDelay?: number; // Time between each sibling animating (e.g., 0.15)
+  
+  /**
+   * The Custom Attributes Dictionary
+   * We use additionalProperties to tell the schema it's a dynamic key-value object
+   * @type|complex
+   * @schema {"type":"object"}
+   */
+  customAttributes?: Record<string, string>;
+
+  /** * @type|class
+   * @schema [{
+   * "key": "Width",
+   * "prefix": "w",
+   * "type": "select",
+   * "options": [
+   * {"key": "full", "label": "Full Width"},
+   * {"key": "fit", "label": "Fit Content"},
+   * {"key": "auto", "label": "Auto"}
+   * ]
+   * },{
+   * "key": "Layout Display",
+   * "prefix": "",
+   * "type": "select",
+   * "options": [
+   * {"key": "block", "label": "Block"},
+   * {"key": "flex flex-col gap-4", "label": "Flex Column"},
+   * {"key": "flex flex-row gap-4 flex-wrap", "label": "Flex Row"},
+   * {"key": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6", "label": "Responsive Grid"}
+   * ]
+   * }]
+   */
+  className?: string;
 }
 
 export default function Reveal({
@@ -21,7 +53,9 @@ export default function Reveal({
   distance = 50,
   cascade = true,
   staggerDelay = 0.15,
-  className = '',
+  customAttributes = {},
+  // Default to full width block layout
+  className = 'w-full block',
   ...props
 }: RevealProps) {
   
@@ -76,10 +110,12 @@ export default function Reveal({
         initial="hidden"
         whileInView="visible"
         viewport={{ once }}
-        className={`w-full ${className}`}
+        className={className}
+        {...customAttributes}
         {...props}
       >
         {childArray.map((child, index) => (
+          // We intentionally avoid giving the inner cascade wrapper styling so it inherits cleanly
           <motion.div key={index} variants={itemVariants}>
             {child}
           </motion.div>
@@ -106,7 +142,8 @@ export default function Reveal({
         delay, 
         ease: [0.25, 0.1, 0.25, 1] 
       }}
-      className={`w-full ${className}`}
+      className={className}
+      {...customAttributes}
       {...props}
     >
       {children}

@@ -7,6 +7,37 @@ export interface GestureCardProps extends React.HTMLAttributes<HTMLDivElement> {
   swipeThreshold?: number; // How many pixels of drag before it commits to dismissing (e.g., 100)
   rotateOnDrag?: boolean; /* @select|true|false */
   onDismiss?: () => void; // Callback fired when the card is successfully swiped away
+  
+  /**
+   * The Custom Attributes Dictionary
+   * We use additionalProperties to tell the schema it's a dynamic key-value object
+   * @type|complex
+   * @schema {"type":"object"}
+   */
+  customAttributes?: Record<string, string>;
+
+  /** * @type|class
+   * @schema [{
+   * "key": "Width",
+   * "prefix": "w",
+   * "type": "select",
+   * "options": [
+   * {"key": "full", "label": "Full Width"},
+   * {"key": "fit", "label": "Fit Content"},
+   * {"key": "auto", "label": "Auto"}
+   * ]
+   * },{
+   * "key": "Layout & Interaction",
+   * "prefix": "",
+   * "type": "select",
+   * "options": [
+   * {"key": "relative block touch-none select-none cursor-grab active:cursor-grabbing", "label": "Block (Draggable)"},
+   * {"key": "relative flex items-center justify-center touch-none select-none cursor-grab active:cursor-grabbing", "label": "Flex Center (Draggable)"},
+   * {"key": "relative inline-block touch-none select-none cursor-grab active:cursor-grabbing", "label": "Inline Block (Draggable)"}
+   * ]
+   * }]
+   */
+  className?: string;
 }
 
 export default function GestureCard({
@@ -15,7 +46,9 @@ export default function GestureCard({
   swipeThreshold = 120,
   rotateOnDrag = true,
   onDismiss,
-  className = '',
+  customAttributes = {},
+  // Solid baseline default: Includes crucial touch-action and cursor states for hardware dragging
+  className = 'relative block w-full touch-none select-none cursor-grab active:cursor-grabbing',
   ...props
 }: GestureCardProps) {
   // We manage an internal presence state so the card can animate its own exit
@@ -99,7 +132,8 @@ export default function GestureCard({
           // Spring physics for when the card snaps back
           transition={{ type: 'spring', stiffness: 400, damping: 25 }}
           
-          className={`w-full relative touch-none select-none cursor-grab active:cursor-grabbing ${className}`}
+          className={className}
+          {...customAttributes}
           {...props}
         >
           {children}

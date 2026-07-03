@@ -8,6 +8,38 @@ export interface HoverUpliftProps extends React.HTMLAttributes<HTMLDivElement> {
   pressEffect?: boolean; // Compress downward on click /* @select|true|false */
   stiffness?: number; // Spring tension (higher = snappier)
   disabled?: boolean;
+  
+  /**
+   * The Custom Attributes Dictionary
+   * We use additionalProperties to tell the schema it's a dynamic key-value object
+   * @type|complex
+   * @schema {"type":"object"}
+   */
+  customAttributes?: Record<string, string>;
+
+  /** * @type|class
+   * @schema [{
+   * "key": "Display & Layout",
+   * "prefix": "",
+   * "type": "select",
+   * "options": [
+   * {"key": "block w-full cursor-pointer", "label": "Block (Full Width)"},
+   * {"key": "inline-block w-fit cursor-pointer", "label": "Inline Block (Fit Content)"},
+   * {"key": "flex items-center justify-center w-full cursor-pointer", "label": "Flex Center"}
+   * ]
+   * },{
+   * "key": "Shadow Effect",
+   * "prefix": "",
+   * "type": "select",
+   * "options": [
+   * {"key": "transition-shadow duration-300 hover:shadow-xl", "label": "Large Shadow on Hover"},
+   * {"key": "transition-shadow duration-300 hover:shadow-md", "label": "Medium Shadow on Hover"},
+   * {"key": "transition-shadow duration-300 hover:shadow-2xl", "label": "Extra Large Shadow"},
+   * {"key": "", "label": "No CSS Shadow (Transforms Only)"}
+   * ]
+   * }]
+   */
+  className?: string;
 }
 
 export default function HoverUplift({
@@ -17,13 +49,23 @@ export default function HoverUplift({
   pressEffect = true,
   stiffness = 380,
   disabled = false,
-  className = '',
+  customAttributes = {},
+  // Solid baseline default: Pairs JS hardware transforms with CSS compositor shadows
+  className = 'block w-full transition-shadow duration-300 hover:shadow-xl cursor-pointer',
   ...props
 }: HoverUpliftProps) {
 
   // If disabled, render a passive pass-through wrapper
   if (disabled) {
-    return <div className={className} {...props}>{children}</div>;
+    return (
+      <div 
+        className={className} 
+        {...customAttributes} 
+        {...props}
+      >
+        {children}
+      </div>
+    );
   }
 
   return (
@@ -42,8 +84,8 @@ export default function HoverUplift({
         stiffness: stiffness,
         damping: 25, // Critically damped: snaps to position instantly with zero gelatinous wobble
       }}
-      // Pairs JS hardware transforms with CSS compositor shadows
-      className={`w-full transition-shadow duration-300 hover:shadow-xl cursor-pointer ${className}`}
+      className={className}
+      {...customAttributes}
       {...props}
     >
       {children}

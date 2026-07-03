@@ -10,6 +10,7 @@ export type { FlipTileProps } from './components/FlipTile';
 export { default as FlipTile } from './components/FlipTile';
 export type { GestureCardProps } from './components/GestureCard';
 export { default as GestureCard } from './components/GestureCard';
+export type { AnimationMethod, GsapStoryboardProps, StoryboardStep } from './components/GsapStoryBoard';
 export { default as GsapStoryboard } from './components/GsapStoryBoard';
 export type { HoverUpliftProps } from './components/HoverUplift';
 export { default as HoverUplift } from './components/HoverUplift';

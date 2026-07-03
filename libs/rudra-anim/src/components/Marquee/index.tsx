@@ -2,21 +2,67 @@ import React from 'react';
 import { motion } from 'motion/react';
 
 export interface MarqueeProps extends React.HTMLAttributes<HTMLDivElement> {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   /** Scrolling direction */
-  direction?: 'left' | 'right';
+  direction?: 'left' | 'right'; /* @select|left|right */
   /** Time in seconds to complete one full horizontal scroll animation loop */
-  speed?: number; 
+  speed?: number;
   /** Pause the scrolling animation when mouse enters the track */
-  pauseOnHover?: boolean;
-  /** Gap space between the scrolling items */
-  gap?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
-
-  // Typography Props (Applied directly if children contains text strings)
-  size?: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | '6xl' | '7xl' | '8xl' | '9xl';
-  weight?: 'thin' | 'extralight' | 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
+  pauseOnHover?: boolean; /* @select|true|false */
   customColor?: string; /* @color */
+
+  /**
+   * The Custom Attributes Dictionary
+   * We use additionalProperties to tell the schema it's a dynamic key-value object
+   * @type|complex
+   * @schema {"type":"object"}
+   */
+  customAttributes?: Record<string, string>;
+
+  /** * @type|class
+   * @schema [{
+   * "key": "Typography Size",
+   * "prefix": "text",
+   * "type": "select",
+   * "options": [
+   * {"key": "sm", "label": "Small"},
+   * {"key": "base", "label": "Base"},
+   * {"key": "lg", "label": "Large"},
+   * {"key": "2xl", "label": "2XL"},
+   * {"key": "4xl", "label": "4XL"},
+   * {"key": "6xl", "label": "6XL"}
+   * ]
+   * },{
+   * "key": "Typography Weight",
+   * "prefix": "font",
+   * "type": "select",
+   * "options": [
+   * {"key": "light", "label": "Light"},
+   * {"key": "normal", "label": "Normal"},
+   * {"key": "medium", "label": "Medium"},
+   * {"key": "bold", "label": "Bold"},
+   * {"key": "black", "label": "Black"}
+   * ]
+   * }]
+   */
   className?: string;
+
+  /** * @type|class
+   * @schema [{
+   * "key": "Item Gap",
+   * "prefix": "gap",
+   * "type": "select",
+   * "options": [
+   * {"key": "0", "label": "None"},
+   * {"key": "4", "label": "Small (1rem)"},
+   * {"key": "8", "label": "Medium (2rem)"},
+   * {"key": "12", "label": "Large (3rem)"},
+   * {"key": "16", "label": "Extra Large (4rem)"},
+   * {"key": "24", "label": "2XL (6rem)"}
+   * ]
+   * }]
+   */
+  trackClassName?: string;
 }
 
 export default function Marquee({
@@ -24,54 +70,14 @@ export default function Marquee({
   direction = 'right',
   speed = 20,
   pauseOnHover = true,
-  gap = 'md',
-  
-  // Typography Defaults
-  size = 'base',
-  weight = 'normal',
   customColor,
-  className = '',
+  customAttributes = {},
+  // Solid Baseline Default for the root mask container
+  className = 'group/marquee flex overflow-hidden select-none w-full text-base font-normal text-zinc-900 dark:text-zinc-100',
+  // Solid Baseline Default for the animated track and duplicated chunks
+  trackClassName = 'flex shrink-0 items-center justify-around gap-8',
   ...props
 }: MarqueeProps) {
-
-  // --- CONFIGURING GAP LAYOUT ---
-  const gapClasses: Record<string, string> = {
-    'none': 'gap-0',
-    'sm': 'gap-4',
-    'md': 'gap-8',
-    'lg': 'gap-12',
-    'xl': 'gap-16',
-    '2xl': 'gap-24',
-  };
-
-  // --- TYPOGRAPHY STYLING ---
-  const sizeClasses: Record<string, string> = {
-    'xs': 'text-xs',
-    'sm': 'text-sm',
-    'base': 'text-base',
-    'lg': 'text-lg',
-    'xl': 'text-xl',
-    '2xl': 'text-2xl leading-relaxed',
-    '3xl': 'text-3xl leading-snug',
-    '4xl': 'text-4xl leading-tight',
-    '5xl': 'text-5xl leading-tight',
-    '6xl': 'text-6xl leading-none',
-    '7xl': 'text-7xl leading-none',
-    '8xl': 'text-8xl leading-none',
-    '9xl': 'text-9xl leading-none',
-  };
-
-  const weightClasses: Record<string, string> = {
-    'thin': 'font-thin',
-    'extralight': 'font-extralight',
-    'light': 'font-light',
-    'normal': 'font-normal',
-    'medium': 'font-medium',
-    'semibold': 'font-semibold',
-    'bold': 'font-bold',
-    'extrabold': 'font-extrabold',
-    'black': 'font-black',
-  };
 
   // --- INFINITE LOOP DIRECTIONS ---
   // To look seamless, the track duplicates content. 
@@ -80,17 +86,11 @@ export default function Marquee({
   const initialX = direction === 'right' ? '-50%' : '0%';
   const animateX = direction === 'right' ? '0%' : '-50%';
 
-  const finalClassName = `
-    group/marquee flex overflow-hidden select-none w-full
-    ${sizeClasses[size] || ''} 
-    ${weightClasses[weight] || ''} 
-    ${className}
-  `.trim().replace(/\s+/g, ' ');
-
   return (
-    <div 
-      className={finalClassName} 
+    <div
+      className={className}
       style={customColor ? { color: customColor } : undefined}
+      {...customAttributes}
       {...props}
     >
       <motion.div
@@ -101,20 +101,18 @@ export default function Marquee({
           repeat: Infinity,
         }}
         // Pure CSS deceleration state triggered natively by Tailwind group selectors
-        className={`flex min-w-full shrink-0 items-center justify-around ${gapClasses[gap]} ${
-          pauseOnHover ? 'group-hover/marquee:[animation-play-state:paused]' : ''
-        }`}
+        className={`min-w-full ${pauseOnHover ? 'group-hover/marquee:[animation-play-state:paused]' : ''} ${trackClassName}`.trim().replace(/\s+/g, ' ')}
       >
         {/* Render Primary List */}
-        <div className={`flex shrink-0 items-center justify-around ${gapClasses[gap]}`}>
+        <div className={trackClassName}>
           {children}
         </div>
-        
+
         {/* Render Duplicate List (Cloned for a pixel-perfect, gapless wrapping effect) */}
-        <div aria-hidden="true" className={`flex shrink-0 items-center justify-around ${gapClasses[gap]}`}>
+        <div aria-hidden="true" className={trackClassName}>
           {children}
         </div>
       </motion.div>
     </div>
-  );
+  ); 
 }

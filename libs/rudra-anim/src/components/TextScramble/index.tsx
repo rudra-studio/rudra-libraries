@@ -2,37 +2,86 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useInView } from 'motion/react';
 
 export interface TextScrambleProps extends React.HTMLAttributes<HTMLElement> {
-  text: string; // The target string to decode
+  text?: string; /* @translate @textarea */
   scrambleSpeed?: number; // Milliseconds between each character scramble update (e.g., 40)
   revealDelay?: number; // Delay before it starts locking in the real text (e.g., 300)
   trigger?: 'onMount' | 'onView' | 'onHover'; /* @select|onMount|onView|onHover */
   characterSet?: string; 
   
-  // Typography Props
   as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span' | 'div' | 'blockquote' | 'label' | 'strong' | 'em';
-  size?: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | '6xl' | '7xl' | '8xl' | '9xl';
-  weight?: 'thin' | 'extralight' | 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
-  align?: 'left' | 'center' | 'right' | 'justify'; /* @select|left|center|right|justify */
   customColor?: string; /* @color */
+  
+  /**
+   * The Custom Attributes Dictionary
+   * We use additionalProperties to tell the schema it's a dynamic key-value object
+   * @type|complex
+   * @schema {"type":"object"}
+   */
+  customAttributes?: Record<string, string>;
+
+  /** * @type|class
+   * @schema [{
+   * "key": "Size",
+   * "prefix": "text",
+   * "type": "select",
+   * "options": [
+   * {"key": "xs", "label": "Extra Small"},
+   * {"key": "sm", "label": "Small"},
+   * {"key": "base", "label": "Base"},
+   * {"key": "lg", "label": "Large"},
+   * {"key": "xl", "label": "Extra Large"},
+   * {"key": "2xl", "label": "2XL"},
+   * {"key": "3xl", "label": "3XL"},
+   * {"key": "4xl", "label": "4XL"},
+   * {"key": "5xl", "label": "5XL"},
+   * {"key": "6xl", "label": "6XL"},
+   * {"key": "7xl", "label": "7XL"},
+   * {"key": "8xl", "label": "8XL"},
+   * {"key": "9xl", "label": "9XL"}
+   * ]
+   * },{
+   * "key": "Weight",
+   * "prefix": "font",
+   * "type": "select",
+   * "options": [
+   * {"key": "thin", "label": "Thin"},
+   * {"key": "extralight", "label": "Extra Light"},
+   * {"key": "light", "label": "Light"},
+   * {"key": "normal", "label": "Normal"},
+   * {"key": "medium", "label": "Medium"},
+   * {"key": "semibold", "label": "Semi Bold"},
+   * {"key": "bold", "label": "Bold"},
+   * {"key": "extrabold", "label": "Extra Bold"},
+   * {"key": "black", "label": "Black"}
+   * ]
+   * },{
+   * "key": "Align",
+   * "prefix": "text",
+   * "type": "select",
+   * "options": [
+   * {"key": "left", "label": "Left"},
+   * {"key": "center", "label": "Center"},
+   * {"key": "right", "label": "Right"},
+   * {"key": "justify", "label": "Justify"}
+   * ]
+   * }]
+   */
   className?: string;
 }
 
 const DEFAULT_CHARS = '!<>-_\\/[]{}—=+*^?#________';
 
 export default function TextScramble({
-  text = "",
+  text = "Initialize Sequence",
   scrambleSpeed = 40,
   revealDelay = 300,
   trigger = 'onView',
   characterSet = DEFAULT_CHARS,
-  
-  // Typography Defaults
   as: Component = 'span',
-  size = 'base',
-  weight = 'normal',
-  align = 'left',
   customColor,
-  className = '',
+  customAttributes = {},
+  // Includes inline-block and tabular-nums to prevent layout shifts + standard baseline styling
+  className = 'inline-block tabular-nums tracking-tight text-base font-normal text-left text-zinc-900 dark:text-zinc-100',
   ...props
 }: TextScrambleProps) {
   const [displayText, setDisplayText] = useState(text);
@@ -101,59 +150,13 @@ export default function TextScramble({
     };
   }, []);
 
-  // --- TYPOGRAPHY STYLING ---
-  const sizeClasses: Record<string, string> = {
-    'xs': 'text-xs',
-    'sm': 'text-sm',
-    'base': 'text-base',
-    'lg': 'text-lg',
-    'xl': 'text-xl',
-    '2xl': 'text-2xl leading-relaxed',
-    '3xl': 'text-3xl leading-snug',
-    '4xl': 'text-4xl leading-tight',
-    '5xl': 'text-5xl leading-tight',
-    '6xl': 'text-6xl leading-none',
-    '7xl': 'text-7xl leading-none',
-    '8xl': 'text-8xl leading-none',
-    '9xl': 'text-9xl leading-none',
-  };
-
-  const weightClasses: Record<string, string> = {
-    'thin': 'font-thin',
-    'extralight': 'font-extralight',
-    'light': 'font-light',
-    'normal': 'font-normal',
-    'medium': 'font-medium',
-    'semibold': 'font-semibold',
-    'bold': 'font-bold',
-    'extrabold': 'font-extrabold',
-    'black': 'font-black',
-  };
-
-  const alignClasses: Record<string, string> = {
-    'left': 'text-left',
-    'center': 'text-center',
-    'right': 'text-right',
-    'justify': 'text-justify',
-  };
-
-  const isQuote = Component === 'blockquote';
-
-  const finalClassName = `
-    inline-block tabular-nums tracking-tight
-    ${sizeClasses[size] || ''} 
-    ${weightClasses[weight] || ''} 
-    ${alignClasses[align] || ''} 
-    ${isQuote ? 'pl-4 border-l-4 border-zinc-300 italic text-zinc-600 dark:border-zinc-600 dark:text-zinc-400' : ''}
-    ${className}
-  `.trim().replace(/\s+/g, ' ');
-
   return (
     <Component
       ref={containerRef as any}
       onMouseEnter={trigger === 'onHover' && !isScrambling ? scramble : undefined}
-      className={finalClassName}
+      className={className}
       style={customColor ? { color: customColor } : undefined}
+      {...customAttributes}
       {...props}
     >
       {/* Accessibility layer: Screen readers read this perfect text */}
