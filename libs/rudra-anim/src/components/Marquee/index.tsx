@@ -9,6 +9,8 @@ export interface MarqueeProps extends React.HTMLAttributes<HTMLDivElement> {
   speed?: number;
   /** Pause the scrolling animation when mouse enters the track */
   pauseOnHover?: boolean; /* @select|true|false */
+  /** Completely pause the animation and disable duplication */
+  pauseAnimation?: boolean; /* @select|true|false */
   customColor?: string; /* @color */
 
   /**
@@ -70,6 +72,7 @@ export default function Marquee({
   direction = 'right',
   speed = 20,
   pauseOnHover = true,
+  pauseAnimation = false,
   customColor,
   customAttributes = {},
   // Solid Baseline Default for the root mask container
@@ -94,24 +97,27 @@ export default function Marquee({
       {...props}
     >
       <motion.div
-        animate={{ x: [initialX, animateX] }}
-        transition={{
+        // Lock X to 0% if paused, otherwise run the animation loop
+        animate={pauseAnimation ? { x: '0%' } : { x: [initialX, animateX] }}
+        transition={pauseAnimation ? {} : {
           ease: 'linear',
           duration: speed,
           repeat: Infinity,
         }}
         // Pure CSS deceleration state triggered natively by Tailwind group selectors
-        className={`min-w-full ${pauseOnHover ? 'group-hover/marquee:[animation-play-state:paused]' : ''} ${trackClassName}`.trim().replace(/\s+/g, ' ')}
+        className={`min-w-full ${!pauseAnimation && pauseOnHover ? 'group-hover/marquee:[animation-play-state:paused]' : ''} ${trackClassName}`.trim().replace(/\s+/g, ' ')}
       >
         {/* Render Primary List */}
         <div className={trackClassName}>
           {children}
         </div>
 
-        {/* Render Duplicate List (Cloned for a pixel-perfect, gapless wrapping effect) */}
-        <div aria-hidden="true" className={trackClassName}>
-          {children}
-        </div>
+        {/* Conditionally Render Duplicate List (Cloned for a pixel-perfect, gapless wrapping effect) */}
+        {!pauseAnimation && (
+          <div aria-hidden="true" className={trackClassName}>
+            {children}
+          </div>
+        )}
       </motion.div>
     </div>
   ); 
