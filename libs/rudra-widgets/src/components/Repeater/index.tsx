@@ -3,17 +3,77 @@ import React from 'react';
 // The interface explicitly defines the render function signature and right-side annotations
 export interface RepeaterProps extends React.HTMLAttributes<HTMLDivElement> {
   items?: any[];                   /* @optional */
-  layout?: 'grid' | 'stack';       /* @optional @select|grid|stack */
-  columns?: number;
-  gap?: 'sm' | 'md' | 'lg';        /* @optional @select|sm|md|lg */
+  layout?: 'grid' | 'stack' | 'flex'; /* @optional @select|grid|stack|flex */
   children?: React.ReactNode | ((context: { item: any; index: number }) => React.ReactNode);  /* @nodeFunction */
+
+  /** 
+   * @type|class
+   * @schema [{
+   * "key": "Grid Columns",
+   * "prefix": "grid-cols",
+   * "type": "select",
+   * "options": [
+   * {"key": "1", "label": "1 Column"},
+   * {"key": "2", "label": "2 Columns"},
+   * {"key": "3", "label": "3 Columns"},
+   * {"key": "4", "label": "4 Columns"},
+   * {"key": "6", "label": "6 Columns"}
+   * ]
+   * },{
+   * "key": "Flex Direction",
+   * "prefix": "flex",
+   * "type": "select",
+   * "options": [
+   * {"key": "row", "label": "Row"}, 
+   * {"key": "col", "label": "Column"}
+   * ]
+   * },{
+   * "key": "Wrap Content",
+   * "prefix": "flex",
+   * "type": "select",
+   * "options": [
+   * {"key": "wrap", "label": "Wrap"}, 
+   * {"key": "nowrap", "label": "No Wrap"}
+   * ]
+   * },{
+   * "key": "Justify (Main Axis)",
+   * "prefix": "justify",
+   * "type": "select",
+   * "options": [
+   * {"key": "start", "label": "Start"},
+   * {"key": "center", "label": "Center"},
+   * {"key": "end", "label": "End"},
+   * {"key": "between", "label": "Space Between"}
+   * ]
+   * },{
+   * "key": "Align (Cross Axis)",
+   * "prefix": "items",
+   * "type": "select",
+   * "options": [
+   * {"key": "start", "label": "Start"},
+   * {"key": "center", "label": "Center"},
+   * {"key": "end", "label": "End"},
+   * {"key": "stretch", "label": "Stretch"}
+   * ]
+   * },{
+   * "key": "Gap",
+   * "prefix": "gap",
+   * "type": "select",
+   * "options": [
+   * {"key": "0", "label": "None (0px)"},
+   * {"key": "2", "label": "Small (8px)"},
+   * {"key": "4", "label": "Medium (16px)"},
+   * {"key": "6", "label": "Large (24px)"},
+   * {"key": "8", "label": "Extra Large (32px)"}
+   * ]
+   * }]
+   */
+  className?: string;
 }
 
 export default function Repeater({
   items = [],
   layout = 'grid',
-  columns = '4',
-  gap = 'md',
   className = '',
   children,
   ...props
@@ -21,27 +81,20 @@ export default function Repeater({
   
   const safeItems = Array.isArray(items) ? items : [];
 
-  const gapClasses = {
-    sm: 'gap-4',
-    md: 'gap-6',
-    lg: 'gap-8',
-  };
-
-  const gridCols: Record<string, string> = {
-    '1': 'grid-cols-1',
-    '2': 'grid-cols-1 sm:grid-cols-2',
-    '3': 'grid-cols-1 md:grid-cols-3',
-    '4': 'grid-cols-1 md:grid-cols-2 xl:grid-cols-4',
-  };
-
-  const containerClass = layout === 'grid' 
-    ? `grid ${gridCols[columns]} ${gapClasses[gap]}`
-    : `flex flex-col w-full ${gapClasses[gap]}`;
+  // Dynamically resolve only the base layout class
+  let containerClass = '';
+  if (layout === 'grid') {
+    containerClass = 'grid w-full';
+  } else if (layout === 'flex') {
+    containerClass = 'flex w-full';
+  } else {
+    containerClass = 'flex flex-col w-full'; // Default Stack
+  }
 
   // Design-time safety: If no items are bound yet, show a placeholder in the builder canvas
   if (safeItems.length === 0) {
     return (
-      <div className={`w-full p-8 border-2 border-dashed border-purple-200 bg-purple-50 rounded-lg flex flex-col items-center justify-center text-purple-600 ${className}`}>
+      <div className={`w-full p-8 border-2 border-dashed border-purple-200 bg-purple-50 rounded-lg flex flex-col items-center justify-center text-purple-600 ${className}`.trim()}>
         <span className="text-sm font-medium mb-2 opacity-70">Repeater (No Data Bound)</span>
         <div className="mt-4 w-full p-4 border border-dashed border-purple-300 rounded bg-white">
             {/* Execute dummy payload so the builder canvas doesn't crash when elements are dropped inside */}
@@ -53,7 +106,7 @@ export default function Repeater({
 
   // Runtime execution: Pure functional injection, zero Context API overhead
   return (
-    <div className={`${containerClass} ${className}`} {...props}>
+    <div className={`${containerClass} ${className}`.trim()} {...props}>
       {safeItems.map((item, index) => (
         <React.Fragment key={item?.id || index}>
            {typeof children === 'function' ? children({ item, index }) : children}
