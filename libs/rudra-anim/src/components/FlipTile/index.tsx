@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 
-
 export interface FlipTileProps extends React.HTMLAttributes<HTMLDivElement> {
   frontContent?: React.ReactNode;
   backContent?: React.ReactNode;
+  
+  /** 
+   * Enable or disable the back face and flip interaction
+   * @type|boolean 
+   */
+  hasBackContent?: boolean;
+  
   direction?: 'horizontal' | 'vertical'; /* @select|horizontal|vertical */
-
+  
   /**
    * The Custom Attributes Dictionary
    * We use additionalProperties to tell the schema it's a dynamic key-value object
@@ -87,6 +93,7 @@ export default function FlipTile({
       </ul>
     </div>
   ),
+  hasBackContent = true,
   direction = 'horizontal',
   customAttributes = {},
   className = 'relative w-full h-fit',
@@ -95,19 +102,21 @@ export default function FlipTile({
 }: FlipTileProps) {
   const [isFlipped, setIsFlipped] = useState(false);
 
-  // Determine the rotation axis based on the direction prop
+  // 🚨 NEW: Master safety lock combining both the prop toggle and the content's existence
+  const canFlip = hasBackContent && !!backContent;
+
   const rotateAxis = direction === 'horizontal' ? 'rotateY' : 'rotateX';
 
-  // Toggle function
   const handleFlip = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent parent clicks if nested
-    // Only allow flip if backContent exists
-    if (backContent) {
+    e.stopPropagation(); 
+    // Only allow flip if the master lock permits it
+    if (canFlip) {
       setIsFlipped(!isFlipped);
     }
   };
 
-  const currentFlipState = isFlipped && !!backContent;
+  // Automatically snap closed if the back content is disabled while currently flipped open
+  const currentFlipState = isFlipped && canFlip;
 
   return (
     <div
@@ -117,8 +126,7 @@ export default function FlipTile({
       {...props}
     >
       <motion.div
-        // 🚨 THE FIX: Container is now a Grid. 
-        className="w-full h-full grid relative"
+        className="w-full h-full relative"
         style={{ transformStyle: 'preserve-3d' }}
         animate={{
           [rotateAxis]: currentFlipState ? 180 : 0,
@@ -127,23 +135,20 @@ export default function FlipTile({
           type: 'spring',
           stiffness: 260,
           damping: 25,
-          mass: 1.2,
+          mass: 1.2, 
         }}
       >
         {/* --- FRONT FACE --- */}
         <div
-          // 🚨 THE FIX: [grid-area:1/1] layers elements without absolute positioning.
-          // Because it is in the document flow, it actively controls the height of the component!
-          className="[grid-area:1/1] relative w-full h-full flex flex-col rounded-2xl shadow-md border border-slate-200 overflow-hidden"
+          className="relative w-full h-full flex flex-col rounded-2xl shadow-md border border-slate-200 overflow-hidden bg-white"
           style={{ backfaceVisibility: 'hidden' }}
         >
-          {/* Inner scrolling container allows text to scroll while keeping the button pinned */}
-          <div className={`flex-1 overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-300 hover:[&::-webkit-scrollbar-thumb]:bg-slate-400 [&::-webkit-scrollbar-thumb]:rounded-full [scrollbar-width:thin] ${backContent ? 'pb-16' : ''}`}>
+          <div className={`flex-1 overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-300 hover:[&::-webkit-scrollbar-thumb]:bg-slate-400 [&::-webkit-scrollbar-thumb]:rounded-full [scrollbar-width:thin] ${canFlip ? 'pb-16' : ''}`}>
             {frontContent}
           </div>
 
           {/* Conditionally render Front Action Button (Plus) */}
-          {backContent && (
+          {canFlip && (
             <button
               onClick={handleFlip}
               className="absolute bottom-4 right-4 w-10 h-10 bg-slate-100/80 hover:bg-slate-200 backdrop-blur-md text-slate-900 rounded-full flex items-center justify-center transition-colors shadow-sm z-10"
@@ -157,11 +162,9 @@ export default function FlipTile({
         </div>
 
         {/* --- CONDITIONAL BACK FACE --- */}
-        {backContent && (
+        {canFlip && (
           <div
-            // 🚨 THE FIX: Also [grid-area:1/1]. If the back text is extremely long, 
-            // the entire card will expand its height to fit the back text!
-            className={`[grid-area:1/1] relative w-full h-full flex flex-col rounded-2xl shadow-xl overflow-hidden border border-slate-200 ${backContentClassName}`.trim()}
+            className={`absolute inset-0 w-full h-full flex flex-col rounded-2xl shadow-xl overflow-hidden border border-slate-200 ${backContentClassName}`.trim()}
             style={{
               backfaceVisibility: 'hidden',
               transform: `${rotateAxis}(180deg)`,
