@@ -48,5 +48,3 @@ export type { ApplyReactionPopArgs } from './utils/applyReactionPop';
 export { default as applyReactionPop } from './utils/applyReactionPop';
 export type { ApplySpinArgs } from './utils/applySpin';
 export { default as applySpin } from './utils/applySpin';
-export type { ParallaxScrubConfig } from './utils/gsapParallax';
-export { default as createParallaxScrub } from './utils/gsapParallax';
