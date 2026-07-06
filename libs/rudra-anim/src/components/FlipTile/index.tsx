@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 
+
 export interface FlipTileProps extends React.HTMLAttributes<HTMLDivElement> {
   frontContent?: React.ReactNode;
   backContent?: React.ReactNode;
   direction?: 'horizontal' | 'vertical'; /* @select|horizontal|vertical */
-  
+
   /**
    * The Custom Attributes Dictionary
    * We use additionalProperties to tell the schema it's a dynamic key-value object
@@ -42,6 +43,30 @@ export interface FlipTileProps extends React.HTMLAttributes<HTMLDivElement> {
    * }]
    */
   className?: string;
+
+  /** * @type|class
+   * @schema [{
+   * "key": "Background",
+   * "prefix": "bg",
+   * "type": "select",
+   * "options": [
+   * {"key": "white", "label": "White"},
+   * {"key": "slate-50", "label": "Slate 50"},
+   * {"key": "slate-100", "label": "Slate 100"},
+   * {"key": "slate-800", "label": "Slate 800"},
+   * {"key": "slate-900", "label": "Slate 900"}
+   * ]
+   * },{
+   * "key": "Text Color",
+   * "prefix": "text",
+   * "type": "select",
+   * "options": [
+   * {"key": "slate-900", "label": "Dark Slate"},
+   * {"key": "white", "label": "White"}
+   * ]
+   * }]
+   */
+  backContentClassName?: string;
 }
 
 export default function FlipTile({
@@ -52,9 +77,9 @@ export default function FlipTile({
     </div>
   ),
   backContent = (
-    <div className="flex flex-col h-full p-6 bg-slate-900 text-white">
+    <div className="flex flex-col h-full p-6">
       <h3 className="text-xl font-bold mb-4">Included Features:</h3>
-      <ul className="space-y-2 text-sm text-slate-300">
+      <ul className="space-y-2 text-sm opacity-80">
         <li>✓ Unlimited Users</li>
         <li>✓ 24/7 Dedicated Support</li>
         <li>✓ Custom SLA</li>
@@ -65,6 +90,7 @@ export default function FlipTile({
   direction = 'horizontal',
   customAttributes = {},
   className = 'relative w-full h-fit',
+  backContentClassName = 'bg-white text-slate-900',
   ...props
 }: FlipTileProps) {
   const [isFlipped, setIsFlipped] = useState(false);
@@ -81,7 +107,6 @@ export default function FlipTile({
     }
   };
 
-  // Safety lock: if backContent is removed while flipped, force it closed
   const currentFlipState = isFlipped && !!backContent;
 
   return (
@@ -92,7 +117,8 @@ export default function FlipTile({
       {...props}
     >
       <motion.div
-        className="w-full h-full relative"
+        // 🚨 THE FIX: Container is now a Grid. 
+        className="w-full h-full grid relative"
         style={{ transformStyle: 'preserve-3d' }}
         animate={{
           [rotateAxis]: currentFlipState ? 180 : 0,
@@ -106,10 +132,15 @@ export default function FlipTile({
       >
         {/* --- FRONT FACE --- */}
         <div
-          className="relative w-full h-full rounded-2xl shadow-md border border-slate-200 overflow-hidden"
+          // 🚨 THE FIX: [grid-area:1/1] layers elements without absolute positioning.
+          // Because it is in the document flow, it actively controls the height of the component!
+          className="[grid-area:1/1] relative w-full h-full flex flex-col rounded-2xl shadow-md border border-slate-200 overflow-hidden"
           style={{ backfaceVisibility: 'hidden' }}
         >
-          {frontContent}
+          {/* Inner scrolling container allows text to scroll while keeping the button pinned */}
+          <div className={`flex-1 overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-300 hover:[&::-webkit-scrollbar-thumb]:bg-slate-400 [&::-webkit-scrollbar-thumb]:rounded-full [scrollbar-width:thin] ${backContent ? 'pb-16' : ''}`}>
+            {frontContent}
+          </div>
 
           {/* Conditionally render Front Action Button (Plus) */}
           {backContent && (
@@ -128,22 +159,22 @@ export default function FlipTile({
         {/* --- CONDITIONAL BACK FACE --- */}
         {backContent && (
           <div
-            className="absolute inset-0 w-full h-full rounded-2xl shadow-xl overflow-hidden bg-slate-900"
+            // 🚨 THE FIX: Also [grid-area:1/1]. If the back text is extremely long, 
+            // the entire card will expand its height to fit the back text!
+            className={`[grid-area:1/1] relative w-full h-full flex flex-col rounded-2xl shadow-xl overflow-hidden border border-slate-200 ${backContentClassName}`.trim()}
             style={{
               backfaceVisibility: 'hidden',
               transform: `${rotateAxis}(180deg)`,
             }}
           >
-            {/* 🚨 THE FIX: Added sleek inline Tailwind scrollbar styles. 
-                Using arbitrary variants to style Webkit scrollbars and 'scrollbar-width:thin' for Firefox */}
-            <div className="w-full h-full overflow-y-auto pb-16 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-500/30 hover:[&::-webkit-scrollbar-thumb]:bg-slate-500/50 [&::-webkit-scrollbar-thumb]:rounded-full [scrollbar-width:thin]">
+            <div className="flex-1 overflow-y-auto overflow-x-hidden pb-16 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-300 hover:[&::-webkit-scrollbar-thumb]:bg-slate-400 [&::-webkit-scrollbar-thumb]:rounded-full [scrollbar-width:thin]">
               {backContent}
             </div>
 
             {/* Back Action Button (Close / X) */}
             <button
               onClick={handleFlip}
-              className="absolute bottom-4 right-4 w-10 h-10 bg-white/20 hover:bg-white/30 text-white rounded-full flex items-center justify-center transition-colors backdrop-blur-md z-10 shadow-sm"
+              className="absolute bottom-4 right-4 w-10 h-10 bg-slate-100/80 hover:bg-slate-200 backdrop-blur-md text-slate-900 rounded-full flex items-center justify-center transition-colors shadow-sm z-10"
               aria-label="Close details"
             >
               <motion.svg
