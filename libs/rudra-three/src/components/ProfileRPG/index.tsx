@@ -533,7 +533,7 @@ export const ProfileRPG = ({
 
       {/* --- 3D CANVAS --- */}
       <KeyboardControls map={keyMap}>
-        <Canvas shadows camera={{ position: [0, 4, 10], fov: 50 }}>
+        <Canvas shadows camera={{ position: [0, 4, 10], fov: 50 }} dpr={[1, 2]}>
           <color attach="background" args={['#060913']} />
           <fog attach="fog" args={['#060913', 15, 60]} />
 
