@@ -55,8 +55,7 @@ export default function OptimizedImage({
         loading="lazy"
         onLoad={() => setIsLoaded(true)}
         onError={() => setHasError(true)}
-        className={`w-full h-full object-cover transition-opacity duration-700 ease-in-out ${
-          isLoaded ? "opacity-100" : "opacity-0"
+        className={`w-full h-full object-cover transition-opacity duration-700 ease-in-out opacity-100"
         }`}
       />
     </div>
