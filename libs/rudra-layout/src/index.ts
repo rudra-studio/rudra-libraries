@@ -1,5 +1,3 @@
-import './index.css';
-
 export type { BoxProps } from './components/Box';
 export { default as Box } from './components/Box';
 export type { RudraCarouselProps } from './components/Carousel';
