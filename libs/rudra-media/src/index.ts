@@ -1,5 +1,3 @@
-import './index.css';
-
 export { default as CameraTest } from './components/CameraTest';
 export type { OptimizedImageProps } from './components/Image';
 export { default as OptimizedImage } from './components/Image';
