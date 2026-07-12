@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
   label?: string; /* @translate */
   icon?: React.ReactNode; /* @icon */
