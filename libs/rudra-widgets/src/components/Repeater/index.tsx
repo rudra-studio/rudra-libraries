@@ -1,6 +1,6 @@
 import React from 'react';
 
-// The interface explicitly defines the render function signature and right-side annotations
+// The interface explicitly defines the render function signature and right-side annotation
 export interface RepeaterProps extends React.HTMLAttributes<HTMLDivElement> {
   items?: any[];                   /* @optional */
   layout?: 'grid' | 'stack' | 'flex'; /* @optional @select|grid|stack|flex */

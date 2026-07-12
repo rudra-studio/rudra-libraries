@@ -1,5 +1,3 @@
-import './index.css';
-
 export type { RudraCarouselProps } from './components/Carousel';
 export { default as RudraCarousel } from './components/Carousel';
 export type { AccordionItem, DataAccordionProps } from './components/DataAccordion';
