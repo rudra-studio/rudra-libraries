@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
+
 export interface RepeaterCarouselProps extends React.HTMLAttributes<HTMLDivElement> {
   items?: any[]; 
   children?: React.ReactNode | ((context: { item: any; index: number }) => React.ReactNode);
