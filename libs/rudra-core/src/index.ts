@@ -1,5 +1,3 @@
-import './index.css';
-
 export type { BadgeProps } from './components/Badge';
 export { default as Badge } from './components/Badge';
 export type { ButtonProps } from './components/Button';
