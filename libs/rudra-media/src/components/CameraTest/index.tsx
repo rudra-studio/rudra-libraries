@@ -7,7 +7,7 @@ export default function CameraTest() {
   const [status, setStatus] = useState<'idle' | 'connecting' | 'live' | 'error'>('idle');
   const [error, setError] = useState<string | null>(null);
 
-  // Hook in the recording logic
+  // Hook in the recording logc
   const { start, stop, isRecording, recordedVideo } = useMediaRecorder(stream);
 
   const startCamera = async () => {
