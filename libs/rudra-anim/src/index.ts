@@ -1,5 +1,3 @@
-import './index.css';
-
 export type { AnimatedButtonProps, ButtonStatus } from './components/AnimatedButton';
 export { default as AnimatedButton } from './components/AnimatedButton';
 export type { AnimatedTabsProps, TabItem } from './components/AnimatedTabs';
