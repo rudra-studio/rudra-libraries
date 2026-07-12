@@ -10,7 +10,6 @@ export interface DinoRunner3DProps extends React.HTMLAttributes<HTMLDivElement> 
   baseSpeed?: number;
 }
 
-// --- CORE GAME ENGINE ----
 function GameScene({ 
   playerColor, obstacleColor, gridColor, baseSpeed, 
   onGameOver, onScore, isGameOver 
