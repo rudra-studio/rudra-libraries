@@ -1,15 +1,18 @@
-interface SetLocalStorageProps {
+export interface SetLocalStorageProps {
   key: string;
   value: any;
 }
 
-export default function SetLocalStorage({ key, value }: SetLocalStorageProps): void {
-  // Utility function logic here
-  if (typeof window === 'undefined') return;
+export default function SetLocalStorage({ key, value }: SetLocalStorageProps): boolean {
+  if (typeof window === 'undefined') return false;
+  
   try {
-    const serializedValue = JSON.stringify(value);
+    // Stringify objects/arrays, keep strings as strings if preferred
+    const serializedValue = typeof value === 'string' ? value : JSON.stringify(value);
     window.localStorage.setItem(key, serializedValue);
+    return true;
   } catch (error) {
-    console.error(`Error saving to localStorage for key "${key}":`, error);
+    console.error(`Failed to write "${key}" to localStorage:`, error);
+    return false;
   }
 }
