@@ -26,6 +26,8 @@ export type { GetLocalStorageProps } from './utils/GetLocalStorage';
 export { default as GetLocalStorage } from './utils/GetLocalStorage';
 export type { GetScreenInfoProps, ScreenInfo } from './utils/GetScreenInfo';
 export { default as GetScreenInfo } from './utils/GetScreenInfo';
+export type { GetThemeStatusProps } from './utils/GetTheme';
+export { default as GetThemeStatus } from './utils/GetTheme';
 export type { GetUrlParamProps } from './utils/GetUrlParams';
 export { default as GetUrlParam } from './utils/GetUrlParams';
 export type { ConditionOperator, IfElseProps } from './utils/IfElse';
