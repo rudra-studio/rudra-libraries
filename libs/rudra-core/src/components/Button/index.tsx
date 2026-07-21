@@ -56,6 +56,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
    * }]
    */
   className?: string;
+  onClick?: (Event: any) => void /* @type|function|return:void|args:event */
 }
 
 export default function Button({
