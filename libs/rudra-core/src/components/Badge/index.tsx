@@ -49,6 +49,7 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
    * }]
    */
   className?: string;
+  onClick?: (event: any) => void; /* @type|function|return:void|args:event*/ 
 }
 
 export default function Badge({
