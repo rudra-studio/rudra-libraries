@@ -1,119 +1,166 @@
-import React, { useState, useRef, useEffect } from 'react';
-import * as LucideIcons from 'lucide-react';
+import React, { useState } from 'react';
+import { useRudraForm } from '../RudraFormContext';
+import FieldWrapper, { ElementSize } from '../FieldWrapper';
 
-export type MultiSelectOption = {
-  label: string;
-  value: string;
-};
-
-export interface MultiSelectProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
-  label?: string; /* @translate */
-  placeholder?: string; /* @translate */
-  options?: MultiSelectOption[];
-  maxSelected?: number;
-  customColor?: string; /* @color */
+export interface CheckboxGroupProps {
+  name: string; /* @type|string */
+  label?: string; /* @type|string|@translate */
+  options?: { label: string; value: string; description?: string }[]; /* @type|json */
+  layout?: 'vertical' | 'horizontal'; /* @select|vertical|horizontal */
+  size?: ElementSize; /* @select|sm|md|lg */
+  radius?: 'none' | 'sm' | 'md' | 'lg' | 'full'; /* @select|none|sm|md|lg|full */
+  colorScheme?: 'blue' | 'emerald' | 'purple' | 'rose' | 'slate'; /* @select|blue|emerald|purple|rose|slate */
+  value?: string[]; /* @type|array */
+  searchable?: boolean; /* @type|boolean */
+  onChangeValue?: (val: string[]) => void; /* @type|function|args:value */
+  required?: boolean; /* @type|boolean */
+  className?: string;
 }
 
-export default function MultiSelect({
-  label = 'Select multiple items',
-  placeholder = 'Search and select...',
+export default function CheckboxGroup({
+  name,
+  label,
   options = [],
-  maxSelected = 10,
-  customColor = '#3b82f6',
-  className = '',
-  ...props
-}: MultiSelectProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [search, setSearch] = useState('');
-  const [selected, setSelected] = useState<MultiSelectOption[]>([]);
-  const wrapperRef = useRef<HTMLDivElement>(null);
+  layout = 'vertical',
+  size = 'md',
+  radius = 'md',
+  colorScheme = 'blue',
+  value = [],
+  searchable = false,
+  onChangeValue,
+  required,
+  className = ''
+}: CheckboxGroupProps) { /* @metadata A group of themed checkboxes acting as a multi-select field. Includes an optional real-time search filter for large option lists. */
+  
+  const formContext = useRudraForm();
+  const isInsideForm = !!formContext;
+  const [searchQuery, setSearchQuery] = useState('');
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
+  // The active value is ALWAYS an array here
+  const activeValue: string[] = Array.isArray(isInsideForm ? formContext.values[name] : value) 
+    ? (isInsideForm ? formContext.values[name] : value) 
+    : [];
+    
+  const errorMessage = isInsideForm ? formContext.errors[name] : undefined;
+
+  const handleChange = (optionValue: string, isChecked: boolean) => {
+    let nextValue = [...activeValue];
+    
+    if (isChecked) {
+      if (!nextValue.includes(optionValue)) nextValue.push(optionValue);
+    } else {
+      nextValue = nextValue.filter(v => v !== optionValue);
     }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
-  const filteredOptions = options.filter(opt =>
-    opt.label.toLowerCase().includes(search.toLowerCase()) &&
-    !selected.some(s => s.value === opt.value)
+    if (isInsideForm) formContext.handleChange(name, nextValue);
+    if (onChangeValue) onChangeValue(nextValue);
+  };
+
+  const filteredOptions = options.filter(opt => 
+    opt.label.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    (opt.description && opt.description.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
-  const toggleSelect = (option: MultiSelectOption) => {
-    if (selected.some(s => s.value === option.value)) {
-      setSelected(selected.filter(s => s.value !== option.value));
-    } else if (selected.length < maxSelected) {
-      setSelected([...selected, option]);
-      setSearch(''); // Clear search on select
-    }
+  // --- Design Dictionaries ---
+  const sizeMap = {
+    sm: { box: "w-4 h-4", text: "text-xs", svg: "w-2.5 h-2.5", gap: "gap-2" },
+    md: { box: "w-5 h-5", text: "text-sm", svg: "w-3.5 h-3.5", gap: "gap-3" },
+    lg: { box: "w-6 h-6", text: "text-base", svg: "w-4 h-4", gap: "gap-4" }
   };
 
-  const removeOption = (e: React.MouseEvent, value: string) => {
-    e.stopPropagation();
-    setSelected(selected.filter(s => s.value !== value));
+  const radiusMap = {
+    none: "rounded-none",
+    sm: "rounded-sm",
+    md: "rounded",
+    lg: "rounded-md",
+    full: "rounded-full"
   };
+
+  const colorMap = {
+    blue: "peer-checked:bg-blue-600 peer-checked:border-blue-600 peer-focus:ring-blue-500/20 text-white",
+    emerald: "peer-checked:bg-emerald-600 peer-checked:border-emerald-600 peer-focus:ring-emerald-500/20 text-white",
+    purple: "peer-checked:bg-purple-600 peer-checked:border-purple-600 peer-focus:ring-purple-500/20 text-white",
+    rose: "peer-checked:bg-rose-600 peer-checked:border-rose-600 peer-focus:ring-rose-500/20 text-white",
+    slate: "peer-checked:bg-slate-700 peer-checked:border-slate-700 peer-focus:ring-slate-500/20 text-white"
+  };
+
+  const searchRingColors = {
+    blue: "focus:ring-blue-500/20 focus:border-blue-500",
+    emerald: "focus:ring-emerald-500/20 focus:border-emerald-500",
+    purple: "focus:ring-purple-500/20 focus:border-purple-500",
+    rose: "focus:ring-rose-500/20 focus:border-rose-500",
+    slate: "focus:ring-slate-500/20 focus:border-slate-500",
+  };
+
+  const dimensions = sizeMap[size];
+  const errorClass = errorMessage ? "border-red-500" : "border-gray-300 dark:border-gray-600";
+  const layoutClass = layout === 'vertical' ? "flex flex-col gap-3" : "flex flex-wrap gap-4";
 
   return (
-    <div className={`flex flex-col gap-1.5 w-full relative ${className}`} ref={wrapperRef} {...props}>
-      {label && <label className="text-sm font-medium text-zinc-800 dark:text-zinc-200">{label}</label>}
-
-      <div
-        onClick={() => setIsOpen(true)}
-        className="min-h-[40px] w-full px-2 py-1.5 bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-md shadow-sm focus-within:ring-2 focus-within:ring-offset-1 dark:focus-within:ring-offset-zinc-950 transition-colors cursor-text flex flex-wrap gap-1.5 items-center"
-        style={{ '--tw-ring-color': customColor } as React.CSSProperties}
-      >
-        {selected.map(opt => (
-          <span
-            key={opt.value}
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-700"
-          >
-            {opt.label}
-            <button
-              onClick={(e) => removeOption(e, opt.value)}
-              className="text-zinc-400 hover:text-red-500 transition-colors"
-            >
-              <LucideIcons.X size={12} />
-            </button>
-          </span>
-        ))}
-
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          onFocus={() => setIsOpen(true)}
-          placeholder={selected.length === 0 ? placeholder : ''}
-          className="flex-1 min-w-[120px] bg-transparent outline-none text-sm text-zinc-900 dark:text-zinc-100 placeholder-zinc-400"
-        />
-
-        <div className="absolute right-3 text-zinc-400 pointer-events-none">
-          <LucideIcons.ChevronDown size={16} />
-        </div>
-      </div>
-
-      {/* Dropdown Menu */}
-      {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-1 max-h-60 overflow-y-auto bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-md shadow-lg z-50">
-          {filteredOptions.length === 0 ? (
-            <div className="p-3 text-sm text-zinc-500 text-center">No options found</div>
-          ) : (
-            filteredOptions.map(opt => (
-              <div
-                key={opt.value}
-                onClick={() => toggleSelect(opt)}
-                className="px-3 py-2 text-sm text-zinc-800 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer transition-colors"
-              >
-                {opt.label}
-              </div>
-            ))
-          )}
+    <FieldWrapper label={label} error={errorMessage} required={required} size={size} className={className}>
+      
+      {searchable && options.length > 0 && (
+        <div className="relative mb-3">
+          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+          </div>
+          <input
+            type="text"
+            placeholder="Search options..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className={`w-full pl-9 pr-3 py-2 text-sm bg-gray-50 dark:bg-gray-800/50 border border-gray-300 dark:border-gray-700 rounded-md text-gray-900 dark:text-white outline-none transition-all ${searchRingColors[colorScheme]}`}
+          />
         </div>
       )}
-    </div>
+
+      <div className={layoutClass}>
+        {filteredOptions.length === 0 ? (
+          <div className="text-sm text-gray-500 dark:text-gray-400 italic py-2">
+            No options found.
+          </div>
+        ) : (
+          filteredOptions.map((opt, i) => {
+            const isChecked = activeValue.includes(opt.value);
+            return (
+              <label key={i} className="inline-flex items-start cursor-pointer group">
+                <div className="relative flex items-center justify-center mt-0.5">
+                  <input
+                    type="checkbox"
+                    checked={isChecked}
+                    onChange={(e) => handleChange(opt.value, e.target.checked)}
+                    className="peer sr-only"
+                  />
+                  <div className={`flex items-center justify-center border-2 bg-white dark:bg-gray-900 transition-all duration-200 peer-focus:ring-4 ${errorClass} ${dimensions.box} ${radiusMap[radius]} ${colorMap[colorScheme]}`}>
+                    <svg
+                      className={`opacity-0 peer-checked:opacity-100 transition-opacity duration-200 ${dimensions.svg}`}
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={3}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                </div>
+
+                <div className="ml-3 flex flex-col">
+                  <span className={`font-medium text-gray-900 dark:text-gray-100 ${dimensions.text}`}>
+                    {opt.label}
+                  </span>
+                  {opt.description && (
+                    <span className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                      {opt.description}
+                    </span>
+                  )}
+                </div>
+              </label>
+            );
+          })
+        )}
+      </div>
+    </FieldWrapper>
   );
 }

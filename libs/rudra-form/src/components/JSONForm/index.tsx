@@ -1,4 +1,10 @@
 import React, { useState } from 'react';
+import  Form  from '../Form';
+import Input from '../Input';
+import Select from '../Select';
+import Checkbox from '../Checkbox';
+import FieldWrapper from '../FieldWrapper';
+import { useRudraForm } from '../RudraFormContext';
 
 export type FormField = {
   id: string;
@@ -6,7 +12,7 @@ export type FormField = {
   label: string;
   placeholder?: string;
   required?: boolean;
-  options?: { label: string; value: string }[]; // Used if type === 'select'
+  options?: { label: string; value: string }[]; 
 };
 
 export type FormStep = {
@@ -14,13 +20,48 @@ export type FormStep = {
   fields: FormField[];
 };
 
-export interface JSONFormProps extends React.HTMLAttributes<HTMLFormElement> {
+export interface JSONFormProps {
   schema?: FormStep[]; /* @widget|generic-array-builder */
   submitLabel?: string; /* @translate */
   nextLabel?: string; /* @translate */
   prevLabel?: string; /* @translate */
   customColor?: string; /* @color */
+  onSubmit?: (values: Record<string, any>) => void; /* @type|function|args:values */
+  className?: string;
 }
+
+// --- Inline Textarea to utilize the new context & FieldWrapper ---
+const FormTextarea = ({ field }: { field: FormField }) => {
+  const context = useRudraForm();
+  const isInsideForm = !!context;
+  
+  const activeValue = isInsideForm ? (context.values[field.id] || '') : '';
+  const errorMessage = isInsideForm ? context.errors[field.id] : undefined;
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (isInsideForm) {
+      context.handleChange(field.id, e.target.value);
+    }
+  };
+
+  const errorClass = errorMessage 
+    ? "border-red-500 focus:border-red-500 focus:ring-red-500/20" 
+    : "border-gray-300 dark:border-gray-700 focus:ring-blue-500/20 focus:border-blue-500";
+
+  return (
+    <FieldWrapper label={field.label} required={field.required} error={errorMessage}>
+      <textarea
+        name={field.id}
+        rows={4}
+        placeholder={field.placeholder}
+        required={field.required}
+        value={activeValue}
+        onChange={handleChange}
+        className={`w-full outline-none bg-white dark:bg-gray-900 transition-all peer text-sm text-gray-900 dark:text-white rounded-md px-3 py-2 focus:ring-4 ${errorClass}`}
+      />
+    </FieldWrapper>
+  );
+};
 
 export default function JSONForm({
   schema = [],
@@ -28,15 +69,11 @@ export default function JSONForm({
   nextLabel = 'Next',
   prevLabel = 'Previous',
   customColor = '#3b82f6',
+  onSubmit,
   className = '',
-  ...props
-}: JSONFormProps) {
+}: JSONFormProps) { /* @metadata A dynamic, multi-step JSON-driven form builder that automatically integrates with the unified form context. */
+  
   const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState<Record<string, any>>({});
-
-  const handleInputChange = (id: string, value: any) => {
-    setFormData(prev => ({ ...prev, [id]: value }));
-  };
 
   const handleNext = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -54,8 +91,10 @@ export default function JSONForm({
   if (!activeStep || schema.length === 0) return null;
 
   return (
-    <form className={`w-full max-w-2xl bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm p-6 ${className}`} {...props}>
-
+    <Form 
+      onSubmit={onSubmit} 
+      className={`w-full max-w-2xl bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm p-6 ${className}`}
+    >
       {/* Progress Header */}
       {isMultiStep && (
         <div className="mb-8">
@@ -72,61 +111,48 @@ export default function JSONForm({
         </div>
       )}
 
-      {/* Dynamic Fields */}
-      <div className="flex flex-col gap-5 mb-8">
+      {/* Dynamic Fields injected using our universal form components */}
+      <div className="flex flex-col gap-1 mb-8">
         {activeStep.fields.map(field => {
-          const commonClasses = "w-full py-2 px-3 text-sm bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-md text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:border-transparent transition-colors shadow-sm";
+          
+          if (field.type === 'textarea') {
+            return <FormTextarea key={field.id} field={field} />;
+          } 
+          
+          if (field.type === 'select') {
+            return (
+              <Select
+                key={field.id}
+                name={field.id}
+                label={field.label}
+                required={field.required}
+                options={field.options}
+              />
+            );
+          }
+          
+          if (field.type === 'checkbox') {
+            return (
+              <Checkbox
+                key={field.id}
+                name={field.id}
+                label={field.label}
+                description={field.placeholder} // Repurposing placeholder as sub-text
+                required={field.required}
+              />
+            );
+          }
 
+          // Default text / email fallback
           return (
-            <div key={field.id} className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
-                {field.label} {field.required && <span className="text-red-500">*</span>}
-              </label>
-
-              {field.type === 'textarea' ? (
-                <textarea
-                  rows={4}
-                  placeholder={field.placeholder}
-                  required={field.required}
-                  value={formData[field.id] || ''}
-                  onChange={(e) => handleInputChange(field.id, e.target.value)}
-                  className={commonClasses}
-                  style={{ '--tw-ring-color': customColor } as React.CSSProperties}
-                />
-              ) : field.type === 'select' ? (
-                <select
-                  required={field.required}
-                  value={formData[field.id] || ''}
-                  onChange={(e) => handleInputChange(field.id, e.target.value)}
-                  className={commonClasses}
-                  style={{ '--tw-ring-color': customColor } as React.CSSProperties}
-                >
-                  <option value="" disabled>Select...</option>
-                  {field.options?.map(opt => (
-                    <option key={opt.value} value={opt.value}>{opt.label}</option>
-                  ))}
-                </select>
-              ) : field.type === 'checkbox' ? (
-                <input
-                  type="checkbox"
-                  required={field.required}
-                  checked={formData[field.id] || false}
-                  onChange={(e) => handleInputChange(field.id, e.target.checked)}
-                  className="w-4 h-4 rounded border-zinc-300 text-current focus:ring-2"
-                  style={{ color: customColor }}
-                />
-              ) : (
-                <input
-                  type={field.type}
-                  placeholder={field.placeholder}
-                  required={field.required}
-                  value={formData[field.id] || ''}
-                  onChange={(e) => handleInputChange(field.id, e.target.value)}
-                  className={commonClasses}
-                  style={{ '--tw-ring-color': customColor } as React.CSSProperties}
-                />
-              )}
-            </div>
+            <Input
+              key={field.id}
+              type={field.type}
+              name={field.id}
+              label={field.label}
+              placeholder={field.placeholder}
+              required={field.required}
+            />
           );
         })}
       </div>
@@ -135,6 +161,7 @@ export default function JSONForm({
       <div className="flex items-center justify-between pt-4 border-t border-zinc-100 dark:border-zinc-800">
         {isMultiStep && currentStep > 0 ? (
           <button
+            type="button" // 🚨 Crucial: Prevents premature form submission
             onClick={handlePrev}
             className="px-4 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md transition-colors"
           >
@@ -144,6 +171,7 @@ export default function JSONForm({
 
         {isMultiStep && currentStep < schema.length - 1 ? (
           <button
+            type="button" // 🚨 Crucial: Prevents premature form submission
             onClick={handleNext}
             className="px-4 py-2 text-sm font-medium text-white rounded-md transition-opacity hover:opacity-90 shadow-sm"
             style={{ backgroundColor: customColor }}
@@ -152,7 +180,7 @@ export default function JSONForm({
           </button>
         ) : (
           <button
-            type="submit"
+            type="submit" // 🚀 Automatically triggers the <Form> Context's onSubmit
             className="px-6 py-2 text-sm font-medium text-white rounded-md transition-opacity hover:opacity-90 shadow-sm"
             style={{ backgroundColor: customColor }}
           >
@@ -160,6 +188,6 @@ export default function JSONForm({
           </button>
         )}
       </div>
-    </form>
+    </Form>
   );
 }
