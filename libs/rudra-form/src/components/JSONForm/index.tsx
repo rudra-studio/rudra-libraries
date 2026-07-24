@@ -8,18 +8,18 @@ import FieldWrapper from '../FieldWrapper';
 import { useRudraForm } from '../RudraFormContext';
 
 export type FormField = {
-  id: string;
-  type: 'text' | 'email' | 'password' | 'textarea' | 'checkbox' | 'select';
-  label: string;
-  placeholder?: string;
-  required?: boolean;
-  icon?: string; /* @type|string */ // e.g. "Mail", "Lock", "User", "Search"
-  options?: { label: string; value: string }[]; 
+  id: string; /* @type|string */
+  type: 'text' | 'email' | 'password' | 'textarea' | 'checkbox' | 'select'; /* @select|text|email|password|textarea|checkbox|select */
+  label: string; /* @type|string */
+  placeholder?: string; /* @type|string */
+  required?: boolean; /* @type|boolean */
+  icon?: string; /* @type|string */
+  options?: { label: string; value: string }[]; /* @type|json */
 };
 
 export type FormStep = {
-  title: string;
-  fields: FormField[];
+  title: string; /* @type|string */
+  fields: FormField[]; /* @type|json */
 };
 
 export interface JSONFormProps {
@@ -30,21 +30,40 @@ export interface JSONFormProps {
   customColor?: string; /* @color */
   onSubmit?: (values: Record<string, any>) => void; /* @type|function|args:values */
   
-  /**
-   * @class|[
-   *   {"key": "Theme", "prefix": "", "type": "select", "options": [
-   *     {"key": "bg-white dark:bg-gray-900 border-black/10 dark:border-white/10", "label": "Solid (Default)"},
-   *     {"key": "bg-transparent border-transparent", "label": "Transparent"},
-   *     {"key": "bg-white/40 dark:bg-black/40 backdrop-blur-xl border-white/50 dark:border-white/10", "label": "Glassmorphism"}
-   *   ]},
-   *   {"key": "Padding", "prefix": "p", "type": "select", "options": [{"key": "4", "label": "Small"}, {"key": "6", "label": "Medium"}, {"key": "8", "label": "Large"}]},
-   *   {"key": "Shadow", "prefix": "shadow", "type": "select", "options": [{"key": "none", "label": "None"}, {"key": "sm", "label": "Small"}, {"key": "md", "label": "Medium"}, {"key": "xl", "label": "Large"}]}
+  /** * @type|class
+   * @schema [{
+   * "key": "Theme",
+   * "prefix": "",
+   * "type": "select",
+   * "options": [
+   * {"key": "bg-white dark:bg-gray-900 border-black/10 dark:border-white/10", "label": "Solid (Default)"},
+   * {"key": "bg-transparent border-transparent", "label": "Transparent"},
+   * {"key": "bg-white/40 dark:bg-black/40 backdrop-blur-xl border-white/50 dark:border-white/10", "label": "Glassmorphism"}
    * ]
+   * },{
+   * "key": "Padding",
+   * "prefix": "p",
+   * "type": "select",
+   * "options": [
+   * {"key": "4", "label": "Small"},
+   * {"key": "6", "label": "Medium"},
+   * {"key": "8", "label": "Large"}
+   * ]
+   * },{
+   * "key": "Shadow",
+   * "prefix": "shadow",
+   * "type": "select",
+   * "options": [
+   * {"key": "none", "label": "None"},
+   * {"key": "sm", "label": "Small"},
+   * {"key": "md", "label": "Medium"},
+   * {"key": "xl", "label": "Large"}
+   * ]
+   * }]
    */
   className?: string;
 }
 
-// --- Dynamic Lucide Icon Resolver Component ---
 const DynamicIcon = ({ name }: { name?: string }) => {
   if (!name) return null;
   const IconComponent = (LucideIcons as Record<string, any>)[name];
@@ -52,7 +71,6 @@ const DynamicIcon = ({ name }: { name?: string }) => {
   return <IconComponent className="w-4 h-4" />;
 };
 
-// --- Inline Textarea utilizing context & FieldWrapper ---
 const FormTextarea = ({ field }: { field: FormField }) => {
   const context = useRudraForm();
   const isInsideForm = !!context;
@@ -124,7 +142,6 @@ export default function JSONForm({
       onSubmit={onSubmit} 
       className={`w-full max-w-2xl border transition-all duration-300 ${className}`}
     >
-      {/* Progress Header */}
       {isMultiStep && (
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
@@ -140,7 +157,6 @@ export default function JSONForm({
         </div>
       )}
 
-      {/* Dynamic Fields */}
       <div className="flex flex-col gap-1 mb-8">
         {activeStep.fields.map(field => {
           if (field.type === 'textarea') return <FormTextarea key={field.id} field={field} />;
@@ -161,7 +177,6 @@ export default function JSONForm({
         })}
       </div>
 
-      {/* Navigation Footer */}
       <div className="flex items-center justify-between pt-4 border-t border-black/10 dark:border-white/10">
         {isMultiStep && currentStep > 0 ? (
           <button

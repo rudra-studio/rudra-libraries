@@ -15,14 +15,36 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
   icon?: React.ReactNode; /* @type|node */
   iconPosition?: 'start' | 'end'; /* @select|start|end */
   
-  /**
-   * @class|[
-   *   {"key": "Radius", "prefix": "rounded", "type": "select", "options": [{"key": "none", "label": "None"}, {"key": "sm", "label": "Small"}, {"key": "md", "label": "Medium"}, {"key": "full", "label": "Full"}]},
-   *   {"key": "Shadow", "prefix": "shadow", "type": "select", "options": [{"key": "none", "label": "None"}, {"key": "sm", "label": "Small"}, {"key": "md", "label": "Medium"}]},
-   *   {"key": "Background", "prefix": "bg", "type": "select", "options": [{"key": "transparent", "label": "Transparent"}, {"key": "white dark:bg-gray-900", "label": "Solid"}, {"key": "gray-50 dark:bg-gray-800", "label": "Subtle"}]},
-   *   {"key": "Border Color", "prefix": "border", "type": "select", "options": [{"key": "gray-300 dark:border-gray-700", "label": "Default"}, {"key": "transparent", "label": "None"}]},
-   *   {"key": "Focus Theme", "prefix": "", "type": "select", "options": [{"key": "focus:ring-blue-500/20 focus:border-blue-500", "label": "Blue"}, {"key": "focus:ring-emerald-500/20 focus:border-emerald-500", "label": "Emerald"}, {"key": "focus:ring-rose-500/20 focus:border-rose-500", "label": "Rose"}, {"key": "focus:ring-slate-500/20 focus:border-slate-500", "label": "Slate"}]}
+  /** * @type|class
+   * @schema [{
+   * "key": "Radius",
+   * "prefix": "rounded",
+   * "type": "select",
+   * "options": [
+   * {"key": "none", "label": "None"},
+   * {"key": "sm", "label": "Small"},
+   * {"key": "md", "label": "Medium"},
+   * {"key": "full", "label": "Full"}
    * ]
+   * },{
+   * "key": "Shadow",
+   * "prefix": "shadow",
+   * "type": "select",
+   * "options": [
+   * {"key": "none", "label": "None"},
+   * {"key": "sm", "label": "Small"},
+   * {"key": "md", "label": "Medium"}
+   * ]
+   * },{
+   * "key": "Background",
+   * "prefix": "bg",
+   * "type": "select",
+   * "options": [
+   * {"key": "transparent", "label": "Transparent"},
+   * {"key": "white dark:bg-gray-900", "label": "Solid"},
+   * {"key": "gray-50 dark:bg-gray-800", "label": "Subtle"}
+   * ]
+   * }]
    */
   className?: string;
 }
@@ -35,7 +57,6 @@ export default function Input({
   required,
   value,
   onChangeValue,
-  // Provides a robust default theme that the @class schema will override dynamically
   className = 'rounded-md shadow-sm bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 focus:ring-blue-500/20 focus:border-blue-500',
   type = 'text',
   placeholder,
@@ -56,7 +77,6 @@ export default function Input({
     if (onChangeValue) onChangeValue(val);
   };
 
-  // --- Structural Dictionaries ONLY (No styling or colors here!) ---
   const sizeMap = {
     sm: "px-2.5 py-1.5 text-xs",
     md: "px-3 py-2 text-sm",
@@ -79,25 +99,20 @@ export default function Input({
     lg: "w-5 h-5" 
   };
 
-  // --- Base Assembly ---
-  // Injects the injected className first so it acts as the baseline design
   let inputClass = `w-full outline-none transition-all peer text-gray-900 dark:text-white ${className} `;
   
-  // Appends structural layout requirements based on the variant
   if (variant === 'default') {
     inputClass += `border focus:ring-4 ${sizeMap[size]} `;
   } else if (variant === 'floating') {
     inputClass += `border focus:ring-4 placeholder-transparent ${sizeMap[size]} `;
   } else if (variant === 'filled' || variant === 'underlined') {
-    inputClass += "px-1 py-1.5 text-sm bg-transparent "; // Overrides bg class if they select these specific variants
+    inputClass += "px-1 py-1.5 text-sm bg-transparent ";
   }
 
-  // Handle Icon Padding Space
   if (icon) {
     inputClass += `${iconPaddingMap[iconPosition][size]} `;
   }
 
-  // Error Override (Utilizes Tailwind's '!' modifier to guarantee it overrides the injected classes)
   if (errorMessage) {
     inputClass += " !border-red-500 focus:!border-red-500 focus:!ring-red-500/20 ";
   }
@@ -105,7 +120,6 @@ export default function Input({
   return (
     <FieldWrapper label={label} error={errorMessage} required={required} variant={variant} size={size}>
       <div className="relative w-full flex items-center">
-        
         <input
           name={name}
           type={type}
@@ -117,16 +131,11 @@ export default function Input({
           {...props}
         />
         
-        {/* The Icon (Placed after the input so it reacts to peer-focus states) */}
         {icon && (
-          <div 
-            // Instead of mapping color themes, it defaults to a premium high-contrast neutral on focus (text-gray-900 / white)
-            className={`absolute ${iconPosMap[iconPosition][size]} text-gray-400 dark:text-gray-500 transition-colors pointer-events-none flex items-center justify-center ${iconSizeMap[size]} ${errorMessage ? '!text-red-500' : 'peer-focus:text-gray-900 dark:peer-focus:text-white'}`}
-          >
+          <div className={`absolute ${iconPosMap[iconPosition][size]} text-gray-400 dark:text-gray-500 transition-colors pointer-events-none flex items-center justify-center ${iconSizeMap[size]} ${errorMessage ? '!text-red-500' : 'peer-focus:text-gray-900 dark:peer-focus:text-white'}`}>
             {icon}
           </div>
         )}
-
       </div>
     </FieldWrapper>
   );
