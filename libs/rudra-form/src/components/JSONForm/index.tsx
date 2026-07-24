@@ -28,6 +28,9 @@ export interface JSONFormProps {
   nextLabel?: string; /* @translate */
   prevLabel?: string; /* @translate */
   customColor?: string; /* @color */
+  buttonVariant?: 'solid' | 'outline' | 'ghost'; /* @select|solid|outline|ghost */
+  buttonSize?: 'sm' | 'md' | 'lg'; /* @select|sm|md|lg */
+  buttonRadius?: 'none' | 'sm' | 'md' | 'lg' | 'full'; /* @select|none|sm|md|lg|full */
   onSubmit?: (values: Record<string, any>) => void; /* @type|function|args:values */
   
   /** * @type|class
@@ -116,9 +119,12 @@ export default function JSONForm({
   nextLabel = 'Next',
   prevLabel = 'Previous',
   customColor = '#3b82f6',
+  buttonVariant = 'solid',
+  buttonSize = 'md',
+  buttonRadius = 'md',
   onSubmit,
   className = 'bg-white dark:bg-gray-900 border border-black/10 dark:border-white/10 p-6 shadow-sm rounded-xl text-gray-900 dark:text-white',
-}: JSONFormProps) { /* @metadata A dynamic, multi-step JSON-driven form builder featuring string-to-icon resolution via Lucide React. */
+}: JSONFormProps) { /* @metadata A dynamic, multi-step JSON-driven form builder with full-width single-page submit and advanced button styling. */
   
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -134,8 +140,42 @@ export default function JSONForm({
 
   const activeStep = schema[currentStep];
   const isMultiStep = schema.length > 1;
+  const isSinglePage = schema.length === 1;
 
   if (!activeStep || schema.length === 0) return null;
+
+  // --- Button Size & Radius Dictionaries ---
+  const sizeMap = {
+    sm: "px-3 py-1.5 text-xs",
+    md: "px-4 py-2 text-sm",
+    lg: "px-6 py-3 text-base"
+  };
+
+  const radiusMap = {
+    none: "rounded-none",
+    sm: "rounded-sm",
+    md: "rounded-md",
+    lg: "rounded-lg",
+    full: "rounded-full"
+  };
+
+  // --- Dynamic Button Variant Styling ---
+  let primaryBtnClass = `font-medium transition-all shadow-sm ${sizeMap[buttonSize]} ${radiusMap[buttonRadius]} `;
+  
+  if (buttonVariant === 'solid') {
+    primaryBtnClass += "text-white hover:opacity-90";
+  } else if (buttonVariant === 'outline') {
+    primaryBtnClass += "border-2 bg-transparent hover:bg-black/5 dark:hover:bg-white/10";
+  } else if (buttonVariant === 'ghost') {
+    primaryBtnClass += "bg-opacity-10 hover:bg-opacity-20";
+  }
+
+  // Inline style overrides for dynamic customColor
+  const primaryBtnStyle = buttonVariant === 'solid' 
+    ? { backgroundColor: customColor } 
+    : buttonVariant === 'outline' 
+    ? { borderColor: customColor, color: customColor } 
+    : { backgroundColor: `${customColor}20`, color: customColor };
 
   return (
     <Form 
@@ -177,31 +217,32 @@ export default function JSONForm({
         })}
       </div>
 
-      <div className="flex items-center justify-between pt-4 border-t border-black/10 dark:border-white/10">
+      {/* Navigation Footer */}
+      <div className={`flex items-center pt-4 border-t border-black/10 dark:border-white/10 ${isSinglePage ? 'justify-center' : 'justify-between'}`}>
         {isMultiStep && currentStep > 0 ? (
           <button
             type="button"
             onClick={handlePrev}
-            className="px-4 py-2 text-sm font-medium text-inherit opacity-80 hover:opacity-100 hover:bg-black/5 dark:hover:bg-white/10 rounded-md transition-all"
+            className={`font-medium text-inherit opacity-80 hover:opacity-100 hover:bg-black/5 dark:hover:bg-white/10 transition-all ${sizeMap[buttonSize]} ${radiusMap[buttonRadius]}`}
           >
             {prevLabel}
           </button>
-        ) : <div />}
+        ) : !isSinglePage ? <div /> : null}
 
         {isMultiStep && currentStep < schema.length - 1 ? (
           <button
             type="button"
             onClick={handleNext}
-            className="px-4 py-2 text-sm font-medium text-white rounded-md transition-opacity hover:opacity-90 shadow-sm"
-            style={{ backgroundColor: customColor }}
+            className={`${primaryBtnClass}`}
+            style={primaryBtnStyle}
           >
             {nextLabel}
           </button>
         ) : (
           <button
             type="submit"
-            className="px-6 py-2 text-sm font-medium text-white rounded-md transition-opacity hover:opacity-90 shadow-sm"
-            style={{ backgroundColor: customColor }}
+            className={`${primaryBtnClass} ${isSinglePage ? 'w-full' : ''}`}
+            style={primaryBtnStyle}
           >
             {submitLabel}
           </button>
