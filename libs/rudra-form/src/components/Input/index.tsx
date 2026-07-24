@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 import { useRudraForm } from '../RudraFormContext';
 import FieldWrapper, { FormVariant, ElementSize } from '../FieldWrapper';
 
@@ -63,13 +64,17 @@ export default function Input({
   icon,
   iconPosition = 'start',
   ...props
-}: InputProps) { /* @metadata A lean, highly customizable text input. Relies on class injection for themes and styling while managing structural layout for variants and icons. */
+}: InputProps) { /* @metadata A customizable text input supporting password visibility toggles, start/end icons, and class injection. */
   
   const formContext = useRudraForm();
   const isInsideForm = !!formContext;
+  const [showPassword, setShowPassword] = useState(false);
 
   const activeValue = isInsideForm ? (formContext.values[name] || '') : (value || '');
   const errorMessage = isInsideForm ? formContext.errors[name] : undefined;
+
+  const isPasswordType = type === 'password';
+  const resolvedType = isPasswordType ? (showPassword ? 'text' : 'password') : type;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
@@ -109,8 +114,12 @@ export default function Input({
     inputClass += "px-1 py-1.5 text-sm bg-transparent ";
   }
 
+  // Handle padding for start/end icons and password eye toggle
   if (icon) {
     inputClass += `${iconPaddingMap[iconPosition][size]} `;
+  }
+  if (isPasswordType) {
+    inputClass += "pr-10 "; // Always reserve right padding for the eye toggle on passwords
   }
 
   if (errorMessage) {
@@ -122,7 +131,7 @@ export default function Input({
       <div className="relative w-full flex items-center">
         <input
           name={name}
-          type={type}
+          type={resolvedType}
           value={activeValue}
           onChange={handleChange}
           required={required}
@@ -131,10 +140,23 @@ export default function Input({
           {...props}
         />
         
+        {/* Custom Start/End Icon (Now renders on password fields too!) */}
         {icon && (
           <div className={`absolute ${iconPosMap[iconPosition][size]} text-gray-400 dark:text-gray-500 transition-colors pointer-events-none flex items-center justify-center ${iconSizeMap[size]} ${errorMessage ? '!text-red-500' : 'peer-focus:text-gray-900 dark:peer-focus:text-white'}`}>
             {icon}
           </div>
+        )}
+
+        {/* Built-in Password Visibility Toggle Icon */}
+        {isPasswordType && (
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-200 transition-colors flex items-center justify-center w-5 h-5 focus:outline-none"
+            tabIndex={-1}
+          >
+            {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+          </button>
         )}
       </div>
     </FieldWrapper>
