@@ -21,7 +21,5 @@ export type { SelectProps } from './components/Select';
 export { default as Select } from './components/Select';
 export type { SliderProps } from './components/Slider';
 export { default as Slider } from './components/Slider';
-export type { TextInputProps } from './components/TextInput';
-export { default as TextInput } from './components/TextInput';
 export type { ToggleProps } from './components/Toggle';
 export { default as Toggle } from './components/Toggle';

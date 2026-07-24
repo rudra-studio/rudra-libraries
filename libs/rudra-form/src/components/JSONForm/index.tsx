@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import * as LucideIcons from 'lucide-react';
 import Form from '../Form';
 import Input from '../Input';
 import Select from '../Select';
@@ -8,10 +9,11 @@ import { useRudraForm } from '../RudraFormContext';
 
 export type FormField = {
   id: string;
-  type: 'text' | 'email' | 'textarea' | 'checkbox' | 'select';
+  type: 'text' | 'email' | 'password' | 'textarea' | 'checkbox' | 'select';
   label: string;
   placeholder?: string;
   required?: boolean;
+  icon?: string; /* @type|string */ // e.g. "Mail", "Lock", "User", "Search"
   options?: { label: string; value: string }[]; 
 };
 
@@ -30,14 +32,27 @@ export interface JSONFormProps {
   
   /**
    * @class|[
-   *   {"key": "Theme", "prefix": "bg", "type": "select", "options": [{"key": "transparent", "label": "Transparent"}, {"key": "white dark:bg-gray-900", "label": "Standard Base"}, {"key": "gray-50 dark:bg-gray-800", "label": "Subtle Base"}]},
-   *   {"key": "Shadow", "prefix": "shadow", "type": "select", "options": [{"key": "none", "label": "None"}, {"key": "sm", "label": "Small"}, {"key": "md", "label": "Medium"}]}
+   *   {"key": "Theme", "prefix": "", "type": "select", "options": [
+   *     {"key": "bg-white dark:bg-gray-900 border-black/10 dark:border-white/10", "label": "Solid (Default)"},
+   *     {"key": "bg-transparent border-transparent", "label": "Transparent"},
+   *     {"key": "bg-white/40 dark:bg-black/40 backdrop-blur-xl border-white/50 dark:border-white/10", "label": "Glassmorphism"}
+   *   ]},
+   *   {"key": "Padding", "prefix": "p", "type": "select", "options": [{"key": "4", "label": "Small"}, {"key": "6", "label": "Medium"}, {"key": "8", "label": "Large"}]},
+   *   {"key": "Shadow", "prefix": "shadow", "type": "select", "options": [{"key": "none", "label": "None"}, {"key": "sm", "label": "Small"}, {"key": "md", "label": "Medium"}, {"key": "xl", "label": "Large"}]}
    * ]
    */
   className?: string;
 }
 
-// --- Inline Textarea to utilize the new context & FieldWrapper ---
+// --- Dynamic Lucide Icon Resolver Component ---
+const DynamicIcon = ({ name }: { name?: string }) => {
+  if (!name) return null;
+  const IconComponent = (LucideIcons as Record<string, any>)[name];
+  if (!IconComponent) return null;
+  return <IconComponent className="w-4 h-4" />;
+};
+
+// --- Inline Textarea utilizing context & FieldWrapper ---
 const FormTextarea = ({ field }: { field: FormField }) => {
   const context = useRudraForm();
   const isInsideForm = !!context;
@@ -51,23 +66,28 @@ const FormTextarea = ({ field }: { field: FormField }) => {
     }
   };
 
-  // Uses inherited border and ring colors
   const errorClass = errorMessage 
-    ? "border-red-500 focus:border-red-500 focus:ring-red-500/20" 
+    ? "!border-red-500 focus:!border-red-500 focus:!ring-red-500/20" 
     : "border-black/20 dark:border-white/20 focus:ring-black/10 dark:focus:ring-white/10";
 
   return (
     <FieldWrapper label={field.label} required={field.required} error={errorMessage}>
-      <textarea
-        name={field.id}
-        rows={4}
-        placeholder={field.placeholder}
-        required={field.required}
-        value={activeValue}
-        onChange={handleChange}
-        // bg-transparent ensures it inherits the form's background color
-        className={`w-full outline-none bg-transparent transition-all peer text-sm text-inherit rounded-md px-3 py-2 focus:ring-4 ${errorClass}`}
-      />
+      <div className="relative w-full flex items-center">
+        <textarea
+          name={field.id}
+          rows={4}
+          placeholder={field.placeholder}
+          required={field.required}
+          value={activeValue}
+          onChange={handleChange}
+          className={`w-full outline-none bg-transparent transition-all peer text-sm text-inherit rounded-md px-3 py-2 border focus:ring-4 ${field.icon ? 'pl-9' : ''} ${errorClass}`}
+        />
+        {field.icon && (
+          <div className="absolute left-3 top-3 text-gray-400 dark:text-gray-500 pointer-events-none flex items-center justify-center">
+            <DynamicIcon name={field.icon} />
+          </div>
+        )}
+      </div>
     </FieldWrapper>
   );
 };
@@ -79,9 +99,8 @@ export default function JSONForm({
   prevLabel = 'Previous',
   customColor = '#3b82f6',
   onSubmit,
-  // Provide a sensible default theme that the builder can easily override via the @class schema
-  className = 'bg-white dark:bg-gray-900 border border-black/10 dark:border-white/10 shadow-sm p-6 rounded-xl text-gray-900 dark:text-white',
-}: JSONFormProps) { /* @metadata A dynamic, multi-step JSON-driven form builder that inherits themes automatically from the consuming application. */
+  className = 'bg-white dark:bg-gray-900 border border-black/10 dark:border-white/10 p-6 shadow-sm rounded-xl text-gray-900 dark:text-white',
+}: JSONFormProps) { /* @metadata A dynamic, multi-step JSON-driven form builder featuring string-to-icon resolution via Lucide React. */
   
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -103,18 +122,15 @@ export default function JSONForm({
   return (
     <Form 
       onSubmit={onSubmit} 
-      className={`w-full max-w-2xl ${className}`}
+      className={`w-full max-w-2xl border transition-all duration-300 ${className}`}
     >
       {/* Progress Header */}
       {isMultiStep && (
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
-            {/* Uses text-inherit to match the container's text color automatically */}
             <h3 className="text-lg font-semibold text-inherit">{activeStep.title}</h3>
-            {/* Uses opacity instead of a hardcoded gray so it looks good on ANY background */}
             <span className="text-sm opacity-60 text-inherit">Step {currentStep + 1} of {schema.length}</span>
           </div>
-          {/* Universal Progress Track: Uses a 5% black overlay in light mode, and 10% white overlay in dark mode */}
           <div className="w-full h-2 bg-black/5 dark:bg-white/10 rounded-full overflow-hidden">
             <div
               className="h-full transition-all duration-300 rounded-full"
@@ -139,19 +155,18 @@ export default function JSONForm({
               label={field.label}
               placeholder={field.placeholder}
               required={field.required}
+              icon={field.icon ? <DynamicIcon name={field.icon} /> : undefined}
             />
           );
         })}
       </div>
 
       {/* Navigation Footer */}
-      {/* Divider relies on universal opacity rather than hardcoded zinc borders */}
       <div className="flex items-center justify-between pt-4 border-t border-black/10 dark:border-white/10">
         {isMultiStep && currentStep > 0 ? (
           <button
             type="button"
             onClick={handlePrev}
-            // Hover uses universal opacity overlays to look good on any theme
             className="px-4 py-2 text-sm font-medium text-inherit opacity-80 hover:opacity-100 hover:bg-black/5 dark:hover:bg-white/10 rounded-md transition-all"
           >
             {prevLabel}
