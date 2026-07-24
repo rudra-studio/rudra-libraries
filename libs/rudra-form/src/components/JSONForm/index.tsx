@@ -124,7 +124,7 @@ export default function JSONForm({
   buttonRadius = 'md',
   onSubmit,
   className = 'bg-white dark:bg-gray-900 border border-black/10 dark:border-white/10 p-6 shadow-sm rounded-xl text-gray-900 dark:text-white',
-}: JSONFormProps) { /* @metadata A dynamic, multi-step JSON-driven form builder with full-width single-page submit and advanced button styling. */
+}: JSONFormProps) { /* @metadata A dynamic, multi-step JSON-driven form builder with adaptive light/dark button inversion and full-width single-page layouts. */
   
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -144,7 +144,6 @@ export default function JSONForm({
 
   if (!activeStep || schema.length === 0) return null;
 
-  // --- Button Size & Radius Dictionaries ---
   const sizeMap = {
     sm: "px-3 py-1.5 text-xs",
     md: "px-4 py-2 text-sm",
@@ -159,20 +158,25 @@ export default function JSONForm({
     full: "rounded-full"
   };
 
-  // --- Dynamic Button Variant Styling ---
+  const isDefaultColor = customColor === '#3b82f6';
+
   let primaryBtnClass = `font-medium transition-all shadow-sm ${sizeMap[buttonSize]} ${radiusMap[buttonRadius]} `;
   
   if (buttonVariant === 'solid') {
-    primaryBtnClass += "text-white hover:opacity-90";
+    if (isDefaultColor) {
+      // Light theme: dark button / white text. Dark theme: white button / dark text.
+      primaryBtnClass += "bg-gray-900 text-white dark:bg-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100";
+    } else {
+      primaryBtnClass += "text-white hover:opacity-90";
+    }
   } else if (buttonVariant === 'outline') {
     primaryBtnClass += "border-2 bg-transparent hover:bg-black/5 dark:hover:bg-white/10";
   } else if (buttonVariant === 'ghost') {
     primaryBtnClass += "bg-opacity-10 hover:bg-opacity-20";
   }
 
-  // Inline style overrides for dynamic customColor
   const primaryBtnStyle = buttonVariant === 'solid' 
-    ? { backgroundColor: customColor } 
+    ? (isDefaultColor ? {} : { backgroundColor: customColor })
     : buttonVariant === 'outline' 
     ? { borderColor: customColor, color: customColor } 
     : { backgroundColor: `${customColor}20`, color: customColor };
@@ -217,7 +221,6 @@ export default function JSONForm({
         })}
       </div>
 
-      {/* Navigation Footer */}
       <div className={`flex items-center pt-4 border-t border-black/10 dark:border-white/10 ${isSinglePage ? 'justify-center' : 'justify-between'}`}>
         {isMultiStep && currentStep > 0 ? (
           <button
