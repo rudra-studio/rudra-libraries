@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as LucideIcons from 'lucide-react';
 import Form from '../Form';
 import Input from '../Input';
@@ -32,6 +32,8 @@ export interface JSONFormProps {
   buttonSize?: 'sm' | 'md' | 'lg'; /* @select|sm|md|lg */
   buttonRadius?: 'none' | 'sm' | 'md' | 'lg' | 'full'; /* @select|none|sm|md|lg|full */
   onSubmit?: (values: Record<string, any>) => void; /* @type|function|args:values */
+  onChange?: (values: Record<string, any>) => void; /* @type|function|args:values */
+  validate?: (values: Record<string, any>) => Record<string, string>; /* @type|function|args:values */
   
   /** * @type|class
    * @schema [{
@@ -74,17 +76,16 @@ const DynamicIcon = ({ name }: { name?: string }) => {
   return <IconComponent className="w-4 h-4" />;
 };
 
-const FormTextarea = ({ field }: { field: FormField }) => {
+const FormTextarea = ({ field, errorOverride, onChangeValue }: { field: FormField, errorOverride?: string, onChangeValue: (val: string) => void }) => {
   const context = useRudraForm();
   const isInsideForm = !!context;
   
   const activeValue = isInsideForm ? (context.values[field.id] || '') : '';
-  const errorMessage = isInsideForm ? context.errors[field.id] : undefined;
+  const errorMessage = errorOverride || (isInsideForm ? context.errors[field.id] : undefined);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (isInsideForm) {
-      context.handleChange(field.id, e.target.value);
-    }
+    if (isInsideForm) context.handleChange(field.id, e.target.value);
+    onChangeValue(e.target.value);
   };
 
   const errorClass = errorMessage 
@@ -123,20 +124,16 @@ export default function JSONForm({
   buttonSize = 'md',
   buttonRadius = 'md',
   onSubmit,
+  onChange,
+  validate,
   className = 'bg-white dark:bg-gray-900 border border-black/10 dark:border-white/10 p-6 shadow-sm rounded-xl text-gray-900 dark:text-white',
-}: JSONFormProps) { /* @metadata A dynamic, multi-step JSON-driven form builder with adaptive light/dark button inversion and full-width single-page layouts. */
+}: JSONFormProps) { 
   
   const [currentStep, setCurrentStep] = useState(0);
-
-  const handleNext = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (currentStep < schema.length - 1) setCurrentStep(currentStep + 1);
-  };
-
-  const handlePrev = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (currentStep > 0) setCurrentStep(currentStep - 1);
-  };
+  
+  // Shadow state to track values for validation purposes
+  const [localValues, setLocalValues] = useState<Record<string, any>>({});
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   const activeStep = schema[currentStep];
   const isMultiStep = schema.length > 1;
@@ -144,6 +141,67 @@ export default function JSONForm({
 
   if (!activeStep || schema.length === 0) return null;
 
+  // Intercept field changes to run real-time updates and clear errors
+  const handleFieldChange = (id: string, val: any) => {
+    const updatedValues = { ...localValues, [id]: val };
+    setLocalValues(updatedValues);
+    if (onChange) onChange(updatedValues);
+
+    // Clear error for the field being typed in
+    if (validationErrors[id]) {
+      const newErrors = { ...validationErrors };
+      delete newErrors[id];
+      setValidationErrors(newErrors);
+    }
+  };
+
+  // Run Validation for the CURRENT Step
+  const processValidation = (fieldsToValidate: FormField[]) => {
+    if (!validate) return true;
+    
+    const errorsFromUser = validate(localValues) || {};
+    const stepErrors: Record<string, string> = {};
+    let hasErrors = false;
+
+    // Only flag errors for fields that exist on the screen right now
+    fieldsToValidate.forEach(field => {
+      if (errorsFromUser[field.id]) {
+        stepErrors[field.id] = errorsFromUser[field.id];
+        hasErrors = true;
+      }
+    });
+
+    if (hasErrors) {
+      setValidationErrors(prev => ({ ...prev, ...stepErrors }));
+      return false; // Blocks progression
+    }
+    return true; // Safe to proceed
+  };
+
+  const handleNext = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const isStepValid = processValidation(activeStep.fields);
+    if (isStepValid && currentStep < schema.length - 1) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const handlePrev = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (currentStep > 0) setCurrentStep(currentStep - 1);
+  };
+
+  const handleSubmitClick = (e: React.MouseEvent) => {
+    // Collect all fields across all steps to ensure full form validation on submit
+    const allFields = schema.flatMap(step => step.fields);
+    const isFormValid = processValidation(allFields);
+    
+    if (!isFormValid) {
+      e.preventDefault(); // Stop form submission if validation fails
+    }
+  };
+
+  // --- Design Dictionaries ---
   const sizeMap = {
     sm: "px-3 py-1.5 text-xs",
     md: "px-4 py-2 text-sm",
@@ -159,12 +217,10 @@ export default function JSONForm({
   };
 
   const isDefaultColor = customColor === '#3b82f6';
-
   let primaryBtnClass = `font-medium transition-all shadow-sm ${sizeMap[buttonSize]} ${radiusMap[buttonRadius]} `;
   
   if (buttonVariant === 'solid') {
     if (isDefaultColor) {
-      // Light theme: dark button / white text. Dark theme: white button / dark text.
       primaryBtnClass += "bg-gray-900 text-white dark:bg-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100";
     } else {
       primaryBtnClass += "text-white hover:opacity-90";
@@ -182,10 +238,9 @@ export default function JSONForm({
     : { backgroundColor: `${customColor}20`, color: customColor };
 
   return (
-    <Form 
-      onSubmit={onSubmit} 
-      className={`w-full max-w-2xl border transition-all duration-300 ${className}`}
-    >
+    <Form onSubmit={onSubmit} className={`w-full max-w-2xl border transition-all duration-300 ${className}`}>
+      
+      {/* Progress Header */}
       {isMultiStep && (
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
@@ -201,11 +256,16 @@ export default function JSONForm({
         </div>
       )}
 
+      {/* Dynamic Fields */}
       <div className="flex flex-col gap-1 mb-8">
         {activeStep.fields.map(field => {
-          if (field.type === 'textarea') return <FormTextarea key={field.id} field={field} />;
-          if (field.type === 'select') return <Select key={field.id} name={field.id} label={field.label} required={field.required} options={field.options} />;
-          if (field.type === 'checkbox') return <Checkbox key={field.id} name={field.id} label={field.label} description={field.placeholder} required={field.required} />;
+          const fieldError = validationErrors[field.id];
+
+          if (field.type === 'textarea') return <FormTextarea key={field.id} field={field} errorOverride={fieldError} onChangeValue={(val) => handleFieldChange(field.id, val)} />;
+          
+          if (field.type === 'select') return <Select key={field.id} name={field.id} label={field.label} required={field.required} options={field.options} onChangeValue={(val) => handleFieldChange(field.id, val)} />;
+          
+          if (field.type === 'checkbox') return <Checkbox key={field.id} name={field.id} label={field.label} description={field.placeholder} required={field.required} onChangeValue={(val) => handleFieldChange(field.id, val)} />;
 
           return (
             <Input
@@ -216,11 +276,14 @@ export default function JSONForm({
               placeholder={field.placeholder}
               required={field.required}
               icon={field.icon ? <DynamicIcon name={field.icon} /> : undefined}
+              error={fieldError}
+              onChangeValue={(val) => handleFieldChange(field.id, val)}
             />
           );
         })}
       </div>
 
+      {/* Navigation Footer */}
       <div className={`flex items-center pt-4 border-t border-black/10 dark:border-white/10 ${isSinglePage ? 'justify-center' : 'justify-between'}`}>
         {isMultiStep && currentStep > 0 ? (
           <button
@@ -244,6 +307,7 @@ export default function JSONForm({
         ) : (
           <button
             type="submit"
+            onClick={handleSubmitClick}
             className={`${primaryBtnClass} ${isSinglePage ? 'w-full' : ''}`}
             style={primaryBtnStyle}
           >
