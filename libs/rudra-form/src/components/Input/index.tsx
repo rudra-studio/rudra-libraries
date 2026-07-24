@@ -15,6 +15,7 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
   type?: string; /* @select|text|email|password|number|url */
   icon?: React.ReactNode; /* @type|node */
   iconPosition?: 'start' | 'end'; /* @select|start|end */
+  error?: string; /* @type|string */ // Allows explicit injection of validation errors
   
   /** * @type|class
    * @schema [{
@@ -63,15 +64,18 @@ export default function Input({
   placeholder,
   icon,
   iconPosition = 'start',
+  error,
   ...props
-}: InputProps) { /* @metadata A customizable text input supporting password visibility toggles, start/end icons, and class injection. */
+}: InputProps) { 
   
   const formContext = useRudraForm();
   const isInsideForm = !!formContext;
   const [showPassword, setShowPassword] = useState(false);
 
   const activeValue = isInsideForm ? (formContext.values[name] || '') : (value || '');
-  const errorMessage = isInsideForm ? formContext.errors[name] : undefined;
+  
+  // Prioritize locally passed validation errors over context errors
+  const errorMessage = error || (isInsideForm ? formContext.errors[name] : undefined);
 
   const isPasswordType = type === 'password';
   const resolvedType = isPasswordType ? (showPassword ? 'text' : 'password') : type;
@@ -114,12 +118,11 @@ export default function Input({
     inputClass += "px-1 py-1.5 text-sm bg-transparent ";
   }
 
-  // Handle padding for start/end icons and password eye toggle
   if (icon) {
     inputClass += `${iconPaddingMap[iconPosition][size]} `;
   }
   if (isPasswordType) {
-    inputClass += "pr-10 "; // Always reserve right padding for the eye toggle on passwords
+    inputClass += "pr-10 "; 
   }
 
   if (errorMessage) {
@@ -140,14 +143,12 @@ export default function Input({
           {...props}
         />
         
-        {/* Custom Start/End Icon (Now renders on password fields too!) */}
         {icon && (
           <div className={`absolute ${iconPosMap[iconPosition][size]} text-gray-400 dark:text-gray-500 transition-colors pointer-events-none flex items-center justify-center ${iconSizeMap[size]} ${errorMessage ? '!text-red-500' : 'peer-focus:text-gray-900 dark:peer-focus:text-white'}`}>
             {icon}
           </div>
         )}
 
-        {/* Built-in Password Visibility Toggle Icon */}
         {isPasswordType && (
           <button
             type="button"
