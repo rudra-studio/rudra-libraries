@@ -4,6 +4,8 @@ export type { AccordionItem, DataAccordionProps } from './components/DataAccordi
 export { default as DataAccordion } from './components/DataAccordion';
 export type { RepeaterCarouselProps } from './components/DataCarousel';
 export { default as RepeaterCarousel } from './components/DataCarousel';
+export type { SeparatorProps } from './components/Divider';
+export { default as Separator } from './components/Divider';
 export type { ModalProps } from './components/Modal';
 export { default as Modal } from './components/Modal';
 export type { RepeaterProps } from './components/Repeater';
