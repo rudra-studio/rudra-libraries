@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import  Form  from '../Form';
+import Form from '../Form';
 import Input from '../Input';
 import Select from '../Select';
 import Checkbox from '../Checkbox';
@@ -27,6 +27,13 @@ export interface JSONFormProps {
   prevLabel?: string; /* @translate */
   customColor?: string; /* @color */
   onSubmit?: (values: Record<string, any>) => void; /* @type|function|args:values */
+  
+  /**
+   * @class|[
+   *   {"key": "Theme", "prefix": "bg", "type": "select", "options": [{"key": "transparent", "label": "Transparent"}, {"key": "white dark:bg-gray-900", "label": "Standard Base"}, {"key": "gray-50 dark:bg-gray-800", "label": "Subtle Base"}]},
+   *   {"key": "Shadow", "prefix": "shadow", "type": "select", "options": [{"key": "none", "label": "None"}, {"key": "sm", "label": "Small"}, {"key": "md", "label": "Medium"}]}
+   * ]
+   */
   className?: string;
 }
 
@@ -44,9 +51,10 @@ const FormTextarea = ({ field }: { field: FormField }) => {
     }
   };
 
+  // Uses inherited border and ring colors
   const errorClass = errorMessage 
     ? "border-red-500 focus:border-red-500 focus:ring-red-500/20" 
-    : "border-gray-300 dark:border-gray-700 focus:ring-blue-500/20 focus:border-blue-500";
+    : "border-black/20 dark:border-white/20 focus:ring-black/10 dark:focus:ring-white/10";
 
   return (
     <FieldWrapper label={field.label} required={field.required} error={errorMessage}>
@@ -57,7 +65,8 @@ const FormTextarea = ({ field }: { field: FormField }) => {
         required={field.required}
         value={activeValue}
         onChange={handleChange}
-        className={`w-full outline-none bg-white dark:bg-gray-900 transition-all peer text-sm text-gray-900 dark:text-white rounded-md px-3 py-2 focus:ring-4 ${errorClass}`}
+        // bg-transparent ensures it inherits the form's background color
+        className={`w-full outline-none bg-transparent transition-all peer text-sm text-inherit rounded-md px-3 py-2 focus:ring-4 ${errorClass}`}
       />
     </FieldWrapper>
   );
@@ -70,8 +79,9 @@ export default function JSONForm({
   prevLabel = 'Previous',
   customColor = '#3b82f6',
   onSubmit,
-  className = '',
-}: JSONFormProps) { /* @metadata A dynamic, multi-step JSON-driven form builder that automatically integrates with the unified form context. */
+  // Provide a sensible default theme that the builder can easily override via the @class schema
+  className = 'bg-white dark:bg-gray-900 border border-black/10 dark:border-white/10 shadow-sm p-6 rounded-xl text-gray-900 dark:text-white',
+}: JSONFormProps) { /* @metadata A dynamic, multi-step JSON-driven form builder that inherits themes automatically from the consuming application. */
   
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -93,16 +103,19 @@ export default function JSONForm({
   return (
     <Form 
       onSubmit={onSubmit} 
-      className={`w-full max-w-2xl bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm p-6 ${className}`}
+      className={`w-full max-w-2xl ${className}`}
     >
       {/* Progress Header */}
       {isMultiStep && (
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
-            <h3 className="text-lg font-semibold text-zinc-900 dark:text-white">{activeStep.title}</h3>
-            <span className="text-sm text-zinc-500">Step {currentStep + 1} of {schema.length}</span>
+            {/* Uses text-inherit to match the container's text color automatically */}
+            <h3 className="text-lg font-semibold text-inherit">{activeStep.title}</h3>
+            {/* Uses opacity instead of a hardcoded gray so it looks good on ANY background */}
+            <span className="text-sm opacity-60 text-inherit">Step {currentStep + 1} of {schema.length}</span>
           </div>
-          <div className="w-full h-2 bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden">
+          {/* Universal Progress Track: Uses a 5% black overlay in light mode, and 10% white overlay in dark mode */}
+          <div className="w-full h-2 bg-black/5 dark:bg-white/10 rounded-full overflow-hidden">
             <div
               className="h-full transition-all duration-300 rounded-full"
               style={{ width: `${((currentStep + 1) / schema.length) * 100}%`, backgroundColor: customColor }}
@@ -111,39 +124,13 @@ export default function JSONForm({
         </div>
       )}
 
-      {/* Dynamic Fields injected using our universal form components */}
+      {/* Dynamic Fields */}
       <div className="flex flex-col gap-1 mb-8">
         {activeStep.fields.map(field => {
-          
-          if (field.type === 'textarea') {
-            return <FormTextarea key={field.id} field={field} />;
-          } 
-          
-          if (field.type === 'select') {
-            return (
-              <Select
-                key={field.id}
-                name={field.id}
-                label={field.label}
-                required={field.required}
-                options={field.options}
-              />
-            );
-          }
-          
-          if (field.type === 'checkbox') {
-            return (
-              <Checkbox
-                key={field.id}
-                name={field.id}
-                label={field.label}
-                description={field.placeholder} // Repurposing placeholder as sub-text
-                required={field.required}
-              />
-            );
-          }
+          if (field.type === 'textarea') return <FormTextarea key={field.id} field={field} />;
+          if (field.type === 'select') return <Select key={field.id} name={field.id} label={field.label} required={field.required} options={field.options} />;
+          if (field.type === 'checkbox') return <Checkbox key={field.id} name={field.id} label={field.label} description={field.placeholder} required={field.required} />;
 
-          // Default text / email fallback
           return (
             <Input
               key={field.id}
@@ -158,12 +145,14 @@ export default function JSONForm({
       </div>
 
       {/* Navigation Footer */}
-      <div className="flex items-center justify-between pt-4 border-t border-zinc-100 dark:border-zinc-800">
+      {/* Divider relies on universal opacity rather than hardcoded zinc borders */}
+      <div className="flex items-center justify-between pt-4 border-t border-black/10 dark:border-white/10">
         {isMultiStep && currentStep > 0 ? (
           <button
-            type="button" // 🚨 Crucial: Prevents premature form submission
+            type="button"
             onClick={handlePrev}
-            className="px-4 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md transition-colors"
+            // Hover uses universal opacity overlays to look good on any theme
+            className="px-4 py-2 text-sm font-medium text-inherit opacity-80 hover:opacity-100 hover:bg-black/5 dark:hover:bg-white/10 rounded-md transition-all"
           >
             {prevLabel}
           </button>
@@ -171,7 +160,7 @@ export default function JSONForm({
 
         {isMultiStep && currentStep < schema.length - 1 ? (
           <button
-            type="button" // 🚨 Crucial: Prevents premature form submission
+            type="button"
             onClick={handleNext}
             className="px-4 py-2 text-sm font-medium text-white rounded-md transition-opacity hover:opacity-90 shadow-sm"
             style={{ backgroundColor: customColor }}
@@ -180,7 +169,7 @@ export default function JSONForm({
           </button>
         ) : (
           <button
-            type="submit" // 🚀 Automatically triggers the <Form> Context's onSubmit
+            type="submit"
             className="px-6 py-2 text-sm font-medium text-white rounded-md transition-opacity hover:opacity-90 shadow-sm"
             style={{ backgroundColor: customColor }}
           >
