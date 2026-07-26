@@ -272,7 +272,7 @@ export default function JSONForm({
 
   return (
     <div onKeyDown={handleKeyDown}>
-      <Form className={`w-full max-w-2xl border transition-all duration-300 ${className}`}>
+      <Form className={`w-full max-w-2xl transition-all duration-300 ${className}`}>
         
         {isMultiStep && (
           <div className="mb-6">
