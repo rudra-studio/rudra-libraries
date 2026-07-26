@@ -157,6 +157,7 @@ export default function JSONForm({
     // 2. Run the developer's custom global validation logic
     if (validate) {
       const valResult = validate(localValues);
+      alert("Validation reult " + valResult)
       if (typeof valResult === 'string') {
         setGlobalError(valResult); // Show the specific error message
         return false;
