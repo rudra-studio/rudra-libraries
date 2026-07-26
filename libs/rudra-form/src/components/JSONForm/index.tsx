@@ -162,6 +162,7 @@ export default function JSONForm({
       setIsValidating(true);
       try {
         const valResult = await validate(localValues); // Await pauses if it's a promise, proceeds if sync
+        alert("Validation Result " + valResult)
         
         if (typeof valResult === 'string' && valResult.trim() !== '') {
           setGlobalError(valResult); 
