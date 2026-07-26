@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import * as LucideIcons from 'lucide-react';
 import Form from '../Form';
 import Input from '../Input';
@@ -8,64 +8,33 @@ import FieldWrapper from '../FieldWrapper';
 import { useRudraForm } from '../RudraFormContext';
 
 export type FormField = {
-  id: string; /* @type|string */
-  type: 'text' | 'email' | 'password' | 'textarea' | 'checkbox' | 'select'; /* @select|text|email|password|textarea|checkbox|select */
-  label: string; /* @type|string */
-  placeholder?: string; /* @type|string */
-  required?: boolean; /* @type|boolean */
-  icon?: string; /* @type|string */
-  options?: { label: string; value: string }[]; /* @type|json */
+  id: string; 
+  type: 'text' | 'email' | 'password' | 'textarea' | 'checkbox' | 'select'; 
+  label: string; 
+  placeholder?: string; 
+  required?: boolean; 
+  icon?: string; 
+  options?: { label: string; value: string }[]; 
 };
 
 export type FormStep = {
-  title: string; /* @type|string */
-  fields: FormField[]; /* @type|json */
+  title: string; 
+  fields: FormField[]; 
 };
 
 export interface JSONFormProps {
-  schema?: FormStep[]; /* @widget|generic-array-builder */
-  submitLabel?: string; /* @translate */
-  nextLabel?: string; /* @translate */
-  prevLabel?: string; /* @translate */
-  customColor?: string; /* @color */
-  buttonVariant?: 'solid' | 'outline' | 'ghost'; /* @select|solid|outline|ghost */
-  buttonSize?: 'sm' | 'md' | 'lg'; /* @select|sm|md|lg */
-  buttonRadius?: 'none' | 'sm' | 'md' | 'lg' | 'full'; /* @select|none|sm|md|lg|full */
-  onSubmit?: (values: Record<string, any>) => void; /* @type|function|args:values */
-  onChange?: (values: Record<string, any>) => void; /* @type|function|args:values */
-  validate?: (values: Record<string, any>) => Record<string, string>; /* @type|function|args:values */
-  
-  /** * @type|class
-   * @schema [{
-   * "key": "Theme",
-   * "prefix": "",
-   * "type": "select",
-   * "options": [
-   * {"key": "bg-white dark:bg-gray-900 border-black/10 dark:border-white/10", "label": "Solid (Default)"},
-   * {"key": "bg-transparent border-transparent", "label": "Transparent"},
-   * {"key": "bg-white/40 dark:bg-black/40 backdrop-blur-xl border-white/50 dark:border-white/10", "label": "Glassmorphism"}
-   * ]
-   * },{
-   * "key": "Padding",
-   * "prefix": "p",
-   * "type": "select",
-   * "options": [
-   * {"key": "4", "label": "Small"},
-   * {"key": "6", "label": "Medium"},
-   * {"key": "8", "label": "Large"}
-   * ]
-   * },{
-   * "key": "Shadow",
-   * "prefix": "shadow",
-   * "type": "select",
-   * "options": [
-   * {"key": "none", "label": "None"},
-   * {"key": "sm", "label": "Small"},
-   * {"key": "md", "label": "Medium"},
-   * {"key": "xl", "label": "Large"}
-   * ]
-   * }]
-   */
+  schema?: FormStep[]; 
+  submitLabel?: string; 
+  nextLabel?: string; 
+  prevLabel?: string; 
+  customColor?: string; 
+  buttonVariant?: 'solid' | 'outline' | 'ghost'; 
+  buttonSize?: 'sm' | 'md' | 'lg'; 
+  buttonRadius?: 'none' | 'sm' | 'md' | 'lg' | 'full'; 
+  onSubmit?: (values: Record<string, any>) => void; 
+  onChange?: (values: Record<string, any>) => void; 
+  // 🚀 FIX 1: Updated signature to expect a global string message or a boolean
+  validate?: (values: Record<string, any>) => boolean | string; 
   className?: string;
 }
 
@@ -130,10 +99,7 @@ export default function JSONForm({
 }: JSONFormProps) { 
   
   const [currentStep, setCurrentStep] = useState(0);
-  
-  // Shadow state to track values for validation purposes
   const [localValues, setLocalValues] = useState<Record<string, any>>({});
-  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   const activeStep = schema[currentStep];
   const isMultiStep = schema.length > 1;
@@ -141,43 +107,29 @@ export default function JSONForm({
 
   if (!activeStep || schema.length === 0) return null;
 
+  // 🚀 FIX 2: Evaluate validation dynamically on every render
+  let globalError: string | null = null;
+  let isValid = true;
+
+  if (validate) {
+    const valResult = validate(localValues);
+    if (typeof valResult === 'string') {
+      globalError = valResult;
+      isValid = false;
+    } else if (valResult === false) {
+      isValid = false;
+    }
+  }
+
   const handleFieldChange = (id: string, val: any) => {
     const updatedValues = { ...localValues, [id]: val };
     setLocalValues(updatedValues);
     if (onChange) onChange(updatedValues);
-
-    if (validationErrors[id]) {
-      const newErrors = { ...validationErrors };
-      delete newErrors[id];
-      setValidationErrors(newErrors);
-    }
   };
 
-  const processValidation = (fieldsToValidate: FormField[]) => {
-    if (!validate) return true;
-    
-    const errorsFromUser = validate(localValues) || {};
-    const stepErrors: Record<string, string> = {};
-    let hasErrors = false;
-
-    fieldsToValidate.forEach(field => {
-      if (errorsFromUser[field.id]) {
-        stepErrors[field.id] = errorsFromUser[field.id];
-        hasErrors = true;
-      }
-    });
-
-    if (hasErrors) {
-      setValidationErrors(prev => ({ ...prev, ...stepErrors }));
-      return false; 
-    }
-    return true; 
-  };
-
-  const handleNext = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const isStepValid = processValidation(activeStep.fields);
-    if (isStepValid && currentStep < schema.length - 1) {
+  const handleNext = (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
+    if (isValid && currentStep < schema.length - 1) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -187,15 +139,23 @@ export default function JSONForm({
     if (currentStep > 0) setCurrentStep(currentStep - 1);
   };
 
-  // 🚀 FIX: This now strictly expects the `values` object from Form.tsx, not a FormEvent!
-  const handleFormSubmit = (formValues: Record<string, any>) => {
-    console.log("Handling form submt", formValues);
-    const allFields = schema.flatMap(step => step.fields);
-    const isFormValid = processValidation(allFields);
-    
-    // Pass the payload directly up to the user's workflow!
-    if (isFormValid && onSubmit) {
-      onSubmit(formValues); 
+  const handleManualSubmit = (e?: React.MouseEvent) => {
+    if (e) e.preventDefault(); 
+    if (isValid && onSubmit) {
+      onSubmit(localValues); 
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); 
+      if (!isValid) return; // Prevent enter key submission if validation fails
+      
+      if (isSinglePage || currentStep === schema.length - 1) {
+        handleManualSubmit();
+      } else {
+        handleNext();
+      }
     }
   };
 
@@ -235,77 +195,90 @@ export default function JSONForm({
     : { backgroundColor: `${customColor}20`, color: customColor };
 
   return (
-    <Form onSubmit={handleFormSubmit} className={`w-full max-w-2xl border transition-all duration-300 ${className}`}>
-      
-      {isMultiStep && (
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="text-lg font-semibold text-inherit">{activeStep.title}</h3>
-            <span className="text-sm opacity-60 text-inherit">Step {currentStep + 1} of {schema.length}</span>
+    <div onKeyDown={handleKeyDown}>
+      <Form className={`w-full max-w-2xl border transition-all duration-300 ${className}`}>
+        
+        {isMultiStep && (
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-lg font-semibold text-inherit">{activeStep.title}</h3>
+              <span className="text-sm opacity-60 text-inherit">Step {currentStep + 1} of {schema.length}</span>
+            </div>
+            <div className="w-full h-2 bg-black/5 dark:bg-white/10 rounded-full overflow-hidden">
+              <div
+                className="h-full transition-all duration-300 rounded-full"
+                style={{ width: `${((currentStep + 1) / schema.length) * 100}%`, backgroundColor: customColor }}
+              />
+            </div>
           </div>
-          <div className="w-full h-2 bg-black/5 dark:bg-white/10 rounded-full overflow-hidden">
-            <div
-              className="h-full transition-all duration-300 rounded-full"
-              style={{ width: `${((currentStep + 1) / schema.length) * 100}%`, backgroundColor: customColor }}
-            />
-          </div>
-        </div>
-      )}
-
-      <div className="flex flex-col gap-1 mb-8">
-        {activeStep.fields.map(field => {
-          const fieldError = validationErrors[field.id];
-
-          if (field.type === 'textarea') return <FormTextarea key={field.id} field={field} errorOverride={fieldError} onChangeValue={(val) => handleFieldChange(field.id, val)} />;
-          if (field.type === 'select') return <Select key={field.id} name={field.id} label={field.label} required={field.required} options={field.options} onChangeValue={(val) => handleFieldChange(field.id, val)} />;
-          if (field.type === 'checkbox') return <Checkbox key={field.id} name={field.id} label={field.label} description={field.placeholder} required={field.required} onChangeValue={(val) => handleFieldChange(field.id, val)} />;
-
-          return (
-            <Input
-              key={field.id}
-              type={field.type}
-              name={field.id}
-              label={field.label}
-              placeholder={field.placeholder}
-              required={field.required}
-              icon={field.icon ? <DynamicIcon name={field.icon} /> : undefined}
-              error={fieldError}
-              onChangeValue={(val) => handleFieldChange(field.id, val)}
-            />
-          );
-        })}
-      </div>
-
-      <div className={`flex items-center pt-4 border-t border-black/10 dark:border-white/10 ${isSinglePage ? 'justify-center' : 'justify-between'}`}>
-        {isMultiStep && currentStep > 0 ? (
-          <button
-            type="button"
-            onClick={handlePrev}
-            className={`font-medium text-inherit opacity-80 hover:opacity-100 hover:bg-black/5 dark:hover:bg-white/10 transition-all ${sizeMap[buttonSize]} ${radiusMap[buttonRadius]}`}
-          >
-            {prevLabel}
-          </button>
-        ) : !isSinglePage ? <div /> : null}
-
-        {isMultiStep && currentStep < schema.length - 1 ? (
-          <button
-            type="button"
-            onClick={handleNext}
-            className={`${primaryBtnClass}`}
-            style={primaryBtnStyle}
-          >
-            {nextLabel}
-          </button>
-        ) : (
-          <button
-            type="submit"
-            className={`${primaryBtnClass} ${isSinglePage ? 'w-full' : ''}`}
-            style={primaryBtnStyle}
-          >
-            {submitLabel}
-          </button>
         )}
-      </div>
-    </Form>
+
+        {/* 🚀 FIX 3: Global Error Message Banner */}
+        {globalError && (
+          <div className="mb-6 p-3 bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-900/50 rounded-md flex items-center gap-3 text-red-600 dark:text-red-400 text-sm">
+            <LucideIcons.AlertCircle className="w-5 h-5 shrink-0" />
+            <span>{globalError}</span>
+          </div>
+        )}
+
+        <div className="flex flex-col gap-1 mb-8">
+          {activeStep.fields.map(field => {
+            if (field.type === 'textarea') return <FormTextarea key={field.id} field={field} errorOverride={undefined} onChangeValue={(val) => handleFieldChange(field.id, val)} />;
+            if (field.type === 'select') return <Select key={field.id} name={field.id} label={field.label} required={field.required} options={field.options} onChangeValue={(val) => handleFieldChange(field.id, val)} />;
+            if (field.type === 'checkbox') return <Checkbox key={field.id} name={field.id} label={field.label} description={field.placeholder} required={field.required} onChangeValue={(val) => handleFieldChange(field.id, val)} />;
+
+            return (
+              <Input
+                key={field.id}
+                type={field.type}
+                name={field.id}
+                label={field.label}
+                placeholder={field.placeholder}
+                required={field.required}
+                icon={field.icon ? <DynamicIcon name={field.icon} /> : undefined}
+                error={undefined}
+                onChangeValue={(val) => handleFieldChange(field.id, val)}
+              />
+            );
+          })}
+        </div>
+
+        <div className={`flex items-center pt-4 border-t border-black/10 dark:border-white/10 ${isSinglePage ? 'justify-center' : 'justify-between'}`}>
+          {isMultiStep && currentStep > 0 ? (
+            <button
+              type="button"
+              onClick={handlePrev}
+              className={`font-medium text-inherit opacity-80 hover:opacity-100 hover:bg-black/5 dark:hover:bg-white/10 transition-all ${sizeMap[buttonSize]} ${radiusMap[buttonRadius]}`}
+            >
+              {prevLabel}
+            </button>
+          ) : !isSinglePage ? <div /> : null}
+
+          {isMultiStep && currentStep < schema.length - 1 ? (
+            <button
+              type="button"
+              onClick={handleNext}
+              disabled={!isValid}
+              // 🚀 FIX 4: Disable Next Button styling if invalid
+              className={`${primaryBtnClass} disabled:opacity-50 disabled:cursor-not-allowed`}
+              style={primaryBtnStyle}
+            >
+              {nextLabel}
+            </button>
+          ) : (
+            <button
+              type="button" 
+              onClick={handleManualSubmit}
+              disabled={!isValid}
+              // 🚀 FIX 4: Disable Submit Button styling if invalid
+              className={`${primaryBtnClass} ${isSinglePage ? 'w-full' : ''} disabled:opacity-50 disabled:cursor-not-allowed`}
+              style={primaryBtnStyle}
+            >
+              {submitLabel}
+            </button>
+          )}
+        </div>
+      </Form>
+    </div>
   );
 }
