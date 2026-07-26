@@ -141,13 +141,11 @@ export default function JSONForm({
 
   if (!activeStep || schema.length === 0) return null;
 
-  // Intercept field changes to run real-time updates and clear errors
   const handleFieldChange = (id: string, val: any) => {
     const updatedValues = { ...localValues, [id]: val };
     setLocalValues(updatedValues);
     if (onChange) onChange(updatedValues);
 
-    // Clear error for the field being typed in
     if (validationErrors[id]) {
       const newErrors = { ...validationErrors };
       delete newErrors[id];
@@ -155,7 +153,6 @@ export default function JSONForm({
     }
   };
 
-  // Run Validation for the CURRENT Step
   const processValidation = (fieldsToValidate: FormField[]) => {
     if (!validate) return true;
     
@@ -163,7 +160,6 @@ export default function JSONForm({
     const stepErrors: Record<string, string> = {};
     let hasErrors = false;
 
-    // Only flag errors for fields that exist on the screen right now
     fieldsToValidate.forEach(field => {
       if (errorsFromUser[field.id]) {
         stepErrors[field.id] = errorsFromUser[field.id];
@@ -173,9 +169,9 @@ export default function JSONForm({
 
     if (hasErrors) {
       setValidationErrors(prev => ({ ...prev, ...stepErrors }));
-      return false; // Blocks progression
+      return false; 
     }
-    return true; // Safe to proceed
+    return true; 
   };
 
   const handleNext = (e: React.MouseEvent) => {
@@ -191,17 +187,18 @@ export default function JSONForm({
     if (currentStep > 0) setCurrentStep(currentStep - 1);
   };
 
-  const handleSubmitClick = (e: React.MouseEvent) => {
-    // Collect all fields across all steps to ensure full form validation on submit
+  // 🚀 FIX: This now strictly expects the `values` object from Form.tsx, not a FormEvent!
+  const handleFormSubmit = (formValues: Record<string, any>) => {
+    console.log("Handling form submt", formValues);
     const allFields = schema.flatMap(step => step.fields);
     const isFormValid = processValidation(allFields);
     
-    if (!isFormValid) {
-      e.preventDefault(); // Stop form submission if validation fails
+    // Pass the payload directly up to the user's workflow!
+    if (isFormValid && onSubmit) {
+      onSubmit(formValues); 
     }
   };
 
-  // --- Design Dictionaries ---
   const sizeMap = {
     sm: "px-3 py-1.5 text-xs",
     md: "px-4 py-2 text-sm",
@@ -238,9 +235,8 @@ export default function JSONForm({
     : { backgroundColor: `${customColor}20`, color: customColor };
 
   return (
-    <Form onSubmit={onSubmit} className={`w-full max-w-2xl border transition-all duration-300 ${className}`}>
+    <Form onSubmit={handleFormSubmit} className={`w-full max-w-2xl border transition-all duration-300 ${className}`}>
       
-      {/* Progress Header */}
       {isMultiStep && (
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
@@ -256,15 +252,12 @@ export default function JSONForm({
         </div>
       )}
 
-      {/* Dynamic Fields */}
       <div className="flex flex-col gap-1 mb-8">
         {activeStep.fields.map(field => {
           const fieldError = validationErrors[field.id];
 
           if (field.type === 'textarea') return <FormTextarea key={field.id} field={field} errorOverride={fieldError} onChangeValue={(val) => handleFieldChange(field.id, val)} />;
-          
           if (field.type === 'select') return <Select key={field.id} name={field.id} label={field.label} required={field.required} options={field.options} onChangeValue={(val) => handleFieldChange(field.id, val)} />;
-          
           if (field.type === 'checkbox') return <Checkbox key={field.id} name={field.id} label={field.label} description={field.placeholder} required={field.required} onChangeValue={(val) => handleFieldChange(field.id, val)} />;
 
           return (
@@ -283,7 +276,6 @@ export default function JSONForm({
         })}
       </div>
 
-      {/* Navigation Footer */}
       <div className={`flex items-center pt-4 border-t border-black/10 dark:border-white/10 ${isSinglePage ? 'justify-center' : 'justify-between'}`}>
         {isMultiStep && currentStep > 0 ? (
           <button
@@ -307,7 +299,6 @@ export default function JSONForm({
         ) : (
           <button
             type="submit"
-            onClick={handleSubmitClick}
             className={`${primaryBtnClass} ${isSinglePage ? 'w-full' : ''}`}
             style={primaryBtnStyle}
           >
