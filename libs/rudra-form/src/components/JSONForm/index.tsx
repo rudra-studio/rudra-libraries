@@ -33,8 +33,10 @@ export interface JSONFormProps {
   buttonRadius?: 'none' | 'sm' | 'md' | 'lg' | 'full'; /* @select|none|sm|md|lg|full */
   onSubmit?: (values: Record<string, any>) => void; /* @type|function|args:values */
   onChange?: (values: Record<string, any>) => void; /* @type|function|args:values */
-  validate?: (values: Record<string, any>) => boolean | string; /* @type|function|args:values */
-
+  
+  // 🚀 FIX: Allow validate to return Promises so it supports Builder execution natively
+  validate?: (values: Record<string, any>) => any; /* @type|function|args:values */
+  
   /** * @type|class
    * @schema [{
    * "key": "Theme",
@@ -79,7 +81,7 @@ const DynamicIcon = ({ name }: { name?: string }) => {
 const FormTextarea = ({ field, errorOverride, onChangeValue }: { field: FormField, errorOverride?: string, onChangeValue: (val: string) => void }) => {
   const context = useRudraForm();
   const isInsideForm = !!context;
-
+  
   const activeValue = isInsideForm ? (context.values[field.id] || '') : '';
   const errorMessage = errorOverride || (isInsideForm ? context.errors[field.id] : undefined);
 
@@ -88,8 +90,8 @@ const FormTextarea = ({ field, errorOverride, onChangeValue }: { field: FormFiel
     onChangeValue(e.target.value);
   };
 
-  const errorClass = errorMessage
-    ? "!border-red-500 focus:!border-red-500 focus:!ring-red-500/20"
+  const errorClass = errorMessage 
+    ? "!border-red-500 focus:!border-red-500 focus:!ring-red-500/20" 
     : "border-black/20 dark:border-white/20 focus:ring-black/10 dark:focus:ring-white/10";
 
   return (
@@ -127,13 +129,14 @@ export default function JSONForm({
   onChange,
   validate,
   className = 'bg-white dark:bg-gray-900 border border-black/10 dark:border-white/10 p-6 shadow-sm rounded-xl text-gray-900 dark:text-white',
-}: JSONFormProps) {
-
+}: JSONFormProps) { 
+  
   const [currentStep, setCurrentStep] = useState(0);
   const [localValues, setLocalValues] = useState<Record<string, any>>({});
-
-  // 🚀 FIX: Store the global error in state so it only shows upon interaction
   const [globalError, setGlobalError] = useState<string | null>(null);
+  
+  // 🚀 FIX: Prevent double-clicks while async validations run
+  const [isValidating, setIsValidating] = useState(false);
 
   const activeStep = schema[currentStep];
   const isMultiStep = schema.length > 1;
@@ -141,9 +144,9 @@ export default function JSONForm({
 
   if (!activeStep || schema.length === 0) return null;
 
-  // 🚀 FIX: Centralized Action-Driven Validator
-  const runValidation = (fieldsToCheck: FormField[]) => {
-    // 1. Manually check native 'required' fields since we bypassed HTML submit
+  // 🚀 FIX: Async validation driver
+  const runValidation = async (fieldsToCheck: FormField[]) => {
+    // 1. Manually check native 'required' fields
     for (const field of fieldsToCheck) {
       if (field.required) {
         const val = localValues[field.id];
@@ -154,17 +157,27 @@ export default function JSONForm({
       }
     }
 
-    // 2. Run the developer's custom global validation logic
+    // 2. Await the developer's custom validation logic (handles Builder Context perfectly)
     if (validate) {
-      const valResult = validate(localValues);
-      alert("Validation reult " + valResult)
-      if (typeof valResult === 'string') {
-        setGlobalError(valResult); // Show the specific error message
-        return false;
-      } else if (valResult === false) {
-        setGlobalError("Please ensure all fields are correctly filled."); // Fallback
+      setIsValidating(true);
+      try {
+        const valResult = await validate(localValues); // Await pauses if it's a promise, proceeds if sync
+        
+        if (typeof valResult === 'string' && valResult.trim() !== '') {
+          setGlobalError(valResult); 
+          setIsValidating(false);
+          return false;
+        } else if (valResult === false) {
+          setGlobalError("Please ensure all fields are correctly filled."); 
+          setIsValidating(false);
+          return false;
+        }
+      } catch (err: any) {
+        setGlobalError(err.message || "Validation failed.");
+        setIsValidating(false);
         return false;
       }
+      setIsValidating(false);
     }
 
     setGlobalError(null);
@@ -175,41 +188,47 @@ export default function JSONForm({
     const updatedValues = { ...localValues, [id]: val };
     setLocalValues(updatedValues);
     if (onChange) onChange(updatedValues);
-
-    // Smooth UX: Clear the error banner as soon as they start typing to fix it
     if (globalError) setGlobalError(null);
   };
 
-  const handleNext = (e?: React.MouseEvent) => {
+  const handleNext = async (e?: React.MouseEvent) => {
     if (e) e.preventDefault();
-    if (runValidation(activeStep.fields) && currentStep < schema.length - 1) {
+    if (isValidating) return;
+    
+    const isValid = await runValidation(activeStep.fields);
+    if (isValid && currentStep < schema.length - 1) {
       setCurrentStep(currentStep + 1);
     }
   };
 
   const handlePrev = (e: React.MouseEvent) => {
     e.preventDefault();
+    if (isValidating) return;
+    
     if (currentStep > 0) setCurrentStep(currentStep - 1);
     if (globalError) setGlobalError(null);
   };
 
-  const handleManualSubmit = (e?: React.MouseEvent) => {
-    if (e) e.preventDefault();
-
-    // On submit, validate all fields across all steps to be perfectly safe
+  const handleManualSubmit = async (e?: React.MouseEvent) => {
+    if (e) e.preventDefault(); 
+    if (isValidating) return;
+    
     const allFields = schema.flatMap(step => step.fields);
-    if (runValidation(allFields) && onSubmit) {
-      onSubmit(localValues);
+    const isValid = await runValidation(allFields);
+    if (isValid && onSubmit) {
+      onSubmit(localValues); 
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = async (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
-      e.preventDefault();
+      e.preventDefault(); 
+      if (isValidating) return;
+      
       if (isSinglePage || currentStep === schema.length - 1) {
-        handleManualSubmit();
+        await handleManualSubmit();
       } else {
-        handleNext();
+        await handleNext();
       }
     }
   };
@@ -230,8 +249,8 @@ export default function JSONForm({
   };
 
   const isDefaultColor = customColor === '#3b82f6';
-  let primaryBtnClass = `font-medium transition-all shadow-sm ${sizeMap[buttonSize]} ${radiusMap[buttonRadius]} `;
-
+  let primaryBtnClass = `font-medium transition-all shadow-sm ${sizeMap[buttonSize]} ${radiusMap[buttonRadius]} flex items-center justify-center gap-2 `;
+  
   if (buttonVariant === 'solid') {
     if (isDefaultColor) {
       primaryBtnClass += "bg-gray-900 text-white dark:bg-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100";
@@ -244,16 +263,16 @@ export default function JSONForm({
     primaryBtnClass += "bg-opacity-10 hover:bg-opacity-20";
   }
 
-  const primaryBtnStyle = buttonVariant === 'solid'
+  const primaryBtnStyle = buttonVariant === 'solid' 
     ? (isDefaultColor ? {} : { backgroundColor: customColor })
-    : buttonVariant === 'outline'
-      ? { borderColor: customColor, color: customColor }
-      : { backgroundColor: `${customColor}20`, color: customColor };
+    : buttonVariant === 'outline' 
+    ? { borderColor: customColor, color: customColor } 
+    : { backgroundColor: `${customColor}20`, color: customColor };
 
   return (
     <div onKeyDown={handleKeyDown}>
       <Form className={`w-full max-w-2xl border transition-all duration-300 ${className}`}>
-
+        
         {isMultiStep && (
           <div className="mb-6">
             <div className="flex items-center justify-between mb-2">
@@ -269,7 +288,6 @@ export default function JSONForm({
           </div>
         )}
 
-        {/* Global Error Message Banner */}
         {globalError && (
           <div className="mb-6 p-3 bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-900/50 rounded-md flex items-center gap-3 text-red-600 dark:text-red-400 text-sm">
             <LucideIcons.AlertCircle className="w-5 h-5 shrink-0" />
@@ -304,7 +322,8 @@ export default function JSONForm({
             <button
               type="button"
               onClick={handlePrev}
-              className={`font-medium text-inherit opacity-80 hover:opacity-100 hover:bg-black/5 dark:hover:bg-white/10 transition-all ${sizeMap[buttonSize]} ${radiusMap[buttonRadius]}`}
+              disabled={isValidating}
+              className={`font-medium text-inherit opacity-80 hover:opacity-100 hover:bg-black/5 dark:hover:bg-white/10 transition-all disabled:opacity-50 ${sizeMap[buttonSize]} ${radiusMap[buttonRadius]}`}
             >
               {prevLabel}
             </button>
@@ -314,19 +333,23 @@ export default function JSONForm({
             <button
               type="button"
               onClick={handleNext}
-              className={`${primaryBtnClass}`}
+              disabled={isValidating}
+              className={`${primaryBtnClass} disabled:opacity-50 disabled:cursor-not-allowed`}
               style={primaryBtnStyle}
             >
-              {nextLabel}
+              {isValidating ? <LucideIcons.Loader2 className="w-4 h-4 animate-spin" /> : null}
+              {isValidating ? "Validating..." : nextLabel}
             </button>
           ) : (
             <button
-              type="button"
+              type="button" 
               onClick={handleManualSubmit}
-              className={`${primaryBtnClass} ${isSinglePage ? 'w-full' : ''}`}
+              disabled={isValidating}
+              className={`${primaryBtnClass} ${isSinglePage ? 'w-full' : ''} disabled:opacity-50 disabled:cursor-not-allowed`}
               style={primaryBtnStyle}
             >
-              {submitLabel}
+              {isValidating ? <LucideIcons.Loader2 className="w-4 h-4 animate-spin" /> : null}
+              {isValidating ? "Validating..." : submitLabel}
             </button>
           )}
         </div>
