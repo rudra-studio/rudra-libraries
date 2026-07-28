@@ -4,14 +4,14 @@ export type { AccordionItem, DataAccordionProps } from './components/DataAccordi
 export { default as DataAccordion } from './components/DataAccordion';
 export type { RepeaterCarouselProps } from './components/DataCarousel';
 export { default as RepeaterCarousel } from './components/DataCarousel';
-export type { SeparatorProps } from './components/Divider';
-export { default as Separator } from './components/Divider';
 export type { ModalProps } from './components/Modal';
 export { default as Modal } from './components/Modal';
 export type { RepeaterProps } from './components/Repeater';
 export { default as Repeater } from './components/Repeater';
 export type { RepeaterTableProps } from './components/RepeaterTable';
 export { default as RepeaterTable } from './components/RepeaterTable';
+export type { SeparatorProps } from './components/Separator';
+export { default as Separator } from './components/Separator';
 export type { DataTableProps } from './components/Table';
 export { default as DataTable } from './components/Table';
 export type { DataTabsProps, TabItem } from './components/Tabs';
