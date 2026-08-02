@@ -1,0 +1,114 @@
+.wrapper {
+  width: 100%;
+}
+
+
+.control {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  border: 1px solid var(--rudra-currency-border, #cbd5e1);
+  border-radius: var(--rudra-currency-radius, 0.625rem);
+  background: var(--rudra-currency-bg, #ffffff);
+  color: var(--rudra-currency-text, #0f172a);
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.control:focus-within {
+  border-color: var(--rudra-currency-accent, #4f46e5);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--rudra-currency-accent, #4f46e5) 20%, transparent);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+}
+
+.size-sm .input {
+  min-height: 2rem;
+  padding: 0.375rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+.size-md .input {
+  min-height: 2.5rem;
+  padding: 0.5rem 0.625rem;
+  font-size: 0.9375rem;
+}
+
+.size-lg .input {
+  min-height: 3rem;
+  padding: 0.625rem 0.75rem;
+  font-size: 1rem;
+}
+
+.affix,
+.code {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  padding-inline: 0.625rem;
+  color: var(--rudra-currency-muted, #64748b);
+  background: color-mix(in srgb, currentColor 5%, transparent);
+  white-space: nowrap;
+}
+
+.code {
+  border-inline-start: 1px solid var(--rudra-currency-border, #cbd5e1);
+  font-size: 0.75em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.variant-filled {
+  border-color: transparent;
+  background: var(--rudra-currency-filled, #f1f5f9);
+}
+
+.variant-underlined {
+  border-width: 0 0 1px;
+  border-radius: 0;
+}
+
+.invalid {
+  border-color: var(--rudra-currency-danger, #dc2626);
+}
+
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+:global(.dark) .control {
+  --rudra-currency-bg: #0f172a;
+  --rudra-currency-text: #f8fafc;
+  --rudra-currency-border: #475569;
+  --rudra-currency-filled: #1e293b;
+}
+
+@media (max-width: 360px) {
+  .code {
+    display: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .control {
+    border-width: 2px;
+  }
+}
+
+
+/* rudra-currency-polish */
+.control {
+  box-shadow: var(--rudra-currency-elevation, 0 1px 2px rgba(15, 23, 42, 0.06), 0 12px 32px -22px rgba(79, 70, 229, 0.5));
+}
