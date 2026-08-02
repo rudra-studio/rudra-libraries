@@ -29,7 +29,7 @@ export default function Slider({
   required,
   className = ''
 }: SliderProps) { /* @metadata A themed visual range slider component supporting custom step increments, track filling, and context binding. */
-  
+
   const formContext = useRudraForm();
   const isInsideForm = !!formContext;
 
