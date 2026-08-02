@@ -1,0 +1,69 @@
+.root {
+  --key-background: var(--rudra-color-surface-muted, #f1f5f9);
+  --key-foreground: var(--rudra-color-text, #0f172a);
+  --key-border: var(--rudra-color-border, #cbd5e1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--key-foreground);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-weight: 650;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.key {
+  display: inline-grid;
+  min-width: 1.5em;
+  min-height: 1.6em;
+  padding: 0.22em 0.42em;
+  place-items: center;
+  border: 1px solid var(--key-border);
+  border-bottom-width: 2px;
+  border-radius: var(--rudra-radius-sm, 0.3rem);
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--key-background) 75%, #ffffff),
+    var(--key-background)
+  );
+  box-shadow: 0 1px 1px color-mix(in srgb, var(--key-foreground) 8%, transparent);
+  white-space: nowrap;
+}
+
+.separator {
+  color: var(--rudra-color-text-muted, #64748b);
+  font-family: inherit;
+  font-weight: 500;
+}
+
+.size_sm { font-size: 0.625rem; }
+.size_md { font-size: 0.75rem; }
+.size_lg { font-size: 0.875rem; }
+
+:global(.dark) .root,
+:global([data-theme='dark']) .root {
+  --key-background: var(--rudra-color-surface-muted, #1e293b);
+  --key-foreground: var(--rudra-color-text, #f8fafc);
+  --key-border: var(--rudra-color-border, #475569);
+}
+
+:global(.dark) .key,
+:global([data-theme='dark']) .key {
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--key-background) 88%, #ffffff),
+    var(--key-background)
+  );
+}
+
+:global([data-theme='high-contrast']) .root {
+  --key-background: Canvas;
+  --key-foreground: CanvasText;
+  --key-border: CanvasText;
+}
+
+@media (forced-colors: active) {
+  .key {
+    border: 2px solid CanvasText;
+  }
+}

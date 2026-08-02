@@ -1,0 +1,114 @@
+.root {
+  --error-surface: color-mix(in srgb, var(--rudra-color-danger, #dc2626) 8%, var(--rudra-color-surface, #ffffff));
+  --error-text: var(--rudra-color-text, #0f172a);
+  --error-danger: var(--rudra-color-danger, #dc2626);
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  align-items: flex-start;
+  gap: 0.875rem;
+  padding: 1rem;
+  border: 1px solid color-mix(in srgb, var(--error-danger) 34%, transparent);
+  border-radius: var(--rudra-radius-xl, 1rem);
+  background: var(--error-surface);
+  color: var(--error-text);
+  font-family: inherit;
+}
+
+.marker {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 9999px;
+  background: var(--error-danger);
+  color: var(--rudra-color-on-danger, #ffffff);
+  font-weight: 800;
+}
+
+.content {
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  color: var(--error-text);
+  font-size: 1rem;
+  font-weight: 750;
+}
+
+.message {
+  margin: 0.35rem 0 0;
+  color: color-mix(in srgb, var(--error-text) 76%, transparent);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.details {
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+}
+
+.details summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.details pre {
+  max-width: 100%;
+  padding: 0.625rem;
+  overflow: auto;
+  border-radius: var(--rudra-radius-md, 0.5rem);
+  background: color-mix(in srgb, var(--error-text) 7%, transparent);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.retry {
+  margin-top: 0.875rem;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid var(--error-danger);
+  border-radius: var(--rudra-radius-md, 0.5rem);
+  background: var(--error-danger);
+  color: var(--rudra-color-on-danger, #ffffff);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 750;
+}
+
+.retry:hover {
+  filter: brightness(0.94);
+}
+
+.retry:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--error-danger) 30%, transparent);
+  outline-offset: 2px;
+}
+
+:global(.dark) .root,
+:global([data-theme='dark']) .root {
+  --error-surface: color-mix(in srgb, var(--rudra-color-danger, #f87171) 13%, var(--rudra-color-surface, #0f172a));
+  --error-text: var(--rudra-color-text, #f8fafc);
+  --error-danger: var(--rudra-color-danger, #f87171);
+}
+
+:global([data-theme='high-contrast']) .root {
+  --error-surface: Canvas;
+  --error-text: CanvasText;
+  --error-danger: Highlight;
+  border: 2px solid CanvasText;
+}
+
+@media (max-width: 420px) {
+  .root {
+    flex-direction: column;
+  }
+}
+
+@media (forced-colors: active) {
+  .retry {
+    border: 2px solid ButtonText;
+  }
+}

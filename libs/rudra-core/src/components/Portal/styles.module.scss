@@ -1,0 +1,14 @@
+.portalRoot {
+  display: contents;
+  color: inherit;
+  font-family: inherit;
+}
+
+:global([data-rudra-portal-container='true']) {
+  position: relative;
+  z-index: var(--rudra-z-portal, 1000);
+}
+
+:global([data-theme='high-contrast']) .portalRoot {
+  color: CanvasText;
+}
