@@ -1,0 +1,203 @@
+.root {
+  --card-surface: var(--rudra-color-surface, #ffffff);
+  --card-surface-muted: var(--rudra-color-surface-muted, #f8fafc);
+  --card-text: var(--rudra-color-text, #0f172a);
+  --card-muted: var(--rudra-color-text-muted, #64748b);
+  --card-border: var(--rudra-color-border, #e2e8f0);
+  --card-primary: var(--rudra-color-primary, #2563eb);
+  position: relative;
+  display: flex;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: var(--rudra-radius-xl, 1rem);
+  color: var(--card-text);
+  font-family: inherit;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease,
+    background-color 160ms ease;
+}
+
+.variant_outlined {
+  border: 1px solid var(--card-border);
+  background: var(--card-surface);
+}
+
+.variant_elevated {
+  border: 1px solid color-mix(in srgb, var(--card-border) 70%, transparent);
+  background: var(--card-surface);
+  box-shadow:
+    0 1px 2px color-mix(in srgb, var(--card-text) 6%, transparent),
+    0 12px 28px color-mix(in srgb, var(--card-text) 10%, transparent);
+}
+
+.variant_filled {
+  border: 1px solid transparent;
+  background: var(--card-surface-muted);
+}
+
+.variant_glass {
+  border: 1px solid color-mix(in srgb, var(--card-border) 75%, transparent);
+  background: color-mix(in srgb, var(--card-surface) 78%, transparent);
+  box-shadow: 0 16px 40px color-mix(in srgb, var(--card-text) 9%, transparent);
+  backdrop-filter: blur(18px) saturate(135%);
+}
+
+.orientation_vertical { flex-direction: column; }
+.orientation_horizontal { flex-direction: row; }
+
+.content {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+}
+
+.media {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.orientation_vertical > .media {
+  width: 100%;
+  max-height: 22rem;
+}
+
+.orientation_horizontal > .media {
+  width: min(38%, 18rem);
+  flex: 0 0 auto;
+}
+
+.media > * {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.padding_none .content { padding: 0; }
+.padding_sm .content { padding: 0.75rem; }
+.padding_md .content { padding: 1rem; }
+.padding_lg .content { padding: 1.5rem; }
+
+.header {
+  margin-bottom: 0.75rem;
+  color: var(--card-text);
+}
+
+.body {
+  min-width: 0;
+  flex: 1 1 auto;
+  color: var(--card-muted);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--card-border);
+}
+
+.footerContent {
+  min-width: 0;
+  color: var(--card-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.interactive {
+  cursor: pointer;
+  outline: none;
+}
+
+.interactive:hover {
+  border-color: color-mix(in srgb, var(--card-primary) 42%, var(--card-border));
+  transform: translateY(-2px);
+  box-shadow: 0 16px 34px color-mix(in srgb, var(--card-text) 12%, transparent);
+}
+
+.interactive:focus-visible {
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--card-primary) 28%, transparent),
+    0 12px 28px color-mix(in srgb, var(--card-text) 10%, transparent);
+}
+
+.selected {
+  border-color: var(--card-primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--card-primary) 22%, transparent);
+}
+
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none;
+  box-shadow: none;
+}
+
+:global(.dark) .root,
+:global([data-theme='dark']) .root {
+  --card-surface: var(--rudra-color-surface, #0f172a);
+  --card-surface-muted: var(--rudra-color-surface-muted, #172033);
+  --card-text: var(--rudra-color-text, #f8fafc);
+  --card-muted: var(--rudra-color-text-muted, #a8b3c7);
+  --card-border: var(--rudra-color-border, #334155);
+  --card-primary: var(--rudra-color-primary, #60a5fa);
+}
+
+:global([data-theme='high-contrast']) .root {
+  --card-surface: Canvas;
+  --card-surface-muted: Canvas;
+  --card-text: CanvasText;
+  --card-muted: CanvasText;
+  --card-border: CanvasText;
+  --card-primary: Highlight;
+  border-width: 2px;
+  box-shadow: none;
+}
+
+@media (max-width: 640px) {
+  .orientation_horizontal {
+    flex-direction: column;
+  }
+
+  .orientation_horizontal > .media {
+    width: 100%;
+    max-height: 16rem;
+  }
+
+  .padding_lg .content {
+    padding: 1.125rem;
+  }
+
+  .footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root {
+    transition: none;
+  }
+
+  .interactive:hover {
+    transform: none;
+  }
+}

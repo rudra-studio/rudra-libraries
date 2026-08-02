@@ -1,0 +1,89 @@
+.root {
+  --surface-background: var(--rudra-color-surface, #ffffff);
+  --surface-foreground: var(--rudra-color-text, #0f172a);
+  --surface-muted: var(--rudra-color-surface-muted, #f8fafc);
+  --surface-border: var(--rudra-color-border, #e2e8f0);
+  --surface-inverted: var(--rudra-color-inverted, #0f172a);
+  --surface-inverted-text: var(--rudra-color-inverted-text, #ffffff);
+  min-width: 0;
+  box-sizing: border-box;
+  color: var(--surface-foreground);
+  font-family: inherit;
+}
+
+.tone_default {
+  background: var(--surface-background);
+}
+
+.tone_subtle {
+  background: var(--surface-muted);
+}
+
+.tone_raised {
+  background: var(--surface-background);
+  box-shadow:
+    0 1px 2px color-mix(in srgb, var(--surface-foreground) 5%, transparent),
+    0 14px 34px color-mix(in srgb, var(--surface-foreground) 10%, transparent);
+}
+
+.tone_inverted {
+  background: var(--surface-inverted);
+  color: var(--surface-inverted-text);
+}
+
+.tone_transparent {
+  background: transparent;
+}
+
+.bordered {
+  border: 1px solid var(--surface-border);
+}
+
+.padding_none { padding: 0; }
+.padding_sm { padding: 0.75rem; }
+.padding_md { padding: 1rem; }
+.padding_lg { padding: 1.5rem; }
+.padding_xl { padding: 2rem; }
+
+.radius_none { border-radius: 0; }
+.radius_sm { border-radius: var(--rudra-radius-sm, 0.25rem); }
+.radius_md { border-radius: var(--rudra-radius-md, 0.5rem); }
+.radius_lg { border-radius: var(--rudra-radius-lg, 0.75rem); }
+.radius_xl { border-radius: var(--rudra-radius-xl, 1rem); }
+.radius_full { border-radius: 9999px; }
+
+:global(.dark) .root,
+:global([data-theme='dark']) .root {
+  --surface-background: var(--rudra-color-surface, #0f172a);
+  --surface-foreground: var(--rudra-color-text, #f8fafc);
+  --surface-muted: var(--rudra-color-surface-muted, #172033);
+  --surface-border: var(--rudra-color-border, #334155);
+  --surface-inverted: var(--rudra-color-inverted, #f8fafc);
+  --surface-inverted-text: var(--rudra-color-inverted-text, #0f172a);
+}
+
+:global([data-theme='high-contrast']) .root {
+  --surface-background: Canvas;
+  --surface-foreground: CanvasText;
+  --surface-muted: Canvas;
+  --surface-border: CanvasText;
+  --surface-inverted: CanvasText;
+  --surface-inverted-text: Canvas;
+  box-shadow: none;
+}
+
+@media (max-width: 640px) {
+  .responsive.padding_lg {
+    padding: 1.125rem;
+  }
+
+  .responsive.padding_xl {
+    padding: 1.25rem;
+  }
+}
+
+@media (forced-colors: active) {
+  .bordered {
+    border-color: CanvasText;
+  }
+}
