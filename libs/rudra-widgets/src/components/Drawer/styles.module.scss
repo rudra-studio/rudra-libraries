@@ -1,0 +1,144 @@
+.trigger {
+  display: inline-flex;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  background: rgba(0, 0, 0, 0.4);
+
+  opacity: 0;
+
+  transition-property: opacity;
+  transition-timing-function: ease;
+
+  pointer-events: none;
+}
+
+.overlayOpen {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.drawer {
+  position: absolute;
+  z-index: 1;
+
+  overflow: auto;
+
+  background: #ffffff;
+
+  box-sizing: border-box;
+
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.22);
+
+  opacity: 0;
+
+  transition-property:
+    transform,
+    opacity;
+
+  transition-timing-function:
+    cubic-bezier(0.4, 0, 0.2, 1);
+
+  will-change:
+    transform,
+    opacity;
+}
+
+.left {
+  top: 0;
+  left: 0;
+
+  width: min(360px, 85vw);
+  height: 100%;
+
+  transform: translateX(-100%);
+}
+
+.right {
+  top: 0;
+  right: 0;
+
+  width: min(360px, 85vw);
+  height: 100%;
+
+  transform: translateX(100%);
+}
+
+.top {
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: min(360px, 70vh);
+
+  transform: translateY(-100%);
+}
+
+.bottom {
+  bottom: 0;
+  left: 0;
+
+  width: 100%;
+  height: min(360px, 70vh);
+
+  transform: translateY(100%);
+}
+
+.drawerOpen {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+.close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+
+  z-index: 10;
+
+  width: 38px;
+  height: 38px;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 9999px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #374151;
+  background: #f3f4f6;
+
+  cursor: pointer;
+
+  transition:
+    background-color 150ms ease,
+    transform 150ms ease;
+}
+
+.close:hover {
+  background: #e5e7eb;
+}
+
+.close:active {
+  transform: scale(0.94);
+}
+
+.close:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .drawer {
+    transition-duration: 0ms !important;
+  }
+}
