@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "@emoji-mart/data": "latest",
+    "@emoji-mart/react": "latest",
     "@gsap/react": "latest",
     "@monaco-editor/react": "latest",
     "@react-three/drei": "latest",
