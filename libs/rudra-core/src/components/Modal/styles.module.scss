@@ -1,0 +1,178 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  padding: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: auto;
+
+  background: transparent;
+
+  box-sizing: border-box;
+}
+
+.modal {
+  position: relative;
+
+  width: 100%;
+
+  max-height: calc(100vh - 48px);
+
+  overflow: auto;
+
+  border-radius: 12px;
+
+  box-sizing: border-box;
+
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+/* Sizes */
+
+.size_sm {
+  max-width: 360px;
+}
+
+.size_md {
+  max-width: 520px;
+}
+
+.size_lg {
+  max-width: 720px;
+}
+
+.size_xl {
+  max-width: 960px;
+}
+
+.size_full {
+  width: calc(100vw - 48px);
+  max-width: none;
+
+  height: calc(100vh - 48px);
+  max-height: none;
+}
+
+/* Themes */
+
+.theme_light {
+  color: #111827;
+  background: #ffffff;
+}
+
+.theme_dark {
+  color: #f9fafb;
+  background: #111827;
+}
+
+.theme_auto {
+  color: #111827;
+  background: #ffffff;
+}
+
+/* Close button */
+.close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 100;
+
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #ffffff;
+  background: #1f2937;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+  cursor: pointer;
+
+  transition:
+    background-color 150ms ease,
+    transform 150ms ease;
+}
+
+.close:hover {
+  background: #374151;
+}
+
+.close:active {
+  transform: scale(0.95);
+}
+
+.close:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+/* Dark close button */
+
+.theme_dark .close {
+  color: #f9fafb;
+  background: rgba(31, 41, 55, 0.95);
+
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.theme_dark .close:hover {
+  background: #374151;
+}
+
+/* Auto theme */
+
+@media (prefers-color-scheme: dark) {
+  .theme_auto {
+    color: #f9fafb;
+    background: #111827;
+  }
+
+  .theme_auto .close {
+    color: #f9fafb;
+    background: rgba(31, 41, 55, 0.95);
+
+    box-shadow:
+      0 2px 8px rgba(0, 0, 0, 0.4);
+  }
+
+  .theme_auto .close:hover {
+    background: #374151;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 640px) {
+  .overlay {
+    padding: 16px;
+  }
+
+  .modal {
+    max-height: calc(100vh - 32px);
+  }
+
+  .size_sm,
+  .size_md,
+  .size_lg,
+  .size_xl {
+    max-width: 100%;
+  }
+
+  .size_full {
+    width: calc(100vw - 32px);
+    height: calc(100vh - 32px);
+  }
+}
