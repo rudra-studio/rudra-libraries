@@ -1,65 +1,131 @@
+import React from "react";
 
-import React from 'react';
+export interface SpinnerProps
+  extends Omit<
+    React.HTMLAttributes<HTMLDivElement>,
+    "className" | "children"
+  > {
+  /**
+   * Accessible loading label.
+   * @translate
+   */
+  label?: string;
 
-export interface SpinnerProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: 'circle' | 'dots' | 'ring'; /* @select|circle|dots|ring */
-  size?: 'sm' | 'md' | 'lg' | 'xl'; /* @select|sm|md|lg|xl */
-  customColor?: string; /* @color */
-  label?: string; /* @translate */
+  showLabel?: boolean;
+
+  /**
+   * Spinner customization.
+   * @type|class
+   * @schema [
+   *   {
+   *     "key":"Size",
+   *     "prefix":"size",
+   *     "type":"select",
+   *     "options":[
+   *       {"key":"3","label":"Extra Small"},
+   *       {"key":"4","label":"Small"},
+   *       {"key":"5","label":"Medium"},
+   *       {"key":"6","label":"Large"},
+   *       {"key":"8","label":"Extra Large"},
+   *       {"key":"10","label":"2XL"},
+   *       {"key":"12","label":"3XL"}
+   *     ]
+   *   },
+   *   {
+   *     "key":"Border Width",
+   *     "prefix":"border",
+   *     "type":"select",
+   *     "options":[
+   *       {"key":"2","label":"Thin"},
+   *       {"key":"4","label":"Medium"},
+   *       {"key":"8","label":"Thick"}
+   *     ]
+   *   },
+   *   {
+   *     "key":"Color",
+   *     "prefix":"border-t",
+   *     "type":"select",
+   *     "options":[
+   *       {"key":"blue-600","label":"Blue"},
+   *       {"key":"green-600","label":"Green"},
+   *       {"key":"red-600","label":"Red"},
+   *       {"key":"purple-600","label":"Purple"},
+   *       {"key":"gray-700","label":"Gray"},
+   *       {"key":"white","label":"White"},
+   *       {"key":"black","label":"Black"}
+   *     ]
+   *   }
+   * ]
+   */
+  className?: string;
+
+  /**
+   * Label customization.
+   * @type|class
+   * @schema [
+   *   {
+   *     "key":"Text Size",
+   *     "prefix":"text",
+   *     "type":"select",
+   *     "options":[
+   *       {"key":"xs","label":"Extra Small"},
+   *       {"key":"sm","label":"Small"},
+   *       {"key":"base","label":"Medium"},
+   *       {"key":"lg","label":"Large"}
+   *     ]
+   *   },
+   *   {
+   *     "key":"Text Color",
+   *     "prefix":"text",
+   *     "type":"select",
+   *     "options":[
+   *       {"key":"gray-500","label":"Gray"},
+   *       {"key":"gray-700","label":"Dark Gray"},
+   *       {"key":"white","label":"White"},
+   *       {"key":"black","label":"Black"},
+   *       {"key":"blue-600","label":"Blue"}
+   *     ]
+   *   }
+   * ]
+   */
+  labelClassName?: string;
 }
 
 export default function Spinner({
-  variant = 'ring',
-  size = 'md',
-  customColor = '#3b82f6', // Default blue-500
-  label,
-  className = '',
+  label = "Loading",
+  showLabel = false,
+  className = "",
+  labelClassName = "",
   ...props
 }: SpinnerProps) {
-  
-  const sizeMap = {
-    sm: 'w-4 h-4',
-    md: 'w-8 h-8',
-    lg: 'w-12 h-12',
-    xl: 'w-16 h-16',
-  };
-
-  const currentSize = sizeMap[size];
-
   return (
-    <div className={`flex flex-col items-center justify-center gap-3 ${className}`} {...props}>
-      
-      {/* Variant 1: Classic Tailwind Spin Ring */}
-      {variant === 'ring' && (
-        <div 
-          className={`${currentSize} rounded-full animate-spin`}
-          style={{ 
-            border: `3px solid ${customColor}30`, 
-            borderTopColor: customColor 
-          }}
-        />
-      )}
+    <div
+      {...props}
+      role="status"
+      aria-label={label}
+      className="inline-flex items-center gap-2"
+    >
+      <span
+        aria-hidden="true"
+        className={[
+          "size-6 animate-spin rounded-full",
+          "border-2 border-gray-200",
+          "border-t-blue-600",
+          className,
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      />
 
-      {/* Variant 2: SVG Circle Pulse */}
-      {variant === 'circle' && (
-        <svg className={`${currentSize} animate-spin`} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" style={{ color: customColor }}></circle>
-          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" style={{ color: customColor }}></path>
-        </svg>
-      )}
-
-      {/* Variant 3: Bouncing Dots */}
-      {variant === 'dots' && (
-        <div className="flex space-x-2 justify-center items-center h-full">
-          <span className="w-2.5 h-2.5 rounded-full animate-bounce" style={{ backgroundColor: customColor, animationDelay: '-0.3s' }}></span>
-          <span className="w-2.5 h-2.5 rounded-full animate-bounce" style={{ backgroundColor: customColor, animationDelay: '-0.15s' }}></span>
-          <span className="w-2.5 h-2.5 rounded-full animate-bounce" style={{ backgroundColor: customColor }}></span>
-        </div>
-      )}
-
-      {/* Optional Loading Text */}
-      {label && (
-        <span className="text-sm font-medium text-zinc-600 dark:text-zinc-400 animate-pulse">
+      {showLabel && (
+        <span
+          className={[
+            "text-sm text-gray-500",
+            labelClassName,
+          ]
+            .filter(Boolean)
+            .join(" ")}
+        >
           {label}
         </span>
       )}
