@@ -1,93 +1,52 @@
-import React from 'react';
-import styles from './styles.module.scss';
+import React from "react";
 
-export type CardVariant = 'outlined' | 'elevated' | 'filled' | 'glass';
-export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
-export type CardOrientation = 'vertical' | 'horizontal';
+export type CardTheme = "light" | "dark" | "auto";
+export type CardElement = "div" | "article" | "section";
 
-export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface CardProps
+  extends Omit<React.HTMLAttributes<HTMLElement>, "children" | "className"> {
   children?: React.ReactNode;
-  header?: React.ReactNode;
-  footer?: React.ReactNode;
-  media?: React.ReactNode;
-  actions?: React.ReactNode;
-  variant?: CardVariant /* @select|outlined|elevated|filled|glass */;
-  padding?: CardPadding /* @select|none|sm|md|lg */;
-  orientation?: CardOrientation /* @select|vertical|horizontal */;
-  interactive?: boolean;
-  selected?: boolean;
-  disabled?: boolean;
-  onClick?: (event: React.MouseEvent<HTMLDivElement>) => void /* @type|function|return:void|args:event */;
+
+  /** @select|div|article|section */
+  as?: CardElement;
+
+  /** @select|light|dark|auto */
+  theme?: CardTheme;
+
+  /**
+   * @type|class
+   * @schema [{"key":"Background","prefix":"bg","type":"select","options":[{"key":"white","label":"White"},{"key":"gray-50","label":"Light Gray"},{"key":"gray-100","label":"Gray"},{"key":"gray-800","label":"Dark Gray"},{"key":"gray-900","label":"Dark"},{"key":"transparent","label":"Transparent"}]},{"key":"Padding","prefix":"p","type":"select","options":[{"key":"0","label":"None"},{"key":"2","label":"Small"},{"key":"4","label":"Medium"},{"key":"6","label":"Large"},{"key":"8","label":"Extra Large"}]},{"key":"Radius","prefix":"rounded","type":"select","options":[{"key":"none","label":"None"},{"key":"sm","label":"Small"},{"key":"md","label":"Medium"},{"key":"lg","label":"Large"},{"key":"xl","label":"Extra Large"},{"key":"2xl","label":"2XL"},{"key":"3xl","label":"3XL"}]},{"key":"Shadow","prefix":"shadow","type":"select","options":[{"key":"none","label":"None"},{"key":"sm","label":"Small"},{"key":"md","label":"Medium"},{"key":"lg","label":"Large"},{"key":"xl","label":"Extra Large"},{"key":"2xl","label":"2XL"}]},{"key":"Border Width","prefix":"border","type":"select","options":[{"key":"0","label":"None"},{"key":"","label":"Default"},{"key":"2","label":"2px"},{"key":"4","label":"4px"}]},{"key":"Width","prefix":"w","type":"select","options":[{"key":"auto","label":"Auto"},{"key":"full","label":"Full Width"},{"key":"1/2","label":"50%"},{"key":"1/3","label":"33%"},{"key":"2/3","label":"66%"}]},{"key":"Overflow","prefix":"overflow","type":"select","options":[{"key":"visible","label":"Visible"},{"key":"hidden","label":"Hidden"},{"key":"auto","label":"Auto"},{"key":"scroll","label":"Scroll"}]}]
+   */
+  className?: string;
 }
+
+const THEME_CLASSES: Record<CardTheme, string> = {
+  light: "bg-white text-gray-900 border-gray-200",
+  dark: "bg-gray-900 text-gray-100 border-gray-700",
+  auto:
+    "bg-white text-gray-900 border-gray-200 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700",
+};
 
 export default function Card({
   children,
-  header,
-  footer,
-  media,
-  actions,
-  variant = 'outlined',
-  padding = 'md',
-  orientation = 'vertical',
-  interactive = false,
-  selected = false,
-  disabled = false,
-  className = '',
-  onClick,
-  onKeyDown,
-  tabIndex,
-  role,
+  as = "div",
+  theme = "auto",
+  className = "",
   ...props
 }: CardProps) {
-  const isInteractive = interactive || Boolean(onClick);
-  const rootClassName = [
-    styles.root,
-    styles['variant_' + variant],
-    styles['padding_' + padding],
-    styles['orientation_' + orientation],
-    isInteractive ? styles.interactive : '',
-    selected ? styles.selected : '',
-    disabled ? styles.disabled : '',
-    className,
-  ].filter(Boolean).join(' ');
+  const Element = as;
 
-  const activateFromKeyboard = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    onKeyDown?.(event);
-    if (
-      event.defaultPrevented ||
-      disabled ||
-      !isInteractive ||
-      (event.key !== 'Enter' && event.key !== ' ')
-    ) {
-      return;
-    }
-    event.preventDefault();
-    event.currentTarget.click();
-  };
+  const resolvedClassName = [
+    "relative overflow-hidden rounded-xl border",
+    THEME_CLASSES[theme],
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
-    <div
-      className={rootClassName}
-      role={role || (isInteractive ? 'button' : undefined)}
-      tabIndex={disabled ? -1 : (isInteractive ? (tabIndex ?? 0) : tabIndex)}
-      aria-disabled={disabled || undefined}
-      aria-selected={selected || undefined}
-      onClick={disabled ? undefined : onClick}
-      onKeyDown={activateFromKeyboard}
-      {...props}
-    >
-      {media && <div className={styles.media}>{media}</div>}
-
-      <div className={styles.content}>
-        {header && <div className={styles.header}>{header}</div>}
-        {children && <div className={styles.body}>{children}</div>}
-        {(footer || actions) && (
-          <div className={styles.footer}>
-            {footer && <div className={styles.footerContent}>{footer}</div>}
-            {actions && <div className={styles.actions}>{actions}</div>}
-          </div>
-        )}
-      </div>
-    </div>
+    <Element {...props} className={resolvedClassName}>
+      {children}
+    </Element>
   );
 }
