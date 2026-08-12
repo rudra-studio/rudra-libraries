@@ -1,3 +1,8 @@
+import styles from "./styles.module.scss";
+
+export default function ScrollProgress() {
+  return <div className={styles.container}>Hello World</div>;
+}
 
 import type { CSSProperties } from "react";
 
