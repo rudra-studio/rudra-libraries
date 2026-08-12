@@ -19,6 +19,8 @@ export type { MediaGridProps } from './components/MediaGrid';
 export { default as MediaGrid } from './components/MediaGrid';
 export type { PlaylistItem, PlaylistProps } from './components/Playlist';
 export { default as Playlist } from './components/Playlist';
+export type { AnimatedScatterPlotProps, ScatterDataPoint } from './components/ScatterPlot';
+export { default as AnimatedScatterPlot } from './components/ScatterPlot';
 export type { SpatialAudioDistanceModel, SpatialAudioPlayerProps } from './components/SpatialAudioPlayer';
 export { default as SpatialAudioPlayer } from './components/SpatialAudioPlayer';
 export type { StreamPlayerProps } from './components/StreamPlayer';
