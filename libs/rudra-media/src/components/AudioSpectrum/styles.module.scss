@@ -1,0 +1,129 @@
+.root {
+  --spectrum-color: var(--rudra-color-accent, #8b5cf6);
+  display: grid;
+  gap: 0.875rem;
+  width: min(100%, 48rem);
+  padding: 1rem;
+  border: 1px solid var(--rudra-color-border, #334155);
+  border-radius: 1.25rem;
+  background: var(--rudra-color-surface, #0f172a);
+  color: var(--rudra-color-text, #f8fafc);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.2rem;
+  color: var(--rudra-color-muted, #94a3b8);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--rudra-color-muted, #94a3b8);
+  font-size: 0.75rem;
+  text-transform: capitalize;
+}
+
+.status span {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: #64748b;
+}
+
+.status[data-status="listening"] span {
+  background: #22c55e;
+  box-shadow: 0 0 0 0.25rem rgba(34, 197, 94, 0.16);
+}
+
+.status[data-status="error"] span {
+  background: #ef4444;
+}
+
+.visualizer {
+  position: relative;
+  min-height: 13rem;
+  overflow: hidden;
+  border-radius: 1rem;
+  background:
+    radial-gradient(circle at 50% 120%, color-mix(in srgb, var(--spectrum-color) 32%, transparent), transparent 55%),
+    #020617;
+}
+
+.canvas {
+  display: block;
+  width: 100%;
+  height: 13rem;
+}
+
+.listenButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-height: 2.75rem;
+  padding: 0.7rem 1rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--spectrum-color);
+  color: white;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+}
+
+.meter {
+  height: 0.4rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--rudra-color-border, #334155) 75%, transparent);
+}
+
+.meter span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #22c55e, var(--spectrum-color), #ec4899);
+  transition: width 80ms linear;
+}
+
+.stopButton {
+  justify-self: start;
+  min-height: 2.5rem;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--rudra-color-border, #334155);
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.listenButton:focus-visible,
+.stopButton:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--spectrum-color) 45%, transparent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .meter span {
+    transition: none;
+  }
+}
