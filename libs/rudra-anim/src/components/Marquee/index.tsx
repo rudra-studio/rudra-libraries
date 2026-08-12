@@ -1,124 +1,565 @@
-import React from 'react';
-import { motion } from 'motion/react';
+import React, {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
-export interface MarqueeProps extends React.HTMLAttributes<HTMLDivElement> {
+import {
+  motion,
+  useAnimationFrame,
+  useMotionValue,
+  useReducedMotion,
+} from "motion/react";
+
+export type MarqueeDirection =
+  | "left"
+  | "right"
+  | "up"
+  | "down";
+
+export interface MarqueeProps
+  extends Omit<
+    React.HTMLAttributes<HTMLDivElement>,
+    "className"
+  > {
   children?: React.ReactNode;
-  /** Scrolling direction */
-  direction?: 'left' | 'right'; /* @select|left|right */
-  /** Time in seconds to complete one full horizontal scroll animation loop */
-  speed?: number;
-  /** Pause the scrolling animation when mouse enters the track */
-  pauseOnHover?: boolean; /* @select|true|false */
-  /** Completely pause the animation and disable duplication */
-  pauseAnimation?: boolean; /* @select|true|false */
-  customColor?: string; /* @color */
 
   /**
-   * The Custom Attributes Dictionary
-   * We use additionalProperties to tell the schema it's a dynamic key-value object
+   * Direction of movement.
+   *
+   * @select|left|right|up|down
+   */
+  direction?: MarqueeDirection;
+
+  /**
+   * Movement speed in pixels
+   * per second.
+   */
+  speed?: number;
+
+  /**
+   * Gap between repeated content.
+   */
+  gap?: number;
+
+  /**
+   * Pause animation while
+   * hovering the marquee.
+   */
+  pauseOnHover?: boolean;
+
+  /**
+   * Pause animation.
+   */
+  paused?: boolean;
+
+  /**
+   * Apply fading edges.
+   */
+  fadeEdges?: boolean;
+
+  /**
+   * Size of the fade area
+   * in pixels.
+   */
+  fadeSize?: number;
+
+  /**
+   * Respect operating system
+   * reduced-motion preference.
+   */
+  respectReducedMotion?: boolean;
+
+  /**
+   * Dynamic HTML attributes.
+   *
    * @type|complex
    * @schema {"type":"object"}
    */
-  customAttributes?: Record<string, string>;
+  customAttributes?: Record<
+    string,
+    string
+  >;
 
-  /** * @type|class
-   * @schema [{
-   * "key": "Typography Size",
-   * "prefix": "text",
-   * "type": "select",
-   * "options": [
-   * {"key": "sm", "label": "Small"},
-   * {"key": "base", "label": "Base"},
-   * {"key": "lg", "label": "Large"},
-   * {"key": "2xl", "label": "2XL"},
-   * {"key": "4xl", "label": "4XL"},
-   * {"key": "6xl", "label": "6XL"}
+  /**
+   * Root customization.
+   *
+   * @type|class
+   * @schema [
+   *   {
+   *     "key":"Width",
+   *     "prefix":"w",
+   *     "type":"select",
+   *     "options":[
+   *       {"key":"full","label":"Full Width"},
+   *       {"key":"fit","label":"Fit Content"},
+   *       {"key":"auto","label":"Auto"}
+   *     ]
+   *   },
+   *   {
+   *     "key":"Height",
+   *     "prefix":"h",
+   *     "type":"select",
+   *     "options":[
+   *       {"key":"auto","label":"Auto"},
+   *       {"key":"32","label":"Small"},
+   *       {"key":"48","label":"Medium"},
+   *       {"key":"64","label":"Large"},
+   *       {"key":"96","label":"Extra Large"}
+   *     ]
+   *   },
+   *   {
+   *     "key":"Background",
+   *     "prefix":"bg",
+   *     "type":"select",
+   *     "options":[
+   *       {"key":"transparent","label":"Transparent"},
+   *       {"key":"white","label":"White"},
+   *       {"key":"gray-50","label":"Gray 50"},
+   *       {"key":"gray-900","label":"Gray 900"}
+   *     ]
+   *   }
    * ]
-   * },{
-   * "key": "Typography Weight",
-   * "prefix": "font",
-   * "type": "select",
-   * "options": [
-   * {"key": "light", "label": "Light"},
-   * {"key": "normal", "label": "Normal"},
-   * {"key": "medium", "label": "Medium"},
-   * {"key": "bold", "label": "Bold"},
-   * {"key": "black", "label": "Black"}
-   * ]
-   * }]
    */
   className?: string;
 
-  /** * @type|class
-   * @schema [{
-   * "key": "Item Gap",
-   * "prefix": "gap",
-   * "type": "select",
-   * "options": [
-   * {"key": "0", "label": "None"},
-   * {"key": "4", "label": "Small (1rem)"},
-   * {"key": "8", "label": "Medium (2rem)"},
-   * {"key": "12", "label": "Large (3rem)"},
-   * {"key": "16", "label": "Extra Large (4rem)"},
-   * {"key": "24", "label": "2XL (6rem)"}
-   * ]
-   * }]
+  /**
+   * Moving track customization.
+   *
+   * @type|class
    */
   trackClassName?: string;
+
+  /**
+   * Individual repeated group
+   * customization.
+   *
+   * @type|class
+   */
+  groupClassName?: string;
 }
 
 export default function Marquee({
   children,
-  direction = 'right',
-  speed = 20,
+
+  direction = "left",
+
+  speed = 50,
+
+  gap = 24,
+
   pauseOnHover = true,
-  pauseAnimation = false,
-  customColor,
+
+  paused = false,
+
+  fadeEdges = false,
+
+  fadeSize = 40,
+
+  respectReducedMotion = true,
+
   customAttributes = {},
-  // Solid Baseline Default for the root mask container
-  className = 'group/marquee flex overflow-hidden select-none w-full text-base font-normal text-zinc-900 dark:text-zinc-100',
-  // Solid Baseline Default for the animated track and duplicated chunks
-  trackClassName = 'flex shrink-0 items-center justify-around gap-8',
+
+  className = "w-full",
+
+  trackClassName = "",
+
+  groupClassName = "",
+
+  style,
+
   ...props
 }: MarqueeProps) {
+  const groupRef =
+    useRef<HTMLDivElement>(
+      null
+    );
 
-  // --- INFINITE LOOP DIRECTIONS ---
-  // To look seamless, the track duplicates content. 
-  // Right scroll animates from negative half position (-50%) to starting position (0)
-  // Left scroll animates from starting position (0) to negative half position (-50%)
-  const initialX = direction === 'right' ? '-50%' : '0%';
-  const animateX = direction === 'right' ? '0%' : '-50%';
+  const [
+    groupSize,
+    setGroupSize,
+  ] = useState(0);
+
+  const [
+    hovering,
+    setHovering,
+  ] = useState(false);
+
+  const prefersReducedMotion =
+    useReducedMotion();
+
+  const x =
+    useMotionValue(0);
+
+  const y =
+    useMotionValue(0);
+
+  const offsetRef =
+    useRef(0);
+
+  const vertical =
+    direction === "up" ||
+    direction === "down";
+
+  const reverse =
+    direction === "right" ||
+    direction === "down";
+
+  const shouldPause =
+    paused ||
+    (pauseOnHover &&
+      hovering) ||
+    Boolean(
+      respectReducedMotion &&
+        prefersReducedMotion
+    );
+
+  /*
+   * Measure one copy of the
+   * marquee content.
+   */
+  useEffect(() => {
+    const element =
+      groupRef.current;
+
+    if (!element) {
+      return;
+    }
+
+    const measure =
+      () => {
+        const size =
+          vertical
+            ? element.offsetHeight
+            : element.offsetWidth;
+
+        setGroupSize(
+          size
+        );
+      };
+
+    measure();
+
+    const observer =
+      new ResizeObserver(
+        measure
+      );
+
+    observer.observe(
+      element
+    );
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [
+    children,
+    vertical,
+  ]);
+
+  /*
+   * Reset position whenever
+   * layout direction or content
+   * measurement changes.
+   */
+  useEffect(() => {
+    offsetRef.current = 0;
+
+    x.set(0);
+    y.set(0);
+  }, [
+    direction,
+    groupSize,
+    gap,
+    x,
+    y,
+  ]);
+
+  useAnimationFrame(
+    (
+      _time,
+      delta
+    ) => {
+      if (
+        shouldPause ||
+        groupSize <= 0
+      ) {
+        return;
+      }
+
+      const safeSpeed =
+        Math.max(
+          0,
+          speed
+        );
+
+      const movement =
+        (safeSpeed *
+          delta) /
+        1000;
+
+      const distance =
+        groupSize +
+        gap;
+
+      if (
+        distance <= 0
+      ) {
+        return;
+      }
+
+      offsetRef.current +=
+        reverse
+          ? movement
+          : -movement;
+
+      if (!reverse) {
+        if (
+          offsetRef.current <=
+          -distance
+        ) {
+          offsetRef.current +=
+            distance;
+        }
+      } else {
+        if (
+          offsetRef.current >=
+          0
+        ) {
+          offsetRef.current -=
+            distance;
+        }
+      }
+
+      if (vertical) {
+        y.set(
+          offsetRef.current
+        );
+      } else {
+        x.set(
+          offsetRef.current
+        );
+      }
+    }
+  );
+
+  /*
+   * For reverse movement we start
+   * one group behind so content
+   * continuously enters from the
+   * opposite side.
+   */
+  useEffect(() => {
+    if (
+      !reverse ||
+      groupSize <= 0
+    ) {
+      return;
+    }
+
+    const distance =
+      groupSize +
+      gap;
+
+    offsetRef.current =
+      -distance;
+
+    if (vertical) {
+      y.set(
+        -distance
+      );
+    } else {
+      x.set(
+        -distance
+      );
+    }
+  }, [
+    reverse,
+    groupSize,
+    gap,
+    vertical,
+    x,
+    y,
+  ]);
+
+  const maskImage =
+    fadeEdges
+      ? vertical
+        ? `linear-gradient(
+            to bottom,
+            transparent 0px,
+            black ${fadeSize}px,
+            black calc(100% - ${fadeSize}px),
+            transparent 100%
+          )`
+        : `linear-gradient(
+            to right,
+            transparent 0px,
+            black ${fadeSize}px,
+            black calc(100% - ${fadeSize}px),
+            transparent 100%
+          )`
+      : undefined;
 
   return (
     <div
-      className={className}
-      style={customColor ? { color: customColor } : undefined}
-      {...customAttributes}
       {...props}
+      {...customAttributes}
+      className={
+        className
+      }
+      onMouseEnter={(
+        event
+      ) => {
+        setHovering(
+          true
+        );
+
+        props.onMouseEnter?.(
+          event
+        );
+      }}
+      onMouseLeave={(
+        event
+      ) => {
+        setHovering(
+          false
+        );
+
+        props.onMouseLeave?.(
+          event
+        );
+      }}
+      style={{
+        position:
+          "relative",
+
+        width:
+          "100%",
+
+        overflow:
+          "hidden",
+
+        boxSizing:
+          "border-box",
+
+        WebkitMaskImage:
+          maskImage,
+
+        maskImage,
+
+        ...style,
+      }}
     >
       <motion.div
-        // Lock X to 0% if paused, otherwise run the animation loop
-        animate={pauseAnimation ? { x: '0%' } : { x: [initialX, animateX] }}
-        transition={pauseAnimation ? {} : {
-          ease: 'linear',
-          duration: speed,
-          repeat: Infinity,
+        className={
+          trackClassName
+        }
+        style={{
+          display:
+            "flex",
+
+          flexDirection:
+            vertical
+              ? "column"
+              : "row",
+
+          width:
+            vertical
+              ? "100%"
+              : "max-content",
+
+          height:
+            vertical
+              ? "max-content"
+              : undefined,
+
+          gap,
+
+          flexShrink:
+            0,
+
+          x:
+            vertical
+              ? undefined
+              : x,
+
+          y:
+            vertical
+              ? y
+              : undefined,
+
+          willChange:
+            shouldPause
+              ? undefined
+              : "transform",
         }}
-        // Pure CSS deceleration state triggered natively by Tailwind group selectors
-        className={`min-w-full ${!pauseAnimation && pauseOnHover ? 'group-hover/marquee:[animation-play-state:paused]' : ''} ${trackClassName}`.trim().replace(/\s+/g, ' ')}
       >
-        {/* Render Primary List */}
-        <div className={trackClassName}>
+        <div
+          ref={
+            groupRef
+          }
+          className={
+            groupClassName
+          }
+          style={{
+            display:
+              "flex",
+
+            flexDirection:
+              vertical
+                ? "column"
+                : "row",
+
+            alignItems:
+              vertical
+                ? undefined
+                : "center",
+
+            gap,
+
+            flexShrink:
+              0,
+          }}
+        >
           {children}
         </div>
 
-        {/* Conditionally Render Duplicate List (Cloned for a pixel-perfect, gapless wrapping effect) */}
-        {!pauseAnimation && (
-          <div aria-hidden="true" className={trackClassName}>
-            {children}
-          </div>
-        )}
+        {/*
+         * Second copy creates
+         * the seamless loop.
+         */}
+        <div
+          aria-hidden="true"
+          className={
+            groupClassName
+          }
+          style={{
+            display:
+              "flex",
+
+            flexDirection:
+              vertical
+                ? "column"
+                : "row",
+
+            alignItems:
+              vertical
+                ? undefined
+                : "center",
+
+            gap,
+
+            flexShrink:
+              0,
+
+            pointerEvents:
+              "none",
+          }}
+        >
+          {children}
+        </div>
       </motion.div>
     </div>
-  ); 
+  );
 }
