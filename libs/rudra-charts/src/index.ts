@@ -1,7 +1,9 @@
-import './index.css';
-
 export type { AnimatedLineChartProps, LineDataPoint, LineSeries } from './components/AnimatedLineChart';
 export { default as AnimatedLineChart } from './components/AnimatedLineChart';
+export type { AreaChartCurve, AreaChartProps } from './components/AreaChart';
+export { default as AreaChart } from './components/AreaChart';
+export type { BarChartProps } from './components/BarChart';
+export { default as BarChart } from './components/BarChart';
 export type { AnimatedBubbleChartProps, BubbleDataPoint } from './components/BubbleChart';
 export { default as AnimatedBubbleChart } from './components/BubbleChart';
 export type { AnimatedCandlestickChartProps, CandlestickDataPoint } from './components/CandleStickChart';
@@ -10,8 +12,8 @@ export type { AnimatedDonutChartProps, PieDataPoint } from './components/DonutCh
 export { default as AnimatedDonutChart } from './components/DonutChart';
 export type { AnimatedFunnelChartProps, FunnelDataPoint } from './components/FunnelChart';
 export { default as AnimatedFunnelChart } from './components/FunnelChart';
-export type { AnimatedGaugeChartProps, GaugeZone } from './components/GaugeChart';
-export { default as AnimatedGaugeChart } from './components/GaugeChart';
+export type { GaugeChartProps, GaugeSegment } from './components/GaugeChart';
+export { default as GaugeChart } from './components/GaugeChart';
 export type { AnimatedHeatmapProps, HeatmapDataPoint } from './components/HeatMap';
 export { default as AnimatedHeatmap } from './components/HeatMap';
 export type { AnimatedHistogramProps, HistogramDataPoint } from './components/Histogram';
@@ -20,8 +22,12 @@ export type { AnimatedHorizontalBarChartProps, HorizontalChartData } from './com
 export { default as AnimatedHorizontalBarChart } from './components/HorizontalBarChart';
 export type { AnimatedHundredPercentBarChartProps, HundredPercentDataPoint } from './components/HundredPercentBarChart';
 export { default as AnimatedHundredPercentBarChart } from './components/HundredPercentBarChart';
+export type { LineChartCurve, LineChartProps } from './components/LineChart';
+export { default as LineChart } from './components/LineChart';
 export type { AnimatedMultiLineChartProps, MultiLineDataPoint } from './components/MultiLineChart';
 export { default as AnimatedMultiLineChart } from './components/MultiLineChart';
+export type { PieChartProps } from './components/PieChart';
+export { default as PieChart } from './components/PieChart';
 export type { AnimatedWorkflowChartProps, WorkflowLink, WorkflowNode, WorkflowStatus } from './components/PipelineChart';
 export { default as AnimatedWorkflowChart } from './components/PipelineChart';
 export type { AnimatedScatterPlotProps, ScatterDataPoint } from './components/ScatterPlot';
