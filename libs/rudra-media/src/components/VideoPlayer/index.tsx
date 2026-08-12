@@ -1,117 +1,270 @@
-import React from "react";
+import React, {
+  useEffect,
+  useRef,
+} from "react";
 
-export interface VideoPlayerProps {
-  url?: string;
+export interface VideoPlayerProps
+  extends Omit<
+    React.VideoHTMLAttributes<HTMLVideoElement>,
+    "className" | "src" | "poster"
+  > {
+  src?: string;
+
+  poster?: string;
+
   controls?: boolean;
+
   autoPlay?: boolean;
-  loop?: boolean;
+
   muted?: boolean;
-  width?: number;
-  height?: number;
-  aspectRatio?: 'video' | 'square' | 'auto';
-  radius?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full';
+
+  loop?: boolean;
+
+  playsInline?: boolean;
+
+  preload?:
+    | "none"
+    | "metadata"
+    | "auto";
+
+  startTime?: number;
+
+  /**
+   * Root video customization.
+   *
+   * @type|class
+   * @schema [
+   *   {
+   *     "key":"Width",
+   *     "prefix":"w",
+   *     "type":"select",
+   *     "options":[
+   *       {"key":"auto","label":"Auto"},
+   *       {"key":"full","label":"Full Width"}
+   *     ]
+   *   },
+   *   {
+   *     "key":"Height",
+   *     "prefix":"h",
+   *     "type":"select",
+   *     "options":[
+   *       {"key":"auto","label":"Auto"},
+   *       {"key":"full","label":"Full Height"},
+   *       {"key":"48","label":"Small"},
+   *       {"key":"64","label":"Medium"},
+   *       {"key":"80","label":"Large"},
+   *       {"key":"96","label":"Extra Large"}
+   *     ]
+   *   },
+   *   {
+   *     "key":"Object Fit",
+   *     "prefix":"object",
+   *     "type":"select",
+   *     "options":[
+   *       {"key":"contain","label":"Contain"},
+   *       {"key":"cover","label":"Cover"},
+   *       {"key":"fill","label":"Fill"},
+   *       {"key":"none","label":"None"},
+   *       {"key":"scale-down","label":"Scale Down"}
+   *     ]
+   *   },
+   *   {
+   *     "key":"Aspect Ratio",
+   *     "prefix":"aspect",
+   *     "type":"select",
+   *     "options":[
+   *       {"key":"video","label":"16:9"},
+   *       {"key":"square","label":"Square"},
+   *       {"key":"auto","label":"Auto"}
+   *     ]
+   *   },
+   *   {
+   *     "key":"Radius",
+   *     "prefix":"rounded",
+   *     "type":"select",
+   *     "options":[
+   *       {"key":"none","label":"None"},
+   *       {"key":"sm","label":"Small"},
+   *       {"key":"md","label":"Medium"},
+   *       {"key":"lg","label":"Large"},
+   *       {"key":"xl","label":"Extra Large"},
+   *       {"key":"2xl","label":"2XL"},
+   *       {"key":"full","label":"Full"}
+   *     ]
+   *   },
+   *   {
+   *     "key":"Background",
+   *     "prefix":"bg",
+   *     "type":"select",
+   *     "options":[
+   *       {"key":"black","label":"Black"},
+   *       {"key":"gray-900","label":"Dark"},
+   *       {"key":"transparent","label":"Transparent"}
+   *     ]
+   *   }
+   * ]
+   */
+  className?: string;
+
+  /** @type|function */
+  onReady?: (
+    video: HTMLVideoElement
+  ) => void;
+
+  /** @type|function */
+  onTimeUpdateValue?: (
+    currentTime: number
+  ) => void;
+
+  /** @type|function */
+  onDurationChangeValue?: (
+    duration: number
+  ) => void;
 }
 
 export default function VideoPlayer({
-  url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+  src = "",
+  poster,
   controls = true,
   autoPlay = false,
-  loop = false,
   muted = false,
-  aspectRatio = "video",
-  radius = "xl",
-  width,
-  height
+  loop = false,
+  playsInline = true,
+  preload = "metadata",
+  startTime = 0,
+  className = "",
+
+  onReady,
+  onTimeUpdateValue,
+  onDurationChangeValue,
+
+  onLoadedMetadata,
+  onTimeUpdate,
+  onDurationChange,
+
+  ...props
 }: VideoPlayerProps) {
+  const videoRef =
+    useRef<HTMLVideoElement>(
+      null
+    );
 
-  const radiusClass = radius === "none" ? "rounded-none" : `rounded-${radius}`;
-  const aspectClass = aspectRatio === "video" ? "aspect-video" : 
-                      aspectRatio === "square" ? "aspect-square" : 
-                      "aspect-auto";
+  const initializedRef =
+    useRef(false);
 
-  // 1. URL Parsers
-  const getYoutubeId = (targetUrl: string) => {
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = targetUrl.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : null;
-  };
+  /*
+   * Reset initialization whenever
+   * the video source changes.
+   */
+  useEffect(() => {
+    initializedRef.current =
+      false;
+  }, [src]);
 
-  const getVimeoId = (targetUrl: string) => {
-    const match = targetUrl.match(/vimeo\.com\/(?:.*#|.*\/videos\/)?([0-9]+)/);
-    return match ? match[1] : null;
-  };
+  const handleLoadedMetadata = (
+    event:
+      React.SyntheticEvent<
+        HTMLVideoElement
+      >
+  ) => {
+    const video =
+      event.currentTarget;
 
-  const ytId = getYoutubeId(url);
-  const vimeoId = !ytId ? getVimeoId(url) : null;
+    if (
+      !initializedRef.current
+    ) {
+      initializedRef.current =
+        true;
 
-  // 2. Render Engine
-  const renderVideo = () => {
-    if (ytId) {
-      const params = new URLSearchParams({
-        controls: controls ? "1" : "0",
-        autoplay: autoPlay ? "1" : "0",
-        mute: (muted || autoPlay) ? "1" : "0",
-        playsinline: "1",
-        ...(loop && { loop: "1", playlist: ytId })
-      });
+      if (
+        startTime > 0 &&
+        Number.isFinite(
+          video.duration
+        )
+      ) {
+        video.currentTime =
+          Math.min(
+            startTime,
+            video.duration
+          );
+      }
 
-      return (
-        <iframe
-          src={`https://www.youtube.com/embed/${ytId}?${params.toString()}`}
-          title="YouTube video player"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          className="absolute inset-0 w-full h-full"
-        />
+      onReady?.(
+        video
       );
     }
 
-    if (vimeoId) {
-      const params = new URLSearchParams({
-        autoplay: autoPlay ? "1" : "0",
-        loop: loop ? "1" : "0",
-        muted: (muted || autoPlay) ? "1" : "0",
-        controls: controls ? "1" : "0",
-        dnt: "1"
-      });
+    onLoadedMetadata?.(
+      event
+    );
+  };
 
-      return (
-        <iframe
-          src={`https://player.vimeo.com/video/${vimeoId}?${params.toString()}`}
-          title="Vimeo video player"
-          frameBorder="0"
-          allow="autoplay; fullscreen; picture-in-picture"
-          allowFullScreen
-          className="absolute inset-0 w-full h-full"
-        />
-      );
-    }
+  const handleTimeUpdate = (
+    event:
+      React.SyntheticEvent<
+        HTMLVideoElement
+      >
+  ) => {
+    const video =
+      event.currentTarget;
 
-    return (
-      <video
-        src={url}
-        controls={controls}
-        autoPlay={autoPlay}
-        loop={loop}
-        muted={muted || autoPlay}
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover bg-black"
-      />
+    onTimeUpdateValue?.(
+      video.currentTime
+    );
+
+    onTimeUpdate?.(
+      event
+    );
+  };
+
+  const handleDurationChange = (
+    event:
+      React.SyntheticEvent<
+        HTMLVideoElement
+      >
+  ) => {
+    const video =
+      event.currentTarget;
+
+    onDurationChangeValue?.(
+      video.duration
+    );
+
+    onDurationChange?.(
+      event
     );
   };
 
   return (
-    <div
-      className={`relative overflow-hidden bg-slate-900 shadow-lg flex items-center justify-center 
-      ${radiusClass} ${aspectClass} 
-      ${!width ? 'min-w-[320px]' : ''} w-full`}
-      style={{
-        width: width ? `${width}px` : undefined,
-        height: height ? `${height}px` : undefined,
-      }}
-    >
-      {renderVideo()}
-    </div>
+    <video
+      {...props}
+      ref={videoRef}
+      src={src || undefined}
+      poster={poster}
+      controls={controls}
+      autoPlay={autoPlay}
+      muted={muted}
+      loop={loop}
+      playsInline={
+        playsInline
+      }
+      preload={preload}
+      onLoadedMetadata={
+        handleLoadedMetadata
+      }
+      onTimeUpdate={
+        handleTimeUpdate
+      }
+      onDurationChange={
+        handleDurationChange
+      }
+      className={[
+        "block w-full",
+        "bg-black",
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    />
   );
 }
