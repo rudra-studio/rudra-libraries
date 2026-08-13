@@ -26,3 +26,5 @@ export type { ComplexGridProps } from './components/StructuredGrid';
 export { default as ComplexGrid } from './components/StructuredGrid';
 export type { DataTableProps } from './components/Table';
 export { default as DataTable } from './components/Table';
+export type { VirtualListProps, VirtualListRenderContext } from './components/VirtualList';
+export { default as VirtualList } from './components/VirtualList';
