@@ -31,7 +31,7 @@ export default defineConfig(() => ({
       formats: ['es' as const],
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'clsx', 'gsap', 'tailwindcss', 'lucide-react', 'motion', 'motion/react', 'framer-motion', 'three', '@react-three/fiber', '@react-three/fiber', '@tanstack/react-table'],
+      external: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'clsx', 'gsap', 'tailwindcss', 'lucide-react', 'motion', 'motion/react', 'framer-motion', 'three', '@react-three/fiber', '@react-three/fiber', '@monaco-editor/react', '@tanstack/react-table'],
       output: {
         preserveModules: true, 
         preserveModulesRoot: 'src',
