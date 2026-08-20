@@ -56,7 +56,7 @@ export interface TypographyProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 export default function Typography({
-  content = 'Add your text here...',
+  content = '',
   as: Tag = 'p',
   customColor,
   // Set a solid baseline default for initial styling

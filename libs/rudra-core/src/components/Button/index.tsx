@@ -43,7 +43,15 @@ export interface ButtonProps
   /**
    * Content displayed inside the button.
    */
-  children?: React.ReactNode;
+  children?: React.ReactNode; /* @optional */
+
+  /**
+   * Optional bindable text label. When provided it takes precedence over
+   * children, while children remains available for composed React content.
+   *
+   * @translate|@optional
+   */
+  label?: string;
 
   /**
    * Optional content displayed before the label.
@@ -230,6 +238,8 @@ export default function Button({
 
   children = "Click Me",
 
+  label,
+
   leftIcon,
 
   rightIcon,
@@ -372,7 +382,7 @@ export default function Button({
           {loading &&
             loadingText
             ? loadingText
-            : children}
+            : label ?? children}
         </span>
 
         {!loading &&
