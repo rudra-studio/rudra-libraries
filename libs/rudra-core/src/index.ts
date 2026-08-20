@@ -2,7 +2,7 @@ export type { AlertAppearance, AlertProps, AlertTheme, AlertVariant } from './co
 export { default as Alert } from './components/Alert';
 export type { AvatarProps, AvatarShape, AvatarSize, AvatarStatus, AvatarTheme } from './components/Avatar';
 export { default as Avatar } from './components/Avatar';
-export type { BadgeProps } from './components/Badge';
+export type { BadgeActionEvent, BadgeProps } from './components/Badge';
 export { default as Badge } from './components/Badge';
 export type { ButtonActionEvent, ButtonProps, ButtonSize, ButtonTheme, ButtonVariant } from './components/Button';
 export { default as Button } from './components/Button';
