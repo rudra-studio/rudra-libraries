@@ -15,6 +15,14 @@ export interface GridProps
   as?: GridElement;
 
   /**
+   * Explicit equal-width column count. This is preferred when the desired
+   * count is data-driven or not represented by a Tailwind utility.
+   *
+   * @type|number
+   */
+  columns?: number;
+
+  /**
    * @type|class
    * @schema [
    *   {
@@ -28,6 +36,11 @@ export interface GridProps
    *       {"key":"4","label":"4 Columns"},
    *       {"key":"5","label":"5 Columns"},
    *       {"key":"6","label":"6 Columns"},
+   *       {"key":"7","label":"7 Columns"},
+   *       {"key":"8","label":"8 Columns"},
+   *       {"key":"9","label":"9 Columns"},
+   *       {"key":"10","label":"10 Columns"},
+   *       {"key":"11","label":"11 Columns"},
    *       {"key":"12","label":"12 Columns"}
    *     ]
    *   },
@@ -149,7 +162,9 @@ export interface GridProps
 export default function Grid({
   children,
   as = "div",
+  columns,
   className = "",
+  style,
   ...props
 }: GridProps) {
   const Element = as;
@@ -158,6 +173,14 @@ export default function Grid({
     <Element
       {...props}
       className={["grid", className].filter(Boolean).join(" ")}
+      style={
+        columns
+          ? {
+              ...style,
+              gridTemplateColumns: `repeat(${Math.max(1, Math.min(12, Math.floor(columns)))}, minmax(0, 1fr))`,
+            }
+          : style
+      }
     >
       {children}
     </Element>
