@@ -117,12 +117,20 @@ export interface SectionProps
    * ]
    */
   className?: string;
+   /**
+   * The Custom Attributes Dictionary
+   * We use additionalProperties to tell the schema it's a dynamic key-value object
+   * @type|complex
+   * @schema {"type":"object"}
+   */
+  customAttributes?: Record<string, string>; 
 }
 
 export default function Section({
   children,
   as = "section",
   className = "",
+  customAttributes = {},
   ...props
 }: SectionProps) {
   const Element = as;
@@ -130,6 +138,7 @@ export default function Section({
   return (
     <Element
       {...props}
+      {...customAttributes}
       className={["w-full", className].filter(Boolean).join(" ")}
     >
       {children}
