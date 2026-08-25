@@ -1,6 +1,6 @@
 import React from 'react';
 
-export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface BoxProps {
   children?: React.ReactNode;
   
   /**
@@ -13,6 +13,17 @@ export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
   
   /** * @type|class
    * @schema [{
+   * "key": "Display",
+   * "type": "select",
+   * "options": [
+   * {"key": "flex", "label": "Flex"}, 
+   * {"key": "block", "label": "Block"},
+   * {"key": "grid", "label": "Grid"},
+   * {"key": "inline-flex", "label": "Inline Flex"},
+   * {"key": "inline-block", "label": "Inline Block"},
+   * {"key": "hidden", "label": "Hidden"}
+   * ]
+   * },{
    * "key": "Direction",
    * "prefix": "flex",
    * "type": "select",
@@ -62,18 +73,29 @@ export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
    * }]
    */
   className?: string; 
+  style?: React.CSSProperties;
+  onClick?: (e: any) => void;
 }
 
 export const Box: React.FC<BoxProps> = ({
   children,
   customAttributes = {},
   className = '',
+  style,
+  onClick,
   ...props
 }) => {
+  // Maintain backward compatibility by defaulting to 'flex' if no display utility is found in className
+  const displayClasses = ['flex', 'block', 'grid', 'inline-flex', 'inline-block', 'hidden'];
+  const hasDisplayClass = className.split(' ').some(cls => displayClasses.includes(cls));
+  
+  const finalClassName = hasDisplayClass ? className : `flex ${className}`.trim();
   
   return (
     <div
-      className={`flex ${className}`.trim()}
+      className={finalClassName}
+      style={style}
+      onClick={onClick}
       {...customAttributes}
       {...props}
     >
@@ -81,6 +103,5 @@ export const Box: React.FC<BoxProps> = ({
     </div>
   );
 };
-
 
 export default Box;
