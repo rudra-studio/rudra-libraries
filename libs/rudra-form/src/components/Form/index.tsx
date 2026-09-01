@@ -40,9 +40,7 @@ const Form = ({
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault(); 
-    console.log("Handling Submit");
     if (onSubmit) {
-      console.log("processing onSubmi")
       onSubmit(values); 
     }
   };
