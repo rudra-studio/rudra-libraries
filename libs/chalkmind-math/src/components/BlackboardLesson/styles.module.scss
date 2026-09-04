@@ -1,0 +1,862 @@
+.board {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  min-height: 42rem;
+  background: var(--board-background, #183f32);
+  color: var(--board-text, #f5f0df);
+  border: .7rem solid var(--board-border, #765139);
+  border-radius: .8rem;
+  padding: clamp(1rem, 3vw, 2rem);
+  box-shadow: inset 0 0 5rem rgba(0, 0, 0, .3), 0 1rem 2.5rem rgba(20, 35, 27, .18)
+}
+
+.board:before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .08;
+  background-image: radial-gradient(circle, #fff 0 1px, transparent 1.5px);
+  background-size: 19px 23px
+}
+
+.board>* {
+  position: relative
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(245, 240, 223, .2);
+  padding-bottom: .8rem
+}
+
+.header h2 {
+  margin: .2rem 0 0;
+  font-size: clamp(1.1rem, 2.5vw, 1.65rem);
+  font-weight: 750
+}
+
+.roomLabel,
+.progress {
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: .13em;
+  font-size: .7rem;
+  color: var(--board-muted, #b9ddd0)
+}
+
+.progress {
+  padding-top: .25rem
+}
+
+.lessonArea {
+  display: block;
+  min-height: 25rem
+}
+
+.steps {
+  display: block;
+  list-style: none;
+  margin: 1rem 0;
+  padding: 0 0 8rem
+}
+
+.step,
+.activeStep {
+  display: block;
+  border-bottom: 1px dashed rgba(245, 240, 223, .18);
+  padding: .6rem 0
+}
+
+.stepButton {
+  display: flex;
+  width: 100%;
+  gap: .8rem;
+  align-items: flex-start;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  padding: .55rem;
+  cursor: pointer
+}
+
+.activeStep .stepButton {
+  outline: 2px solid rgba(243, 201, 105, .7);
+  outline-offset: 2px;
+  border-radius: .65rem;
+  background: rgba(255, 255, 255, .035)
+}
+
+.number {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 1.75rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font: 700 .8rem/1 system-ui
+}
+
+.stepContent,
+.stepTitle,
+.expression,
+.workingLine,
+.writingLine {
+  display: block
+}
+
+.stepContent {
+  min-width: 0;
+  flex: 1
+}
+
+.stepTitle {
+  margin-bottom: .35rem;
+  color: var(--board-accent, #f3c969);
+  font: 750 .82rem/1.3 system-ui;
+  text-transform: uppercase;
+  letter-spacing: .08em
+}
+
+.expression {
+  font: 600 clamp(1.05rem, 2.5vw, 1.65rem)/1.45 "Comic Sans MS", "Segoe Print", cursive;
+  overflow-wrap: anywhere
+}
+
+.workingLine,
+.writingLine {
+  margin: .28rem 0 0 1rem;
+  color: #dff3e9;
+  font: 500 clamp(.95rem, 2vw, 1.35rem)/1.45 "Comic Sans MS", "Segoe Print", cursive
+}
+
+.writingLine {
+  animation: chalkWrite .8s both
+}
+
+.teacherButton {
+  display: block;
+  margin: .6rem 0 .15rem 2.55rem;
+  min-height: 40px;
+  border: 1px solid rgba(243, 201, 105, .65);
+  border-radius: 999px;
+  background: rgba(243, 201, 105, .1);
+  color: var(--board-accent, #f3c969);
+  padding: .45rem .8rem;
+  font-weight: 750;
+  cursor: pointer
+}
+
+.empty {
+  display: block;
+  padding: 2rem 0;
+  color: var(--board-muted, #b9ddd0)
+}
+
+.captionBar {
+  display: flex;
+  align-items: flex-start;
+  gap: .7rem;
+  background: rgba(0, 0, 0, .25);
+  border-radius: .75rem;
+  padding: .8rem 1rem;
+  margin-top: .8rem
+}
+
+.captionBar p {
+  margin: 0;
+  line-height: 1.55
+}
+
+.teacherBadge {
+  display: inline-block;
+  border-radius: 999px;
+  background: var(--board-accent, #f3c969);
+  color: var(--board-background, #183f32);
+  padding: .25rem .55rem;
+  font-size: .72rem;
+  font-weight: 850
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  flex-wrap: wrap;
+  margin-top: 1rem
+}
+
+.controls span {
+  margin-left: auto
+}
+
+.controls button,
+.popupActions button {
+  min-height: 42px;
+  border: 1px solid rgba(245, 240, 223, .45);
+  border-radius: 999px;
+  background: rgba(246, 241, 231, .08);
+  color: inherit;
+  padding: .5rem .8rem;
+  cursor: pointer
+}
+
+.popup {
+  display: block;
+  position: absolute;
+  z-index: 5;
+  right: 1rem;
+  bottom: 5.5rem;
+  width: min(28rem, calc(100% - 2rem));
+  max-height: calc(100% - 7rem);
+  overflow: auto;
+  box-sizing: border-box;
+  background: var(--board-popup-background, #fffaf0);
+  color: var(--board-popup-text, #14231b);
+  border: 2px solid var(--board-accent, #f3c969);
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 1.2rem 3rem rgba(0, 0, 0, .35);
+  animation: popupIn .22s ease-out
+}
+
+.popupHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid #ded5c4;
+  padding-bottom: .7rem
+}
+
+.popupHeader span {
+  display: block;
+  color: #2e6f63;
+  font-size: .72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .08em
+}
+
+.popupHeader h3 {
+  margin: .25rem 0 0;
+  font-size: 1.2rem
+}
+
+.closeButton {
+  display: grid;
+  place-items: center;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #b9b0a1;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--board-popup-text, #14231b);
+  font-size: 1.4rem;
+  cursor: pointer
+}
+
+.popupSection,
+.warning,
+.teacherPrompt {
+  display: block;
+  margin-top: .8rem;
+  padding: .75rem;
+  border-radius: .7rem;
+  background: #eef8f4
+}
+
+.popupSection p,
+.warning p,
+.teacherPrompt p {
+  margin: .25rem 0 0;
+  line-height: 1.5
+}
+
+.warning {
+  background: #fff0e7;
+  border-left: 4px solid var(--board-danger, #f27059)
+}
+
+.teacherPrompt {
+  background: #fff6d9;
+  border-left: 4px solid var(--board-accent, #f3c969)
+}
+
+.popupActions {
+  display: flex;
+  gap: .45rem;
+  flex-wrap: wrap;
+  margin-top: .9rem
+}
+
+.popupActions button {
+  border-color: #2e6f63;
+  background: #fff;
+  color: var(--board-background, #183f32)
+}
+
+button:disabled {
+  opacity: .45;
+  cursor: not-allowed
+}
+
+button:focus-visible {
+  outline: 3px solid var(--board-accent, #f3c969);
+  outline-offset: 2px
+}
+
+@keyframes chalkWrite {
+  from {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0)
+  }
+
+  to {
+    opacity: 1;
+    clip-path: inset(0)
+  }
+}
+
+@keyframes popupIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(.98)
+  }
+
+  to {
+    opacity: 1;
+    transform: none
+  }
+}
+
+.reduced .writingLine,
+.reduced .popup {
+  animation: none
+}
+
+@media(prefers-reduced-motion:reduce) {
+
+  .writingLine,
+  .popup {
+    animation: none
+  }
+}
+
+@media(max-width:650px) {
+  .board {
+    border-width: .45rem;
+    min-height: 46rem
+  }
+
+  .header {
+    display: block
+  }
+
+  .progress {
+    margin-top: .45rem
+  }
+
+  .controls span {
+    width: 100%;
+    margin-left: 0
+  }
+
+  .popup {
+    position: fixed;
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    width: auto;
+    max-height: 70vh
+  }
+
+  .steps {
+    padding-bottom: 11rem
+  }
+}
+
+.popupWorking {
+  display: block;
+  margin: .65rem 0 0;
+  padding-left: 1.4rem
+}
+
+.popupWorking li {
+  display: list-item;
+  margin: .35rem 0;
+  font-family: "STIX Two Math", "Cambria Math", serif
+}
+
+.popupActions button[aria-pressed="true"] {
+  background: var(--board-background, #183f32);
+  color: var(--board-popup-background, #fffaf0);
+  border-color: var(--board-background, #183f32)
+}
+
+.problemCard {
+  display: block;
+  margin: 1rem 0;
+  padding: .9rem 1rem;
+  border: 1px solid rgba(243, 201, 105, .7);
+  border-radius: .75rem;
+  background: rgba(0, 0, 0, .16)
+}
+
+.problemLabel {
+  display: block;
+  color: var(--board-accent, #f3c969);
+  font-size: .7rem;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: .12em
+}
+
+.problemStatement {
+  display: block;
+  white-space: pre-line;
+  margin: .35rem 0 0;
+  color: #fffdf5;
+  font: 600 clamp(1rem, 2.2vw, 1.4rem)/1.5 "STIX Two Math", "Cambria Math", serif
+}
+
+.learningGoal {
+  display: block;
+  margin: .55rem 0 0;
+  color: #cbe5da;
+  font-size: .85rem;
+  line-height: 1.45
+}
+
+.matrixPresentation {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  margin: .65rem 0 .5rem 1rem;
+  overflow-x: auto;
+  padding: .25rem 0
+}
+
+.matrixLabel {
+  display: inline-block;
+  flex: 0 0 auto;
+  color: var(--board-accent, #f3c969);
+  font: 700 1rem/1.2 "STIX Two Math", "Cambria Math", serif
+}
+
+.matrix {
+  display: inline-block;
+  position: relative;
+  flex: 0 0 auto;
+  padding: .5rem .75rem
+}
+
+.matrix:before,
+.matrix:after {
+  content: "";
+  position: absolute;
+  top: .15rem;
+  bottom: .15rem;
+  width: .42rem;
+  border-top: 2px solid currentColor;
+  border-bottom: 2px solid currentColor
+}
+
+.matrix:before {
+  left: 0;
+  border-left: 2px solid currentColor
+}
+
+.matrix:after {
+  right: 0;
+  border-right: 2px solid currentColor
+}
+
+.matrixGrid,
+.matrixColumnLabels {
+  display: grid;
+  align-items: center;
+  text-align: center
+}
+
+.matrixGrid span,
+.matrixColumnLabels span {
+  display: block;
+  min-width: 2.25rem;
+  padding: .22rem .55rem;
+  box-sizing: border-box;
+  font: 600 clamp(1.05rem, 2.3vw, 1.45rem)/1.25 "STIX Two Math", "Cambria Math", serif
+}
+
+.matrixColumnLabels {
+  margin-bottom: .15rem;
+  color: var(--board-accent, #f3c969)
+}
+
+.matrixColumnLabels span {
+  font-size: .72rem;
+  font-family: system-ui, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: .08em
+}
+
+.augmentedCell {
+  border-left: 2px solid currentColor
+}
+
+.popup .matrixPresentation {
+  color: var(--board-background, #183f32);
+  margin-left: 0
+}
+
+.popup .matrixLabel {
+  color: #2e6f63
+}
+
+.matrixCompact .matrixGrid span {
+  font-size: 1rem;
+  min-width: 1.9rem;
+  padding: .18rem .4rem
+}
+
+@media(max-width:560px) {
+  .matrixPresentation {
+    margin-left: 0
+  }
+
+  .matrixGrid span {
+    min-width: 1.9rem;
+    padding: .18rem .38rem
+  }
+}
+
+
+/* General mathematics content blocks */
+.contentBlocks {
+  display: block;
+  margin: .25rem 0 .5rem
+}
+
+.contentHeading {
+  display: block;
+  margin: .65rem 0 .35rem;
+  color: #fff7dc;
+  font: 750 clamp(1rem, 2.2vw, 1.3rem)/1.35 system-ui, sans-serif
+}
+
+.contentText {
+  display: block;
+  margin: .4rem 0;
+  color: #e5f3ed;
+  font: 500 clamp(.92rem, 1.8vw, 1.08rem)/1.6 system-ui, sans-serif;
+  white-space: pre-line
+}
+
+.contentEmphasis {
+  color: #fff7dc;
+  font-weight: 750
+}
+
+.equationBlock {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  overflow-x: auto;
+  margin: .7rem 0;
+  padding: .5rem .8rem;
+  border-left: 3px solid var(--board-accent, #f3c969);
+  background: rgba(0, 0, 0, .12)
+}
+
+.equationLabel {
+  display: block;
+  margin-bottom: .25rem;
+  color: var(--board-muted, #b9ddd0);
+  font: 700 .72rem/1.25 system-ui, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: .08em
+}
+
+.equationVisual {
+  display: block;
+  min-width: max-content;
+  color: #fffdf5;
+  font: 650 clamp(1.1rem, 2.5vw, 1.65rem)/1.5 "STIX Two Math", "Cambria Math", serif;
+  white-space: pre-wrap
+}
+
+.writingBlock {
+  animation: chalkWrite .8s both
+}
+
+.contentList {
+  display: block;
+  margin: .55rem 0;
+  padding-left: 1.55rem;
+  color: #e5f3ed;
+  font: 500 clamp(.92rem, 1.8vw, 1.08rem)/1.55 system-ui, sans-serif
+}
+
+.contentList li {
+  display: list-item;
+  margin: .32rem 0
+}
+
+.definitionBlock,
+.theoremBlock,
+.proofBlock,
+.noteBlock {
+  display: block;
+  margin: .65rem 0;
+  padding: .75rem .85rem;
+  border-radius: .55rem;
+  color: #eaf6f1;
+  font: 500 .98rem/1.55 system-ui, sans-serif
+}
+
+.definitionBlock {
+  border-left: 4px solid #7fd1b9;
+  background: rgba(127, 209, 185, .1)
+}
+
+.theoremBlock {
+  border: 1px solid rgba(243, 201, 105, .6);
+  background: rgba(243, 201, 105, .08)
+}
+
+.proofBlock {
+  border-left: 4px solid #a9bff7;
+  background: rgba(169, 191, 247, .09)
+}
+
+.definitionBlock strong,
+.theoremBlock strong,
+.proofBlock strong {
+  display: block;
+  color: var(--board-accent, #f3c969)
+}
+
+.definitionBlock p,
+.theoremBlock p {
+  display: block;
+  margin: .25rem 0 0
+}
+
+.proofBlock ol {
+  display: block;
+  margin: .35rem 0 0;
+  padding-left: 1.35rem
+}
+
+.proofBlock li {
+  display: list-item;
+  margin: .25rem 0
+}
+
+.note_info {
+  border-left: 4px solid #7fd1b9;
+  background: rgba(127, 209, 185, .1)
+}
+
+.note_warning {
+  border-left: 4px solid var(--board-accent, #f3c969);
+  background: rgba(243, 201, 105, .1)
+}
+
+.note_success {
+  border-left: 4px solid #8bd17c;
+  background: rgba(139, 209, 124, .1)
+}
+
+.tableScroll {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  margin: .7rem 0
+}
+
+.theoryTable {
+  display: table;
+  width: 100%;
+  min-width: 28rem;
+  border-collapse: collapse;
+  color: var(--board-text, #f5f0df);
+  font: 500 .9rem/1.4 system-ui, sans-serif
+}
+
+.theoryTable caption {
+  display: table-caption;
+  text-align: left;
+  padding: 0 0 .4rem;
+  color: var(--board-accent, #f3c969);
+  font-weight: 750
+}
+
+.theoryTable th,
+.theoryTable td {
+  display: table-cell;
+  border: 1px solid rgba(245, 240, 223, .35);
+  padding: .5rem .6rem;
+  text-align: left;
+  vertical-align: top
+}
+
+.theoryTable th {
+  background: rgba(0, 0, 0, .2);
+  color: var(--board-accent, #f3c969)
+}
+
+.reduced .writingBlock {
+  animation: none
+}
+
+@media(prefers-reduced-motion:reduce) {
+  .writingBlock {
+    animation: none
+  }
+}
+
+@media(max-width:560px) {
+  .equationBlock {
+    width: 100%;
+    box-sizing: border-box
+  }
+
+  .contentText,
+  .contentList {
+    font-size: .92rem
+  }
+}
+
+.stepRow {
+  display: block
+}
+
+.stepRow>.stepButton {
+  display: flex;
+  width: 100%;
+  align-items: center
+}
+
+.stepRow>.stepContent {
+  display: block;
+  margin: .35rem 0 0 2.55rem
+}
+
+.graphBlock {
+  display: block;
+  margin: .7rem 0;
+  padding: .65rem;
+  border: 1px solid rgba(245, 240, 223, .28);
+  border-radius: .6rem;
+  background: rgba(0, 0, 0, .1)
+}
+
+.graphBlock svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 18rem;
+  overflow: visible
+}
+
+.graphBlock line {
+  stroke: #dff3e9;
+  stroke-width: 3
+}
+
+.graphBlock marker path {
+  fill: #dff3e9
+}
+
+.graphBlock circle {
+  fill: var(--board-background, #183f32);
+  stroke: var(--board-accent, #f3c969);
+  stroke-width: 3
+}
+
+.graphBlock text {
+  fill: #fffdf5;
+  text-anchor: middle;
+  font: 700 18px system-ui, sans-serif
+}
+
+.graphBlock .edgeLabel {
+  fill: var(--board-accent, #f3c969);
+  font-size: 15px
+}
+
+.graphNodeAccent circle {
+  fill: #2e6f63;
+  stroke: #fff7dc
+}
+
+.graphBlock figcaption {
+  display: block;
+  margin-top: .45rem;
+  color: var(--board-muted, #b9ddd0);
+  font: .82rem/1.4 system-ui, sans-serif
+}
+
+@media(max-width:560px) {
+  .stepRow>.stepContent {
+    margin-left: 0
+  }
+
+  .graphBlock {
+    padding: .35rem
+  }
+}
+
+.graphEdge {
+  fill: none;
+  stroke: #dff3e9;
+  stroke-width: 3
+}
+
+.board[dir="rtl"] {
+  text-align: right
+}
+
+.board[dir="rtl"] .stepButton {
+  text-align: right
+}
+
+.board[dir="rtl"] .workingLine,
+.board[dir="rtl"] .writingLine {
+  margin-left: 0;
+  margin-right: 1rem
+}
+
+.board[dir="rtl"] .teacherButton {
+  margin-left: 0;
+  margin-right: 2.55rem
+}
+
+.board[dir="rtl"] .stepRow>.stepContent {
+  margin-left: 0;
+  margin-right: 2.55rem
+}
+
+.board[dir="rtl"] .definitionBlock,
+.board[dir="rtl"] .proofBlock,
+.board[dir="rtl"] .noteBlock,
+.board[dir="rtl"] .warning,
+.board[dir="rtl"] .teacherPrompt {
+  border-left-width: 0;
+  border-right-width: 4px
+}
+
+@media(max-width:560px) {
+  .board[dir="rtl"] .stepRow>.stepContent {
+    margin-right: 0
+  }
+}
