@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./styles.module.scss";
 
 export interface MathVisualWidgetProps {
-  /** @select|right-triangle|circle|abacus|number-line */
+  /** @select|right-triangle|circle|abacus|number-line  */
   kind?: "right-triangle" | "circle" | "abacus" | "number-line";
 
   /** @widget|slider */
