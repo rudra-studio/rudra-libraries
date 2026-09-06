@@ -25,7 +25,9 @@
       "import": "./*.js",
       "require": "./*.js",
       "types": "./*.d.ts"
-    }
+    },
+    "./components/*/styles.css": "./components/*/styles.css",
+    "./global.css": "./global.css"
   },
   "jsdelivr": "./index.umd.js",
   "main": "./index.js",
