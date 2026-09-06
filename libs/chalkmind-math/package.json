@@ -22,7 +22,8 @@
       "import": "./*.js",
       "require": "./*.js",
       "types": "./*.d.ts"
-    }
+    },
+    "./index.css": "./index.css"
   },
   "jsdelivr": "./index.umd.js",
   "main": "./index.js",
@@ -38,6 +39,7 @@
   "scripts": {
     "test": "echo 'Skipping unit tests for now...' \u0026\u0026 exit 0"
   },
+  "style": "./index.css",
   "types": "./index.d.ts",
   "unpkg": "./index.umd.js",
   "version": "0.0.1"
