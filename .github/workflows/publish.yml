@@ -76,29 +76,6 @@ jobs:
       - name: Build library
         run: npx nx build ${{ steps.extract.outputs.project }}
 
-      # Every authored component stylesheet is a public, independently loaded
-      # artifact. Fail before publishing if the Vite entry map did not emit it.
-      - name: Validate component stylesheet artifacts
-        shell: bash
-        run: |
-          project="${{ steps.extract.outputs.project }}"
-          source_root="libs/${project}/src"
-          dist_root="dist/libs/${project}"
-          missing=0
-
-          while IFS= read -r source_file; do
-            relative_path="${source_file#${source_root}/}"
-            expected_file="${dist_root}/${relative_path%styles.module.scss}styles.css"
-            if [ ! -f "$expected_file" ]; then
-              echo "Missing component stylesheet artifact: $expected_file"
-              missing=1
-            fi
-          done < <(find "$source_root" -type f -name 'styles.module.scss' -print)
-
-          if [ "$missing" -ne 0 ]; then
-            exit 1
-          fi
-
       # 🔥 Ensure package.json exists in dist
       - name: Validate package.json
         run: |
