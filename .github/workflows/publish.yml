@@ -12,12 +12,10 @@ on:
         description: 'Name of the library (e.g., my-ui-lib)'
         required: true
         type: string
-
       version:
         description: 'Version (e.g., 1.0.0)'
         required: false
         type: string
-
       job_id:
         description: 'Job ID from the Go Backend (for webhook tracking)'
         required: false
@@ -29,51 +27,26 @@ jobs:
 
     permissions:
       contents: read
-
-      # Required for GitHub Packages
       packages: write
 
-      # Required for npm Trusted Publishing / OIDC
-      id-token: write
-
     steps:
-      # -------------------------------------------------------
-      # Checkout
-      # -------------------------------------------------------
-
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      # -------------------------------------------------------
-      # Node + npm
-      # -------------------------------------------------------
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '20'
           registry-url: 'https://registry.npmjs.org/'
-
-      # Trusted Publishing requires a recent npm version
-      - name: Setup npm
-        run: npm install --global npm@11
-
-      # -------------------------------------------------------
-      # Install workspace dependencies
-      # -------------------------------------------------------
 
       - name: Install dependencies
         run: npm ci
 
-      # -------------------------------------------------------
-      # Determine project + version
-      # -------------------------------------------------------
-
+      # 🔥 Extract project + version (supports both tag + manual)
       - name: Determine Project and Version
         id: extract
-        shell: bash
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             PROJECT_NAME="${{ inputs.project_name }}"
@@ -86,169 +59,71 @@ jobs:
 
             echo "Manual trigger detected"
           else
-            TAG_NAME="${{ github.ref_name }}"
-
+            TAG_NAME=${{ github.ref_name }}
             PROJECT_NAME="${TAG_NAME%@*}"
             VERSION="${TAG_NAME#*@}"
 
             echo "Tag trigger detected"
           fi
 
-          if [ -z "$PROJECT_NAME" ]; then
-            echo "❌ Project name is missing"
-            exit 1
-          fi
-
-          if [ -z "$VERSION" ]; then
-            echo "❌ Version is missing"
-            exit 1
-          fi
-
           echo "Project: $PROJECT_NAME"
           echo "Version: $VERSION"
 
-          echo "project=$PROJECT_NAME" >> "$GITHUB_OUTPUT"
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "project=$PROJECT_NAME" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      # -------------------------------------------------------
-      # Build only requested Rudra library
-      # -------------------------------------------------------
-
+      # 🔥 Build ONLY the targeted library
       - name: Build library
-        run: |
-          npx nx build "${{ steps.extract.outputs.project }}"
+        run: npx nx build ${{ steps.extract.outputs.project }}
 
-      # -------------------------------------------------------
-      # Validate output
-      # -------------------------------------------------------
-
+      # 🔥 Ensure package.json exists in dist
       - name: Validate package.json
-        shell: bash
         run: |
-          PACKAGE_DIR="dist/libs/${{ steps.extract.outputs.project }}"
-
-          if [ ! -f "$PACKAGE_DIR/package.json" ]; then
-            echo "❌ package.json not found in dist."
-            echo "Expected: $PACKAGE_DIR/package.json"
+          if [ ! -f "dist/libs/${{ steps.extract.outputs.project }}/package.json" ]; then
+            echo "❌ package.json not found in dist. Fix your Nx build config."
             exit 1
           fi
 
-          echo "✅ package.json found"
-
-      # -------------------------------------------------------
-      # Set requested version
-      # -------------------------------------------------------
-
+      # 🔥 Set correct version before publish
       - name: Set version
-        working-directory: dist/libs/${{ steps.extract.outputs.project }}
         run: |
-          npm version "${{ steps.extract.outputs.version }}" \
-            --no-git-tag-version
+          cd dist/libs/${{ steps.extract.outputs.project }}
+          npm version ${{ steps.extract.outputs.version }} --no-git-tag-version
 
-      # -------------------------------------------------------
-      # Debug package before publishing
-      # -------------------------------------------------------
-
-      - name: Verify package
-        working-directory: dist/libs/${{ steps.extract.outputs.project }}
-        run: |
-          echo "Publishing package:"
-          npm pkg get name
-
-          echo "Version:"
-          npm pkg get version
-
-          echo "Package contents:"
-          npm pack --dry-run
-
-      # -------------------------------------------------------
-      # GitHub Packages
-      #
-      # Keep your existing token-based GitHub Packages flow.
-      # This is separate from npm Trusted Publishing.
-      # -------------------------------------------------------
-
+      # 🔥 Publish to GitHub Packages
       - name: Publish to GitHub Packages
         if: vars.ENABLE_GIT_PUBLISH == 'true'
-        working-directory: dist/libs/${{ steps.extract.outputs.project }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_GIT_TOKEN }}
         run: |
-          npm config set \
-            //npm.pkg.github.com/:_authToken \
-            "$NODE_AUTH_TOKEN"
-
+          cd dist/libs/${{ steps.extract.outputs.project }}
+          npm config set //npm.pkg.github.com/:_authToken $NODE_AUTH_TOKEN
           npm publish
 
-      # -------------------------------------------------------
-      # IMPORTANT:
-      # Switch registry back to npmjs after GitHub Packages
-      # -------------------------------------------------------
-
-      - name: Configure npm registry
-        if: vars.ENABLE_NPM_PUBLISH == 'true'
-        run: |
-          npm config set registry https://registry.npmjs.org/
-
-      # -------------------------------------------------------
-      # NPMJS PUBLISH
-      #
-      # NO NPM_TOKEN
-      # NO OTP
-      # NO 2FA BYPASS
-      #
-      # Authentication happens through:
-      #
-      # GitHub Actions
-      #       ↓
-      # OIDC
-      #       ↓
-      # npm Trusted Publishing
-      # -------------------------------------------------------
-
+      # 🔥 Publish to NPM (optional)
       - name: Publish to NPM Registry
         if: vars.ENABLE_NPM_PUBLISH == 'true'
-        working-directory: dist/libs/${{ steps.extract.outputs.project }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
+          cd dist/libs/${{ steps.extract.outputs.project }}
+          npm config set //registry.npmjs.org/:_authToken $NODE_AUTH_TOKEN
           npm publish --access public
 
-      # -------------------------------------------------------
-      # Notify Rudra Backend - Success
-      # -------------------------------------------------------
-
+      # 🔥 Notify Backend of Success
       - name: Notify Backend (Success)
         if: success() && inputs.job_id != ''
-        env:
-          WEBHOOK_URL: ${{ vars.BACKEND_WEBHOOK_URL }}
-          WEBHOOK_SECRET: ${{ secrets.WEBHOOK_SECRET }}
-          JOB_ID: ${{ inputs.job_id }}
         run: |
-          curl --fail-with-body \
-            --location "$WEBHOOK_URL" \
-            --header "x-auth-code: $WEBHOOK_SECRET" \
-            --header "Content-Type: application/json" \
-            --data "{
-              \"jobId\": \"$JOB_ID\",
-              \"status\": \"success\"
-            }"
+          curl --location '${{ vars.BACKEND_WEBHOOK_URL }}' \
+          --header 'x-auth-code: ${{ secrets.WEBHOOK_SECRET }}' \
+          --header 'Content-Type: application/json' \
+          --data '{"jobId": "${{ inputs.job_id }}", "status": "success"}'
 
-      # -------------------------------------------------------
-      # Notify Rudra Backend - Failure
-      # -------------------------------------------------------
-
+      # 🔥 Notify Backend of Failure
       - name: Notify Backend (Failure)
         if: failure() && inputs.job_id != ''
-        env:
-          WEBHOOK_URL: ${{ vars.BACKEND_WEBHOOK_URL }}
-          WEBHOOK_SECRET: ${{ secrets.WEBHOOK_SECRET }}
-          JOB_ID: ${{ inputs.job_id }}
         run: |
-          curl --fail-with-body \
-            --location "$WEBHOOK_URL" \
-            --header "x-auth-code: $WEBHOOK_SECRET" \
-            --header "Content-Type: application/json" \
-            --data "{
-              \"jobId\": \"$JOB_ID\",
-              \"status\": \"failed\",
-              \"error\": \"Publish pipeline failed. Check GitHub Actions logs.\"
-            }"
+          curl --location '${{ vars.BACKEND_WEBHOOK_URL }}' \
+          --header 'x-auth-code: ${{ secrets.WEBHOOK_SECRET }}' \
+          --header 'Content-Type: application/json' \
+          --data '{"jobId": "${{ inputs.job_id }}", "status": "failed", "error": "Publish pipeline failed. Check GitHub Actions logs."}'
