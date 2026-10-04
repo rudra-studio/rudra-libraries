@@ -44,5 +44,7 @@ export type { PublicFormProps } from './components/PublicForm';
 export { default as PublicForm } from './components/PublicForm';
 export type { StageColumnProps } from './components/StageColumn';
 export { default as StageColumn } from './components/StageColumn';
+export type { WorkspaceCardProps } from './components/WorkspaceCard';
+export { default as WorkspaceCard } from './components/WorkspaceCard';
 export type { WorkspaceSwitcherItem, WorkspaceSwitcherProps } from './components/WorkspaceSwitcher';
 export { default as WorkspaceSwitcher } from './components/WorkspaceSwitcher';

@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+
 import {
   Bell,
+  ChevronDown,
+  LogOut,
   Menu,
   Plus,
   Search,
+  Settings,
+  User,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -69,6 +74,43 @@ export interface AppHeaderProps {
   showMenuTrigger?: boolean;
 
   /**
+   * Whether the signed-in user control is displayed.
+   */
+  showUserMenu?: boolean;
+
+  /**
+   * Signed-in user's display name.
+   */
+  userName?: string;
+
+  /**
+   * Signed-in user's email address.
+   */
+  userEmail?: string;
+
+  /**
+   * Signed-in user's avatar image.
+   */
+  userAvatarUrl?: string;
+
+  /**
+   * Whether Account settings is displayed in the user menu.
+   */
+  showAccountSettings?: boolean;
+
+  /**
+   * Account settings menu label.
+   * @translate
+   */
+  accountSettingsLabel?: string;
+
+  /**
+   * Sign out menu label.
+   * @translate
+   */
+  signOutLabel?: string;
+
+  /**
    * Accessible label for the header.
    */
   ariaLabel?: string;
@@ -92,6 +134,16 @@ export interface AppHeaderProps {
    * Emits when the mobile navigation trigger is selected.
    */
   onMenuClick?: () => void;
+
+  /**
+   * Emits when Account settings is selected.
+   */
+  onAccountClick?: () => void;
+
+  /**
+   * Emits when Sign out is selected.
+   */
+  onSignOut?: () => void;
 
   /**
    * Utility classes exposed to the Rudra builder.
@@ -142,13 +194,30 @@ const AppHeader: React.FC<AppHeaderProps> = ({
   primaryActionLabel = 'Add',
   primaryActionIcon = 'Plus',
   showMenuTrigger = true,
+
+  showUserMenu = true,
+  userName = '',
+  userEmail = '',
+  userAvatarUrl = '',
+  showAccountSettings = true,
+  accountSettingsLabel = 'Account settings',
+  signOutLabel = 'Sign out',
+
   ariaLabel = 'Page header',
+
   onSearchChange,
   onPrimaryAction,
   onNotificationsClick,
   onMenuClick,
+  onAccountClick,
+  onSignOut,
+
   className = '',
 }) => {
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+
+  const userMenuRef = useRef<HTMLDivElement>(null);
+
   const PrimaryActionIcon =
     ICONS[primaryActionIcon] || Plus;
 
@@ -156,6 +225,53 @@ const AppHeader: React.FC<AppHeaderProps> = ({
     notificationCount > 99
       ? '99+'
       : notificationCount;
+
+  const initials = userName
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part.charAt(0))
+    .join('')
+    .toUpperCase() || 'U';
+
+  useEffect(() => {
+    if (!userMenuOpen) {
+      return;
+    }
+
+    const handlePointerDown = (event: MouseEvent) => {
+      if (
+        userMenuRef.current &&
+        !userMenuRef.current.contains(event.target as Node)
+      ) {
+        setUserMenuOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setUserMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handlePointerDown);
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [userMenuOpen]);
+
+  const handleAccountClick = () => {
+    setUserMenuOpen(false);
+    onAccountClick?.();
+  };
+
+  const handleSignOut = () => {
+    setUserMenuOpen(false);
+    onSignOut?.();
+  };
 
   return (
     <header
@@ -323,9 +439,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({
                 value={searchValue}
                 placeholder={searchPlaceholder}
                 onChange={(event) =>
-                  onSearchChange?.(
-                    event.target.value,
-                  )
+                  onSearchChange?.(event.target.value)
                 }
                 className="
                   h-10 w-full
@@ -476,15 +590,247 @@ const AppHeader: React.FC<AppHeaderProps> = ({
                 aria-hidden="true"
               />
 
-              <span
-                className="
-                  hidden
-                  sm:inline
-                "
-              >
+              <span className="hidden sm:inline">
                 {primaryActionLabel}
               </span>
             </button>
+          )}
+
+          {/* User menu */}
+          {showUserMenu && (
+            <div
+              ref={userMenuRef}
+              className="relative shrink-0"
+            >
+              <button
+                type="button"
+                aria-haspopup="menu"
+                aria-expanded={userMenuOpen}
+                aria-label="Open user menu"
+                onClick={() =>
+                  setUserMenuOpen((open) => !open)
+                }
+                className="
+                  flex h-10
+                  items-center gap-2
+                  rounded-xl
+                  border border-slate-200
+                  bg-white
+                  px-1.5
+
+                  transition-colors
+
+                  hover:bg-slate-50
+
+                  focus-visible:outline-none
+                  focus-visible:ring-2
+                  focus-visible:ring-indigo-500
+                  focus-visible:ring-offset-2
+
+                  dark:border-slate-800
+                  dark:bg-slate-950
+                  dark:hover:bg-slate-900
+                  dark:focus-visible:ring-offset-slate-950
+
+                  sm:pr-2.5
+                "
+              >
+                <span
+                  className="
+                    flex h-7 w-7
+                    shrink-0 items-center
+                    justify-center
+                    overflow-hidden
+                    rounded-lg
+                    bg-indigo-100
+
+                    text-xs font-semibold
+                    text-indigo-700
+
+                    dark:bg-indigo-500/15
+                    dark:text-indigo-300
+                  "
+                >
+                  {userAvatarUrl ? (
+                    <img
+                      src={userAvatarUrl}
+                      alt=""
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    initials
+                  )}
+                </span>
+
+                {userName && (
+                  <span
+                    className="
+                      hidden max-w-[120px]
+                      truncate
+                      text-sm font-medium
+                      text-slate-700
+
+                      dark:text-slate-200
+
+                      sm:block
+                    "
+                  >
+                    {userName}
+                  </span>
+                )}
+
+                <ChevronDown
+                  size={15}
+                  strokeWidth={1.8}
+                  aria-hidden="true"
+                  className={`
+                    hidden text-slate-400
+                    transition-transform
+                    sm:block
+
+                    ${userMenuOpen ? 'rotate-180' : ''}
+                  `}
+                />
+              </button>
+
+              {userMenuOpen && (
+                <div
+                  role="menu"
+                  className="
+                    absolute right-0
+                    top-[calc(100%+8px)]
+                    z-50
+                    w-64
+                    overflow-hidden
+                    rounded-2xl
+                    border border-slate-200
+                    bg-white
+                    p-1.5
+
+                    shadow-xl
+                    shadow-slate-900/10
+
+                    dark:border-slate-800
+                    dark:bg-slate-900
+                    dark:shadow-black/30
+                  "
+                >
+                  {(userName || userEmail) && (
+                    <div
+                      className="
+                        border-b
+                        border-slate-100
+                        px-3 py-2.5
+
+                        dark:border-slate-800
+                      "
+                    >
+                      {userName && (
+                        <p
+                          className="
+                            truncate
+                            text-sm font-semibold
+                            text-slate-900
+
+                            dark:text-white
+                          "
+                        >
+                          {userName}
+                        </p>
+                      )}
+
+                      {userEmail && (
+                        <p
+                          className="
+                            mt-0.5 truncate
+                            text-xs
+                            text-slate-500
+
+                            dark:text-slate-400
+                          "
+                        >
+                          {userEmail}
+                        </p>
+                      )}
+                    </div>
+                  )}
+
+                  <div className="py-1">
+                    {showAccountSettings && (
+                      <button
+                        type="button"
+                        role="menuitem"
+                        onClick={handleAccountClick}
+                        className="
+                          flex w-full
+                          items-center gap-2.5
+                          rounded-xl
+                          px-3 py-2
+
+                          text-left text-sm
+                          text-slate-700
+
+                          transition-colors
+
+                          hover:bg-slate-50
+                          hover:text-slate-950
+
+                          focus-visible:outline-none
+                          focus-visible:ring-2
+                          focus-visible:ring-indigo-500
+
+                          dark:text-slate-300
+                          dark:hover:bg-slate-800
+                          dark:hover:text-white
+                        "
+                      >
+                        <Settings
+                          size={16}
+                          strokeWidth={1.8}
+                          aria-hidden="true"
+                        />
+
+                        {accountSettingsLabel}
+                      </button>
+                    )}
+
+                    <button
+                      type="button"
+                      role="menuitem"
+                      onClick={handleSignOut}
+                      className="
+                        flex w-full
+                        items-center gap-2.5
+                        rounded-xl
+                        px-3 py-2
+
+                        text-left text-sm
+                        text-red-600
+
+                        transition-colors
+
+                        hover:bg-red-50
+
+                        focus-visible:outline-none
+                        focus-visible:ring-2
+                        focus-visible:ring-red-500
+
+                        dark:text-red-400
+                        dark:hover:bg-red-500/10
+                      "
+                    >
+                      <LogOut
+                        size={16}
+                        strokeWidth={1.8}
+                        aria-hidden="true"
+                      />
+
+                      {signOutLabel}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           )}
         </div>
       </div>
