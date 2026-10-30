@@ -1,0 +1,28 @@
+.heroSection.light {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.heroSection.dark {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+.container {
+  text-align: center;
+  padding: 50px;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+p {
+  font-size: 1.5rem;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+}
