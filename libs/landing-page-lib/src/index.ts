@@ -8,6 +8,8 @@ export type { HeroProps } from './components/Hero';
 export { default as Hero } from './components/Hero';
 export type { HeroSectionProps } from './components/HeroSection';
 export { default as HeroSection } from './components/HeroSection';
+export type { LandingPageProps } from './components/LandingPage';
+export { default as LandingPage } from './components/LandingPage';
 export type { NavbarProps } from './components/Navbar';
 export { default as Navbar } from './components/Navbar';
 export { cx, landingPageTokens } from './utils/shared-utilities-styles-and-exports';
