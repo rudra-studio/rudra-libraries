@@ -39,7 +39,7 @@ export default function LandingPage({
       </nav>
     </header>
 
-    <section id="top" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 340px), 1fr))", alignItems: "center", gap: "clamp(38px, 7vw, 88px)", maxWidth: 1180, margin: "0 auto", padding: "clamp(64px, 10vw, 126px) clamp(20px, 5vw, 64px)" }}>
+    <section id="top" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 340px), 1fr))", alignItems: "center", gap: "clamp(38px, 7vw, 88px)", maxWidth: 1180, margin: "0 auto", padding: "clamp(38px, 5vw, 72px) clamp(20px, 5vw, 64px) clamp(58px, 7vw, 88px)" }}>
       <div>
         <p style={{ margin: "0 0 20px", color: colors.accent, fontSize: 13, fontWeight: 800, letterSpacing: "0.16em" }}>{eyebrow}</p>
         <h1 style={{ maxWidth: 760, margin: 0, fontSize: "clamp(44px, 7vw, 82px)", lineHeight: 0.98, letterSpacing: "-0.055em", fontWeight: 800 }}>{headline}</h1>
