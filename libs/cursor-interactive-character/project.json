@@ -1,0 +1,9 @@
+{
+  "name": "cursor-interactive-character",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/cursor-interactive-character/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project cursor-interactive-character --web",
+  "targets": {}
+}
