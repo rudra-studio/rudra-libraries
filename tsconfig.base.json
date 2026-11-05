@@ -31,6 +31,9 @@
       "@rudra-libraries/leadflow-ui": ["./libs/leadflow-ui/src/index.ts"],
       "@rudra-libraries/landing-page-lib": [
         "./libs/landing-page-lib/src/index.ts"
+      ],
+      "@rudra-libraries/portfolio-section": [
+        "./libs/portfolio-section/src/index.ts"
       ]
     }
   },
