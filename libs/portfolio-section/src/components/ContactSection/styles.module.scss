@@ -1,0 +1,59 @@
+.contactSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.container {
+  text-align: center;
+}
+
+.professionalTitle {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.biography {
+  margin-bottom: 2rem;
+}
+
+.contactHeading,
+.socialHeading {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.socialList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.socialItem {
+  display: inline-block;
+  margin-right: 1rem;
+}
+
+.socialItem a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.light .contactSection {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.light .contactSection a {
+  color: #1890ff;
+}
+
+.dark .contactSection {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.dark .contactSection a {
+  color: #1890ff;
+}

@@ -1,0 +1,25 @@
+.resumeLink {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+.resumeLink:hover,
+.resumeLink:focus {
+  background-color: var(--primary-color-hover);
+}
+.resumeLink:active {
+  background-color: var(--primary-color-active);
+}
+.resumeLink.dark {
+  background-color: var(--primary-color-dark);
+  color: var(--text-color-dark);
+  --primary-color: #333;
+  --primary-color-hover: #555;
+  --primary-color-active: #777;
+  --text-color: #fff;
+  --text-color-dark: #ddd;
+}
