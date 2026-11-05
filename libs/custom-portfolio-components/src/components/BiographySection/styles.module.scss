@@ -1,0 +1,60 @@
+.biographySection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: var(--color-background);
+}
+
+.imageContainer {
+  width: 150px;
+  height: 150px;
+  background-size: cover;
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+
+.biographyContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: var(--color-text);
+}
+
+h2 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+h3 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .biographySection {
+    flex-direction: column;
+    align-items: center;
+  }
+  .imageContainer, .biographyContent {
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 480px) {
+  h2 {
+    font-size: 2rem;
+  }
+  h3 {
+    font-size: 1rem;
+  }
+  p {
+    font-size: 0.9rem;
+  }
+}
