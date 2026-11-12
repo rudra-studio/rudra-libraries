@@ -34,6 +34,9 @@
       ],
       "@rudra-libraries/custom-portfolio-components": [
         "./libs/custom-portfolio-components/src/index.ts"
+      ],
+      "@rudra-libraries/common-components": [
+        "./libs/common-components/src/index.ts"
       ]
     }
   },
