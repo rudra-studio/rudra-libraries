@@ -1,66 +1,54 @@
 import React from 'react';
-import './styles.module.scss';
+import { Box, Typography, useTheme } from '@mui/material';
+import { useMediaQuery } from '@mui/material';
+import { useTheme as useEmotionTheme } from '@emotion/react';
 
-interface ResumeSectionProps {
-  name: string;
-  role: string;
-  experience: Array<{
-    company: string;
-    position: string;
-    startDate: string;
-    endDate: string;
-    description: string[];
-  }>
-  skills: string[];
-  education: Array<{
-    institution: string;
-    degree: string;
-    startDate: string;
-    endDate: string;
-  }>
-}
+const ResumeSection: React.FC = () => {
+  const theme = useTheme();
+  const emotionTheme = useEmotionTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-const ResumeSection: React.FC<ResumeSectionProps> = ({ name, role, experience, skills, education }) => {
   return (
-    <div className="resume-section">
-      <header className="resume-header">
-        <h1>{name}</h1>
-        <h2>{role}</h2>
-      </header>
-      <section className="resume-experience">
-        <h3>Experience</h3>
-        {experience.map((exp, index) => (
-          <div key={index} className="resume-experience-item">
-            <h4>{exp.company}</h4>
-            <h5>{exp.position}</h5>
-            <p>{exp.startDate} - {exp.endDate}</p>
-            <ul>
-              {exp.description.map((desc, i) => (
-                <li key={i}>{desc}</li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </section>
-      <section className="resume-skills">
-        <h3>Skills</h3>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 2, backgroundColor: emotionTheme.palette.background.default, color: emotionTheme.palette.text.primary }}>
+      <Typography variant='h4' gutterBottom>
+        RRR's Resume
+      </Typography>
+      <Typography variant='body1' gutterBottom>
+        Software Developer
+      </Typography>
+      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 2, mt: 2 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: emotionTheme.palette.background.paper, padding: 1, borderRadius: 1, boxShadow: 2, flex: 1 }}>
+          <Typography variant='body2' gutterBottom>
+            Skills
+          </Typography>
+          <ul>
+            <li>JavaScript</li>
+            <li>TypeScript</li>
+            <li>React</li>
+            <li>Node.js</li>
+            <li>Python</li>
+          </ul>
+        </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: emotionTheme.palette.background.paper, padding: 1, borderRadius: 1, boxShadow: 2, flex: 1 }}>
+          <Typography variant='body2' gutterBottom>
+            Experience
+          </Typography>
+          <ul>
+            <li>Software Developer at ABC Corp</li>
+            <li>Full Stack Developer at DEF Corp</li>
+          </ul>
+        </Box>
+      </Box>
+      <Box sx={{ mt: 2 }}>
+        <Typography variant='body2' gutterBottom>
+          Contact
+        </Typography>
         <ul>
-          {skills.map((skill, index) => (
-            <li key={index}>{skill}</li>
-          ))}
+          <li>Email: person@example.com</li>
+          <li>Phone: 123-456-7890</li>
         </ul>
-      </section>
-      <section className="resume-education">
-        <h3>Education</h3>
-        {education.map((edu, index) => (
-          <div key={index} className="resume-education-item">
-            <h4>{edu.institution}</h4>
-            <h5>{edu.degree}</h5>
-            <p>{edu.startDate} - {edu.endDate}</p>
-          </div>
-        ))}
-      </section>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

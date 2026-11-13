@@ -1,21 +1,25 @@
 import React from 'react';
-import './styles.module.scss';
+import { Button, Drawer, List, ListItem, ListItemText, Typography } from '@mui/material';
+import '@emotion/react';
+import '@emotion/styled';
 
 interface NavigationMenuProps {
+  isOpen: boolean;
+  onClose: () => void;
   items: { label: string; path: string }[];
 }
 
-const NavigationMenu: React.FC<NavigationMenuProps> = ({ items }) => {
+const NavigationMenu: React.FC<NavigationMenuProps> = ({ isOpen, onClose, items }) => {
   return (
-    <nav className='navigation-menu'>
-      <ul className='menu-list'>
+    <Drawer anchor='left' open={isOpen} onClose={onClose}>
+      <List>
         {items.map((item, index) => (
-          <li key={index} className='menu-item'>
-            <a href={item.path} className='menu-link'>{item.label}</a>
-          </li>
+          <ListItem button key={index} onClick={onClose}>
+            <ListItemText primary={item.label} />
+          </ListItem>
         ))}
-      </ul>
-    </nav>
+      </List>
+    </Drawer>
   );
 };
 
