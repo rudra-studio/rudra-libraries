@@ -27,11 +27,7 @@ export default defineConfig(() => ({
     commonjsOptions: { transformMixedEsModules: true },
     lib: {
       entry: {
-      'index': path.resolve(import.meta.dirname, 'src/index.ts'),
-      "components/ContactForm/styles": path.resolve(import.meta.dirname, "src/components/ContactForm/styles.module.scss"),
-      "components/NavigationMenu/styles": path.resolve(import.meta.dirname, "src/components/NavigationMenu/styles.module.scss"),
-      "components/ResumeSection/styles": path.resolve(import.meta.dirname, "src/components/ResumeSection/styles.module.scss"),
-      "components/SkillBadge/styles": path.resolve(import.meta.dirname, "src/components/SkillBadge/styles.module.scss")
+      'index': path.resolve(import.meta.dirname, 'src/index.ts')
     },
       name: 'common-components',
       fileName: 'index',

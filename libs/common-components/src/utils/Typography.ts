@@ -1,41 +1,56 @@
-// Typography.ts
+import { css } from '@emotion/react';
 
-export const Typography = {
+// Framework-neutral design-token constants for typography
+export const typographyTokens = {
+  fontFamily: 'Roboto, sans-serif',
   fontSize: {
-    small: '12px',
-    medium: '16px',
-    large: '20px',
+    xs: '12px',
+    sm: '14px',
+    md: '16px',
+    lg: '18px',
+    xl: '20px',
   },
-  fontFamily: {
-    primary: 'Arial, sans-serif',
-    secondary: 'Georgia, serif',
-  },
-  color: {
-    primary: '#333333',
-    secondary: '#666666',
-    accent: '#007bff',
+  fontWeight: {
+    light: 300,
+    regular: 400,
+    medium: 500,
+    bold: 700,
   },
   lineHeight: {
-    normal: '1.5',
-    tight: '1.2',
-    loose: '2',
+    xs: '1.2',
+    sm: '1.4',
+    md: '1.6',
+    lg: '1.8',
+    xl: '2.0',
+  },
+  colors: {
+    primary: '#007bff',
+    secondary: '#6c757d',
+    success: '#28a745',
+    info: '#17a2b8',
+    warning: '#ffc107',
+    danger: '#dc3545',
+    light: '#f8f9fa',
+    dark: '#343a40',
   },
 };
 
-export type TypographyKeys = keyof typeof Typography;
+// Helper function to generate typography styles based on tokens
+export const generateTypographyStyles = (tokenKey: string, subKey?: string) => {
+  const tokens = typographyTokens;
+  const value = subKey ? tokens[tokenKey][subKey] : tokens[tokenKey];
+  return css`
+    font-family: ${tokens.fontFamily};
+    font-size: ${value};
+    font-weight: ${tokens.fontWeight.regular};
+    line-height: ${tokens.lineHeight.md};
+  `;
+};
 
-export function getFontSize(key: TypographyKeys): string {
-  return Typography.fontSize[key];
-}
-
-export function getFontFamily(key: TypographyKeys): string {
-  return Typography.fontFamily[key];
-}
-
-export function getColor(key: TypographyKeys): string {
-  return Typography.color[key];
-}
-
-export function getLineHeight(key: TypographyKeys): string {
-  return Typography.lineHeight[key];
-}
+// Helper function to generate color styles based on tokens
+export const generateColorStyles = (colorKey: string) => {
+  const tokens = typographyTokens.colors;
+  return css`
+    color: ${tokens[colorKey]};
+  `;
+};
