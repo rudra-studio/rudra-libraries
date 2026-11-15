@@ -37,6 +37,9 @@
       ],
       "@rudra-libraries/common-components": [
         "./libs/common-components/src/index.ts"
+      ],
+      "@rudra-libraries/local-agent-smoke-ui-ux-ux": [
+        "./libs/local-agent-smoke-ui-ux-ux/src/index.ts"
       ]
     }
   },
