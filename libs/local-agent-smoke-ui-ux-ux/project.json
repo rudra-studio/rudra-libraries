@@ -1,0 +1,9 @@
+{
+  "name": "local-agent-smoke-ui-ux-ux",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/local-agent-smoke-ui-ux-ux/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project local-agent-smoke-ui-ux-ux --web",
+  "targets": {}
+}

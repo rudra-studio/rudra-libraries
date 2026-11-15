@@ -1,0 +1,31 @@
+.action-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: var(--color-primary);
+  color: var(--color-text);
+  transition: background-color 0.3s ease;
+}
+
+.action-button:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.action-button:disabled {
+  background-color: var(--color-disabled);
+  cursor: not-allowed;
+}
+
+.rudra-module-wrapper.dark .action-button {
+  background-color: var(--color-primary-dark);
+  background-color: var(--color-primary-dark-hover);
+  color: var(--color-text-dark);
+}
+
+.rudra-module-wrapper[data-theme="dark"] .action-button {
+  background-color: var(--color-primary-dark);
+  background-color: var(--color-primary-dark-hover);
+  color: var(--color-text-dark);
+}
