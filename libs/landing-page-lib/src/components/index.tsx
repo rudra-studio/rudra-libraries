@@ -1,0 +1,1 @@
+.rudra-module-wrapper { .dark { background-color: #121212; color: #ffffff; } [data-theme='dark'] { background-color: #121212; color: #ffffff; } .Navbar { background-color: #007bff; color: #ffffff; } .HeroSection { background-color: #0056b3; color: #ffffff; } .FeatureCard { background-color: #004085; color: #ffffff; } .Footer { background-color: #003366; color: #ffffff; } }

@@ -27,22 +27,7 @@ export default defineConfig(() => ({
     commonjsOptions: { transformMixedEsModules: true },
     lib: {
       entry: {
-      'index': path.resolve(import.meta.dirname, 'src/index.ts'),
-      "components/AspectRatio/styles": path.resolve(import.meta.dirname, "src/components/AspectRatio/styles.module.scss"),
-      "components/Box/styles": path.resolve(import.meta.dirname, "src/components/Box/styles.module.scss"),
-      "components/Carousel/styles": path.resolve(import.meta.dirname, "src/components/Carousel/styles.module.scss"),
-      "components/Container/styles": path.resolve(import.meta.dirname, "src/components/Container/styles.module.scss"),
-      "components/DataCarousel/styles": path.resolve(import.meta.dirname, "src/components/DataCarousel/styles.module.scss"),
-      "components/Flex/styles": path.resolve(import.meta.dirname, "src/components/Flex/styles.module.scss"),
-      "components/Grid/styles": path.resolve(import.meta.dirname, "src/components/Grid/styles.module.scss"),
-      "components/Repeater/styles": path.resolve(import.meta.dirname, "src/components/Repeater/styles.module.scss"),
-      "components/RepeaterTable/styles": path.resolve(import.meta.dirname, "src/components/RepeaterTable/styles.module.scss"),
-      "components/ScrollArea/styles": path.resolve(import.meta.dirname, "src/components/ScrollArea/styles.module.scss"),
-      "components/Section/styles": path.resolve(import.meta.dirname, "src/components/Section/styles.module.scss"),
-      "components/Stack/styles": path.resolve(import.meta.dirname, "src/components/Stack/styles.module.scss"),
-      "components/StructuredGrid/styles": path.resolve(import.meta.dirname, "src/components/StructuredGrid/styles.module.scss"),
-      "components/Table/styles": path.resolve(import.meta.dirname, "src/components/Table/styles.module.scss"),
-      "components/VirtualList/styles": path.resolve(import.meta.dirname, "src/components/VirtualList/styles.module.scss")
+      'index': path.resolve(import.meta.dirname, 'src/index.ts')
     },
       name: 'rudra-layout',
       fileName: 'index',

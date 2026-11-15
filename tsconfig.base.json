@@ -28,7 +28,19 @@
       "@rudra-libraries/rudra-widgets": ["./libs/rudra-widgets/src/index.ts"],
       "@rudra-libraries/rudra-charts": ["./libs/rudra-charts/src/index.ts"],
       "@rudra-libraries/chalkmind-math": ["./libs/chalkmind-math/src/index.ts"],
-      "@rudra-libraries/leadflow-ui": ["./libs/leadflow-ui/src/index.ts"]
+      "@rudra-libraries/leadflow-ui": ["./libs/leadflow-ui/src/index.ts"],
+      "@rudra-libraries/landing-page-lib": [
+        "./libs/landing-page-lib/src/index.ts"
+      ],
+      "@rudra-libraries/custom-portfolio-components": [
+        "./libs/custom-portfolio-components/src/index.ts"
+      ],
+      "@rudra-libraries/common-components": [
+        "./libs/common-components/src/index.ts"
+      ],
+      "@rudra-libraries/local-agent-smoke-ui-ux-ux": [
+        "./libs/local-agent-smoke-ui-ux-ux/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

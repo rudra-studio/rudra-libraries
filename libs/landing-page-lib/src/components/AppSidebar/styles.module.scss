@@ -1,0 +1,47 @@
+.sidebar {
+  background-color: #fff;
+  color: #333;
+  padding: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s;
+}
+
+.sidebar.dark {
+  background-color: #333;
+  color: #fff;
+}
+
+.navList {
+  list-style: none;
+  padding: 0;
+}
+
+.navLink {
+  display: block;
+  margin: 10px 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+.navLink:hover {
+  text-decoration: underline;
+}
+
+.themeToggle {
+  display: block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.themeToggle:hover {
+  background-color: #0056b3;
+}

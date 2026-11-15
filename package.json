@@ -1,7 +1,10 @@
 {
   "dependencies": {
+    "@emotion/react": "11.14.0",
+    "@emotion/styled": "11.14.1",
     "@gsap/react": "latest",
     "@monaco-editor/react": "4.7.0",
+    "@mui/material": "9.5.0",
     "@react-three/drei": "9.105.6",
     "@react-three/fiber": "9.6.1",
     "@react-three/postprocessing": "latest",

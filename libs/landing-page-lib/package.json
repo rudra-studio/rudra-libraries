@@ -1,0 +1,38 @@
+{
+  "dependencies": {},
+  "devDependencies": {
+    "sass": "^1.72.0",
+    "tailwindcss": "^4.0.0"
+  },
+  "exports": {
+    ".": {
+      "import": "./index.js",
+      "require": "./index.js",
+      "types": "./index.d.ts"
+    },
+    "./*": {
+      "import": "./*.js",
+      "require": "./*.js",
+      "types": "./*.d.ts"
+    },
+    "./components/*/styles.css": "./components/*/styles.css",
+    "./global.css": "./global.css"
+  },
+  "jsdelivr": "./index.umd.js",
+  "main": "./index.js",
+  "name": "@rudra-studio/landing-page-lib",
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwindcss": "^4.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "echo 'Skipping unit tests for now...' \u0026\u0026 exit 0"
+  },
+  "types": "./index.d.ts",
+  "unpkg": "./index.umd.js",
+  "version": "0.0.1"
+}

@@ -1,0 +1,22 @@
+.socialLinks {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.link {
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+.socialLinks .link,
+.socialLinks .link {
+  color: var(--color-text);
+}
+
+@media (max-width: 768px) {
+  .socialLinks {
+    flex-direction: column;
+  }
+}

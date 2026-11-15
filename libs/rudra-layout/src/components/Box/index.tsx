@@ -86,14 +86,10 @@ export const Box: React.FC<BoxProps> = ({
   ...props
 }) => {
   // Maintain backward compatibility by defaulting to 'flex' if no display utility is found in className
-  const displayClasses = ['flex', 'block', 'grid', 'inline-flex', 'inline-block', 'hidden'];
-  const hasDisplayClass = className.split(' ').some(cls => displayClasses.includes(cls));
-  
-  const finalClassName = hasDisplayClass ? className : `flex ${className}`.trim();
   
   return (
     <div
-      className={finalClassName}
+      className={className}
       style={style}
       onClick={onClick}
       {...customAttributes}

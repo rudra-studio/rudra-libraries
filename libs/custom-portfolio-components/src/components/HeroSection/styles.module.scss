@@ -1,0 +1,10 @@
+.heroSection { padding: 50px; text-align: center; background-color: var(--color-background); }
+.heroContent { max-width: 800px; margin: 0 auto; }
+.heroContent h1 { font-size: 3em; color: var(--color-text); }
+.heroContent p { font-size: 1.5em; color: var(--color-text-secondary); }
+.socialLinks { list-style-type: none; padding: 0; }
+.socialLinks li { display: inline-block; margin: 0 10px; }
+.socialLinks a { color: var(--color-link); text-decoration: none; }
+.socialLinks a:hover { text-decoration: underline; }
+@media (max-width: 768px) { .heroContent h1 { font-size: 2em; } }
+@media (max-width: 480px) { .heroContent { padding: 20px; } }
