@@ -88,7 +88,7 @@ jobs:
       - name: Set version
         run: |
           cd dist/libs/${{ steps.extract.outputs.project }}
-          npm version ${{ steps.extract.outputs.version }} --no-git-tag-version
+          npm version ${{ steps.extract.outputs.version }} --no-git-tag-version --allow-same-version
 
       # 🔥 Publish to GitHub Packages
       - name: Publish to GitHub Packages
