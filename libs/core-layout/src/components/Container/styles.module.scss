@@ -1,0 +1,11 @@
+.container {
+  padding: 1rem;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-size: var(--font-size-base);
+}
+
+.container.dark {
+  background-color: var(--color-background-dark);
+  color: var(--color-text-dark);
+}

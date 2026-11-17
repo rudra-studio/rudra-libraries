@@ -1,0 +1,9 @@
+{
+  "name": "core-layout",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/core-layout/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project core-layout --web",
+  "targets": {}
+}
