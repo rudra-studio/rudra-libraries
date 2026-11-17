@@ -40,7 +40,8 @@
       ],
       "@rudra-libraries/local-agent-smoke-ui-ux-ux": [
         "./libs/local-agent-smoke-ui-ux-ux/src/index.ts"
-      ]
+      ],
+      "@rudra-libraries/core-layout": ["./libs/core-layout/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
