@@ -1,0 +1,9 @@
+{
+  "name": "core-sprite",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/core-sprite/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project core-sprite --web",
+  "targets": {}
+}
