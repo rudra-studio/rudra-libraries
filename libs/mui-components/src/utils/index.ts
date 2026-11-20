@@ -1,0 +1,1 @@
+export const createAppThemeProvider = (children: React.ReactNode) => ({ theme: createTheme(), children });

@@ -1,0 +1,26 @@
+.checkboxWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.label {
+  margin-left: 8px;
+}
+
+/* Light theme styles */
+.light .label {
+  color: #000;
+}
+
+.light .checkboxWrapper {
+  background-color: #fff;
+}
+
+/* Dark theme styles */
+.dark .label {
+  color: #fff;
+}
+
+.dark .checkboxWrapper {
+  background-color: #333;
+}

@@ -1,0 +1,77 @@
+.button {
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+}
+
+.button.primary {
+  background-color: #1976d2;
+  color: white;
+}
+
+.button.secondary {
+  background-color: #ffffff;
+  color: #1976d2;
+  border: 1px solid #1976d2;
+}
+
+.button.tertiary {
+  background-color: transparent;
+  color: #1976d2;
+  border: none;
+}
+
+.button.small {
+  padding: 4px 8px;
+}
+
+.button.large {
+  padding: 12px 24px;
+}
+
+@media (max-width: 600px) {
+  .button {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+  .button {
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .button {
+    font-size: 18px;
+  }
+}
+
+.button.dark {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.button.dark:disabled {
+  background-color: #666666;
+}
+
+.button.dark.primary {
+  background-color: #000000;
+}
+
+.button.dark.secondary {
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #000000;
+}
+
+.button.dark.tertiary {
+  background-color: transparent;
+  color: #ffffff;
+  border: none;
+}
