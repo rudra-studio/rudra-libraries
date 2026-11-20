@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styles from './styles.module.scss';
 
 export interface ProposalExperienceProps {
@@ -8,6 +8,8 @@ export interface ProposalExperienceProps {
   senderName?: string;
   /** @select|ml|en */
   defaultLanguage?: 'ml' | 'en';
+  /** @optional */
+  youtubeVideoId?: string;
   /** @type|function */
   onAccept?: () => void;
 }
@@ -47,6 +49,8 @@ interface ChapterItem {
 
 interface CopyDeck {
   toggleLabel: string;
+  musicOnLabel: string;
+  musicOffLabel: string;
   sealedKicker: string;
   sealedHeading: string;
   sealedLead: string;
@@ -68,9 +72,13 @@ interface CopyDeck {
   replayLink: string;
 }
 
+const DEFAULT_UN_VIZHIGALIL_VIDEO_ID = 'L3G_W4g17gA';
+
 const CONTENT: Record<'ml' | 'en', CopyDeck> = {
   ml: {
     toggleLabel: 'English',
+    musicOnLabel: 'സംഗീതം ഓൺ',
+    musicOffLabel: 'സംഗീതം ഓഫ്',
     sealedKicker: 'നിനക്കായി എന്റെ ഹൃദയത്തിൽ നിന്നൊരു കത്ത്',
     sealedHeading: 'എന്റെ ഹൃദയത്തിന്റെ ഓരോ മിടിപ്പും എന്നെ നിന്നിലേക്കാണ് എത്തിച്ചത്.',
     sealedLead:
@@ -162,6 +170,8 @@ const CONTENT: Record<'ml' | 'en', CopyDeck> = {
   },
   en: {
     toggleLabel: 'മലയാളം',
+    musicOnLabel: 'Music On',
+    musicOffLabel: 'Music Off',
     sealedKicker: 'A Private Letter From My Heart To Yours',
     sealedHeading: 'Every beat of my heart led me straight to you.',
     sealedLead:
@@ -534,10 +544,13 @@ export function ProposalExperience({
   partnerName = 'Ashika',
   senderName = 'Sivasankar',
   defaultLanguage = 'ml',
+  youtubeVideoId = DEFAULT_UN_VIZHIGALIL_VIDEO_ID,
   onAccept,
 }: ProposalExperienceProps) {
   const [lang, setLang] = useState<'ml' | 'en'>(defaultLanguage);
   const [stage, setStage] = useState<'sealed' | 'story' | 'question' | 'accepted'>('sealed');
+  const [musicEnabled, setMusicEnabled] = useState<boolean>(true);
+  const [playerMountKey, setPlayerMountKey] = useState<number>(0);
   const [noClicks, setNoClicks] = useState(0);
   const [noOffset, setNoOffset] = useState<{ x: number; y: number; rot: number }>({
     x: 0,
@@ -548,6 +561,7 @@ export function ProposalExperience({
   const [floatingHearts, setFloatingHearts] = useState<FloatingHeart[]>([]);
   const [burstParticles, setBurstParticles] = useState<BurstParticle[]>([]);
   const [acceptedDate, setAcceptedDate] = useState<string>('');
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
   useEffect(() => {
     setLang(defaultLanguage);
@@ -565,6 +579,37 @@ export function ProposalExperience({
     }));
     setFloatingHearts(generated);
   }, []);
+
+  const sendYtCommand = (func: 'playVideo' | 'pauseVideo' | 'unMute' | 'mute') => {
+    const win = iframeRef.current?.contentWindow;
+    if (!win) return;
+    win.postMessage(
+      JSON.stringify({
+        event: 'command',
+        func,
+        args: [],
+      }),
+      '*'
+    );
+  };
+
+  const activateMusicOnGesture = () => {
+    setMusicEnabled(true);
+    setPlayerMountKey((k) => k + 1);
+    window.setTimeout(() => {
+      sendYtCommand('unMute');
+      sendYtCommand('playVideo');
+    }, 180);
+  };
+
+  const toggleMusic = () => {
+    if (musicEnabled) {
+      setMusicEnabled(false);
+      sendYtCommand('pauseVideo');
+    } else {
+      activateMusicOnGesture();
+    }
+  };
 
   const copy = CONTENT[lang];
   const currentNoStage = copy.noStages[Math.min(noClicks, copy.noStages.length - 1)];
@@ -624,6 +669,12 @@ export function ProposalExperience({
 
   const displayPartner = partnerName.trim();
   const displaySender = senderName.trim();
+  const cleanVideoId = (youtubeVideoId || DEFAULT_UN_VIZHIGALIL_VIDEO_ID).trim();
+  const audioEmbedSrc = `https://www.youtube.com/embed/${encodeURIComponent(
+    cleanVideoId
+  )}?autoplay=1&loop=1&playlist=${encodeURIComponent(
+    cleanVideoId
+  )}&controls=0&disablekb=1&fs=0&modestbranding=1&playsinline=1&enablejsapi=1`;
 
   return (
     <section
@@ -631,16 +682,43 @@ export function ProposalExperience({
       lang={lang}
       aria-label="Marriage Proposal"
     >
+      {/* Hidden audio-only YouTube loop player (no video shown on screen) */}
+      {musicEnabled && cleanVideoId && (
+        <iframe
+          key={`${cleanVideoId}-${playerMountKey}`}
+          ref={iframeRef}
+          src={audioEmbedSrc}
+          title="Un Vizhigalil Vizhuntha Naatkalil Background Music"
+          allow="autoplay; encrypted-media"
+          className={styles.hiddenAudioFrame}
+          aria-hidden="true"
+          tabIndex={-1}
+        />
+      )}
+
       <div className={styles.ambientGlow} aria-hidden="true" />
 
-      <div className={styles.langBar}>
+      {/* Top Controls: Audio Toggle + Language Toggle */}
+      <div className={styles.topControls}>
         <button
           type="button"
-          className={styles.langToggle}
+          className={`${styles.pillButton} ${musicEnabled ? styles.musicActive : ''}`}
+          onClick={toggleMusic}
+          aria-label={musicEnabled ? 'Mute background song' : 'Play background song'}
+        >
+          <span className={styles.pillIcon} aria-hidden="true">
+            {musicEnabled ? '🎵' : '🔇'}
+          </span>
+          <span>{musicEnabled ? copy.musicOnLabel : copy.musicOffLabel}</span>
+        </button>
+
+        <button
+          type="button"
+          className={styles.pillButton}
           onClick={() => setLang((prev) => (prev === 'ml' ? 'en' : 'ml'))}
           aria-label={lang === 'ml' ? 'Switch to English' : 'മലയാളത്തിലേക്ക് മാറ്റുക'}
         >
-          <span className={styles.langIcon} aria-hidden="true">
+          <span className={styles.pillIcon} aria-hidden="true">
             🌐
           </span>
           <span>{copy.toggleLabel}</span>
@@ -692,7 +770,10 @@ export function ProposalExperience({
             <button
               type="button"
               className={styles.primaryCta}
-              onClick={() => setStage('story')}
+              onClick={() => {
+                activateMusicOnGesture();
+                setStage('story');
+              }}
             >
               <span>{copy.sealedCta}</span>
               <span className={styles.ctaHeart} aria-hidden="true">

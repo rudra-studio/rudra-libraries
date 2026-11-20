@@ -7,7 +7,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(56px, 7vw, 68px) clamp(16px, 4vw, 40px) clamp(24px, 4vw, 40px);
+  padding: clamp(58px, 7vw, 72px) clamp(16px, 4vw, 40px) clamp(24px, 4vw, 40px);
   box-sizing: border-box;
   overflow: hidden;
   background:
@@ -22,26 +22,44 @@
   font-family: 'Noto Serif Malayalam', 'Plus Jakarta Sans', sans-serif;
 }
 
-.langBar {
-  position: absolute;
-  top: clamp(14px, 3vw, 24px);
-  right: clamp(14px, 3vw, 28px);
-  z-index: 10;
+.hiddenAudioFrame {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  opacity: 0.001;
+  pointer-events: none;
+  border: 0;
+  bottom: 0;
+  right: 0;
 }
 
-.langToggle {
+.topControls {
+  position: absolute;
+  top: clamp(14px, 3vw, 24px);
+  left: clamp(14px, 3vw, 28px);
+  right: clamp(14px, 3vw, 28px);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.pillButton {
+  pointer-events: auto;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 9px 18px;
+  gap: 7px;
+  padding: 8px 16px;
   border-radius: 999px;
   border: 1px solid rgba(243, 209, 158, 0.36);
   background: rgba(34, 14, 23, 0.78);
   color: #f9e2ba;
   font-family: 'Plus Jakarta Sans', 'Noto Serif Malayalam', sans-serif;
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
   cursor: pointer;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -49,19 +67,24 @@
   transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
 }
 
-.langToggle:hover {
+.pillButton:hover {
   transform: translateY(-1px);
   border-color: rgba(248, 200, 212, 0.65);
   background: rgba(56, 22, 38, 0.9);
 }
 
-.langToggle:focus-visible {
+.pillButton:focus-visible {
   outline: 2px solid #f3d19e;
   outline-offset: 3px;
 }
 
-.langIcon {
-  font-size: 0.95rem;
+.musicActive {
+  border-color: rgba(248, 200, 212, 0.55);
+  color: #ffe8ef;
+}
+
+.pillIcon {
+  font-size: 0.92rem;
 }
 
 .ambientGlow {
