@@ -1,0 +1,23 @@
+.root {
+  width: 100%;
+}
+
+@media (min-width: 600px) {
+  .root {
+    width: 50%;
+  }
+}
+
+@media (min-width: 900px) {
+  .root {
+    width: 30%;
+  }
+}
+
+.light & {
+  color: var(--color-text-light);
+}
+
+.dark & {
+  color: var(--color-text-dark);
+}
