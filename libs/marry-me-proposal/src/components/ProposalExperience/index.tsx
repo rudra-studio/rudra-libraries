@@ -682,7 +682,6 @@ export function ProposalExperience({
       lang={lang}
       aria-label="Marriage Proposal"
     >
-      {/* Hidden audio-only YouTube loop player (no video shown on screen) */}
       {musicEnabled && cleanVideoId && (
         <iframe
           key={`${cleanVideoId}-${playerMountKey}`}
@@ -698,7 +697,6 @@ export function ProposalExperience({
 
       <div className={styles.ambientGlow} aria-hidden="true" />
 
-      {/* Top Controls: Audio Toggle + Language Toggle */}
       <div className={styles.topControls}>
         <button
           type="button"
@@ -748,7 +746,6 @@ export function ProposalExperience({
       </div>
 
       <div className={styles.container}>
-        {/* STAGE 1: WAX-SEALED INVITATION */}
         {stage === 'sealed' && (
           <div className={`${styles.card} ${styles.fadeIn}`}>
             <p className={styles.kicker}>
@@ -783,7 +780,6 @@ export function ProposalExperience({
           </div>
         )}
 
-        {/* STAGE 2: FOUR CHAPTERS + ROMANTIC VOW */}
         {stage === 'story' && (
           <div className={`${styles.card} ${styles.storyCard} ${styles.fadeIn}`}>
             <div className={styles.miniCrest}>
@@ -825,7 +821,6 @@ export function ProposalExperience({
           </div>
         )}
 
-        {/* STAGE 3: THE PROPOSAL QUESTION */}
         {stage === 'question' && (
           <div
             className={`${styles.card} ${styles.questionCard} ${styles.fadeIn} ${
@@ -882,7 +877,6 @@ export function ProposalExperience({
           </div>
         )}
 
-        {/* STAGE 4: CELEBRATION / SHE SAID YES */}
         {stage === 'accepted' && (
           <div className={`${styles.card} ${styles.celebrationCard} ${styles.fadeIn}`}>
             <div className={styles.burstOrigin} aria-hidden="true">
