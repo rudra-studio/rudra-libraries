@@ -1,0 +1,9 @@
+{
+  "name": "marry-me-proposal",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/marry-me-proposal/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project marry-me-proposal --web",
+  "targets": {}
+}
