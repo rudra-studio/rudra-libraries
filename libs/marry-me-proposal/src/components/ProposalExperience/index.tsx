@@ -72,7 +72,7 @@ interface CopyDeck {
   replayLink: string;
 }
 
-const DEFAULT_UN_VIZHIGALIL_VIDEO_ID = 'L3G_W4g17gA';
+const DEFAULT_UN_VIZHIGALIL_VIDEO_ID = '8T7WQrcyE9';
 
 const CONTENT: Record<'ml' | 'en', CopyDeck> = {
   ml: {
@@ -263,6 +263,24 @@ const CONTENT: Record<'ml' | 'en', CopyDeck> = {
   },
 };
 
+const FALLBACK_NO_STAGE: NoStage = {
+  buttonLabel: 'Not yet',
+  headline: 'Will You Marry Me?',
+  banner: '',
+  heartMood: 'normal',
+  cartoonMood: 'shy',
+};
+
+function resolveDeck(langValue: unknown): CopyDeck {
+  const normalized = typeof langValue === 'string' && langValue.toLowerCase() === 'en' ? 'en' : 'ml';
+  const deck = CONTENT[normalized] || CONTENT.ml;
+  const stages = Array.isArray(deck.noStages) && deck.noStages.length > 0 ? deck.noStages : CONTENT.ml.noStages;
+  return {
+    ...deck,
+    noStages: stages,
+  };
+}
+
 const ElegantHeartSvg: React.FC<{
   className?: string;
   gradientId: string;
@@ -344,9 +362,9 @@ type CartoonMascotMood =
   | 'celebrate';
 
 const CartoonMascotSvg: React.FC<{
-  mood: CartoonMascotMood;
+  mood?: CartoonMascotMood;
   className?: string;
-}> = ({ mood, className }) => {
+}> = ({ mood = 'shy', className }) => {
   const isHeartEyes = mood === 'holding-heart' || mood === 'celebrate';
   const isShocked = mood === 'shocked';
   const isCrying = mood === 'crying';
@@ -547,7 +565,8 @@ export function ProposalExperience({
   youtubeVideoId = DEFAULT_UN_VIZHIGALIL_VIDEO_ID,
   onAccept,
 }: ProposalExperienceProps) {
-  const [lang, setLang] = useState<'ml' | 'en'>(defaultLanguage);
+  const safeDefaultLang: 'ml' | 'en' = defaultLanguage === 'en' ? 'en' : 'ml';
+  const [lang, setLang] = useState<'ml' | 'en'>(safeDefaultLang);
   const [stage, setStage] = useState<'sealed' | 'story' | 'question' | 'accepted'>('sealed');
   const [musicEnabled, setMusicEnabled] = useState<boolean>(true);
   const [playerMountKey, setPlayerMountKey] = useState<number>(0);
@@ -564,7 +583,7 @@ export function ProposalExperience({
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
   useEffect(() => {
-    setLang(defaultLanguage);
+    setLang(defaultLanguage === 'en' ? 'en' : 'ml');
   }, [defaultLanguage]);
 
   useEffect(() => {
@@ -611,9 +630,11 @@ export function ProposalExperience({
     }
   };
 
-  const copy = CONTENT[lang];
-  const currentNoStage = copy.noStages[Math.min(noClicks, copy.noStages.length - 1)];
-  const isConvertedToYes = noClicks >= copy.noStages.length - 1;
+  const copy = resolveDeck(lang);
+  const stages = copy.noStages;
+  const clampedIdx = Math.max(0, Math.min(noClicks, stages.length - 1));
+  const currentNoStage: NoStage = stages[clampedIdx] || FALLBACK_NO_STAGE;
+  const isConvertedToYes = noClicks >= stages.length - 1;
 
   const handleNoAction = () => {
     if (isConvertedToYes) {
@@ -627,7 +648,7 @@ export function ProposalExperience({
     setIsShaking(true);
     window.setTimeout(() => setIsShaking(false), 480);
 
-    if (nextCount >= copy.noStages.length - 1) {
+    if (nextCount >= stages.length - 1) {
       setNoOffset({ x: 0, y: 0, rot: 0 });
       return;
     }
@@ -667,9 +688,12 @@ export function ProposalExperience({
   const yesScale = Math.min(1 + noClicks * 0.08, 1.38);
   const noScale = isConvertedToYes ? 1 : Math.max(1 - noClicks * 0.11, 0.58);
 
-  const displayPartner = partnerName.trim();
-  const displaySender = senderName.trim();
-  const cleanVideoId = (youtubeVideoId || DEFAULT_UN_VIZHIGALIL_VIDEO_ID).trim();
+  const displayPartner = typeof partnerName === 'string' ? partnerName.trim() : '';
+  const displaySender = typeof senderName === 'string' ? senderName.trim() : '';
+  const cleanVideoId =
+    typeof youtubeVideoId === 'string' && youtubeVideoId.trim()
+      ? youtubeVideoId.trim()
+      : DEFAULT_UN_VIZHIGALIL_VIDEO_ID;
   const audioEmbedSrc = `https://www.youtube.com/embed/${encodeURIComponent(
     cleanVideoId
   )}?autoplay=1&loop=1&playlist=${encodeURIComponent(
