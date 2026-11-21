@@ -1,0 +1,9 @@
+{
+  "name": "rudra-mui-complete",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/rudra-mui-complete/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project rudra-mui-complete --web",
+  "targets": {}
+}
