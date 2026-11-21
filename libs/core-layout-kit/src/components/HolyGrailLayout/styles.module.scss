@@ -1,0 +1,76 @@
+.grailRoot {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.grailHeader {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky, 20);
+  min-height: var(--spacing-header, 4rem);
+}
+
+.grailBody {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: var(--spacing-sidebar, 16rem) minmax(0, 1fr) var(--spacing-aside, 20rem);
+}
+
+.leftRail {
+  position: sticky;
+  top: var(--spacing-header, 4rem);
+  align-self: start;
+  max-height: calc(100dvh - var(--spacing-header, 4rem));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.centerMain {
+  min-width: 0;
+}
+
+.rightRail {
+  position: sticky;
+  top: var(--spacing-header, 4rem);
+  align-self: start;
+  max-height: calc(100dvh - var(--spacing-header, 4rem));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.mobileDrawerBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-drawer, 40);
+  background: rgba(15, 23, 42, 0.55);
+  display: flex;
+}
+
+.mobileDrawerPanel {
+  width: var(--spacing-sidebar, 16rem);
+  max-width: 85vw;
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+@media (max-width: 1023px) {
+  .grailBody {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .leftRail {
+    display: none;
+  }
+  .rightRail {
+    position: static;
+    max-height: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .mobileDrawerBackdrop {
+    display: none;
+  }
+}

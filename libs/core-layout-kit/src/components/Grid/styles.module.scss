@@ -1,0 +1,4 @@
+.autoFitGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--min-col, 16rem), 100%), 1fr));
+}
