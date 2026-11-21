@@ -1,0 +1,7 @@
+.box { width: 100%; max-width: 280px; padding: 16px; border-radius: 18px; box-sizing: border-box; }
+.mode_dark { background: rgba(15, 23, 42, 0.94); border: 1px solid rgba(148, 163, 184, 0.25); color: #f8fafc; }
+.mode_light { background: #ffffff; border: 1px solid #e2e8f0; color: #0f172a; }
+.top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.88rem; }
+.btn { padding: 4px 10px; border-radius: 8px; border: 1px solid rgba(148, 163, 184, 0.35); background: transparent; color: inherit; font-size: 0.76rem; font-weight: 700; cursor: pointer; }
+.board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.sq { aspect-ratio: 1 / 1; border-radius: 12px; border: 1px solid rgba(148, 163, 184, 0.3); background: rgba(99, 102, 241, 0.14); color: inherit; font-size: 1.4rem; font-weight: 800; cursor: pointer; }

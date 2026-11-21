@@ -1,0 +1,9 @@
+{
+  "name": "rudra-games-kit",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/rudra-games-kit/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project rudra-games-kit --web",
+  "targets": {}
+}

@@ -1,0 +1,12 @@
+.wrap { width: 100%; max-width: 440px; padding: 16px; border-radius: 18px; box-sizing: border-box; }
+.mode_dark { background: rgba(15, 23, 42, 0.94); border: 1px solid rgba(148, 163, 184, 0.25); color: #f8fafc; }
+.mode_light { background: #ffffff; border: 1px solid #e2e8f0; color: #0f172a; }
+.top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.banner { font-size: 0.9rem; font-weight: 800; }
+.reset { padding: 5px 12px; border-radius: 8px; border: 1px solid rgba(148, 163, 184, 0.35); background: transparent; color: inherit; font-size: 0.78rem; font-weight: 700; cursor: pointer; }
+.colBtns { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 6px; }
+.dropBtn { padding: 6px 2px; border-radius: 8px; border: none; background: rgba(79, 70, 229, 0.25); color: inherit; font-size: 0.75rem; font-weight: 700; cursor: pointer; }
+.grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; padding: 10px; border-radius: 14px; background: #1d4ed8; }
+.cell { aspect-ratio: 1 / 1; border-radius: 999px; background: #0f172a; }
+.p1 { background: #ef4444; }
+.p2 { background: #facc15; }

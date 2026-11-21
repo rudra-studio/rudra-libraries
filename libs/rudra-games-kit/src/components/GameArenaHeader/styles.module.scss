@@ -1,0 +1,9 @@
+.bar { width: 100%; padding: 14px 18px; border-radius: 16px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; box-sizing: border-box; }
+.mode_dark { background: rgba(15, 23, 42, 0.92); border: 1px solid rgba(148, 163, 184, 0.25); color: #f8fafc; }
+.mode_light { background: #ffffff; border: 1px solid #e2e8f0; color: #0f172a; }
+.title { margin: 0 0 2px; font-size: 1.15rem; font-weight: 800; }
+.status { font-size: 0.82rem; font-weight: 700; color: #38bdf8; }
+.mode_light .status { color: #4f46e5; }
+.right { display: flex; align-items: center; gap: 10px; }
+.score { font-size: 0.84rem; font-weight: 700; }
+.btn { padding: 7px 14px; border-radius: 10px; border: none; background: linear-gradient(135deg, #4f46e5, #ec4899); color: #fff; font-size: 0.8rem; font-weight: 700; cursor: pointer; }
