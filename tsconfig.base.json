@@ -52,6 +52,9 @@
       ],
       "@rudra-libraries/rudra-mui-complete": [
         "./libs/rudra-mui-complete/src/index.ts"
+      ],
+      "@rudra-libraries/rudra-games-kit": [
+        "./libs/rudra-games-kit/src/index.ts"
       ]
     }
   },

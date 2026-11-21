@@ -1,0 +1,5 @@
+.pad { width: 100%; min-height: 130px; padding: 18px; border-radius: 18px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; cursor: pointer; box-sizing: border-box; }
+.mode_dark { background: linear-gradient(135deg, rgba(79, 70, 229, 0.25), rgba(236, 72, 153, 0.22)); border: 1px solid rgba(167, 139, 250, 0.35); color: #f8fafc; }
+.mode_light { background: linear-gradient(135deg, #eef2ff, #fdf2f8); border: 1px solid #c7d2fe; color: #0f172a; }
+.title { font-size: 1.2rem; font-weight: 800; }
+.sub { font-size: 0.8rem; opacity: 0.85; }

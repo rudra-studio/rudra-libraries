@@ -1,0 +1,12 @@
+export type { ConnectFourBoardProps } from './components/ConnectFourBoard';
+export { default as ConnectFourBoard } from './components/ConnectFourBoard';
+export type { GameArenaHeaderProps } from './components/GameArenaHeader';
+export { default as GameArenaHeader } from './components/GameArenaHeader';
+export type { MemoryMatchGridProps } from './components/MemoryMatchGrid';
+export { default as MemoryMatchGrid } from './components/MemoryMatchGrid';
+export type { NumberSlideBoardProps } from './components/NumberSlideBoard';
+export { default as NumberSlideBoard } from './components/NumberSlideBoard';
+export type { ReactionReflexPadProps } from './components/ReactionReflexPad';
+export { default as ReactionReflexPad } from './components/ReactionReflexPad';
+export type { TicTacToeBoardProps } from './components/TicTacToeBoard';
+export { default as TicTacToeBoard } from './components/TicTacToeBoard';
