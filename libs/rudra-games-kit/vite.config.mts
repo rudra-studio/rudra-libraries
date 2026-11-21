@@ -28,11 +28,14 @@ export default defineConfig(() => ({
     lib: {
       entry: {
       'index': path.resolve(import.meta.dirname, 'src/index.ts'),
+      "components/AdventureQuestStage/styles": path.resolve(import.meta.dirname, "src/components/AdventureQuestStage/styles.module.scss"),
       "components/ConnectFourBoard/styles": path.resolve(import.meta.dirname, "src/components/ConnectFourBoard/styles.module.scss"),
       "components/GameArenaHeader/styles": path.resolve(import.meta.dirname, "src/components/GameArenaHeader/styles.module.scss"),
       "components/MemoryMatchGrid/styles": path.resolve(import.meta.dirname, "src/components/MemoryMatchGrid/styles.module.scss"),
       "components/NumberSlideBoard/styles": path.resolve(import.meta.dirname, "src/components/NumberSlideBoard/styles.module.scss"),
       "components/ReactionReflexPad/styles": path.resolve(import.meta.dirname, "src/components/ReactionReflexPad/styles.module.scss"),
+      "components/Scene3DStageWidget/styles": path.resolve(import.meta.dirname, "src/components/Scene3DStageWidget/styles.module.scss"),
+      "components/Sprite2DAnimator/styles": path.resolve(import.meta.dirname, "src/components/Sprite2DAnimator/styles.module.scss"),
       "components/TicTacToeBoard/styles": path.resolve(import.meta.dirname, "src/components/TicTacToeBoard/styles.module.scss")
     },
       name: 'rudra-games-kit',
@@ -40,7 +43,7 @@ export default defineConfig(() => ({
       formats: ['es' as const],
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'clsx'],
+      external: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'clsx', 'three', '@react-three/fiber'],
       output: {
 		preserveModules: true,
 		preserveModulesRoot: 'src',

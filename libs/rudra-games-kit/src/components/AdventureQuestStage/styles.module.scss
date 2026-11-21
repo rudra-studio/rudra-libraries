@@ -1,0 +1,15 @@
+.box { width: 100%; padding: 18px; border-radius: 18px; display: flex; flex-direction: column; gap: 12px; box-sizing: border-box; }
+.mode_dark { background: rgba(15, 23, 42, 0.94); border: 1px solid rgba(148, 163, 184, 0.25); color: #f8fafc; }
+.mode_light { background: #ffffff; border: 1px solid #e2e8f0; color: #0f172a; }
+.topBar { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.title { margin: 0 0 2px; font-size: 1.05rem; font-weight: 800; }
+.stats { font-size: 0.8rem; font-weight: 700; color: #34d399; }
+.mode_light .stats { color: #059669; }
+.resetBtn { padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(148, 163, 184, 0.35); background: transparent; color: inherit; font-size: 0.78rem; font-weight: 700; cursor: pointer; }
+.narrative { margin: 0; font-size: 0.88rem; line-height: 1.5; }
+.choiceList { display: flex; flex-direction: column; gap: 8px; }
+.choiceBtn { width: 100%; padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(129, 140, 248, 0.35); background: rgba(79, 70, 229, 0.16); color: inherit; display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 0.86rem; font-weight: 700; cursor: pointer; text-align: left; }
+.badge { font-size: 0.75rem; opacity: 0.9; }
+.logBox { padding: 10px 12px; border-radius: 12px; font-size: 0.84rem; }
+.mode_dark .logBox { background: rgba(30, 41, 59, 0.85); color: #e2e8f0; }
+.mode_light .logBox { background: #f8fafc; color: #334155; border: 1px solid #e2e8f0; }
