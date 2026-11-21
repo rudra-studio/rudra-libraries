@@ -1,3 +1,5 @@
+export type { AdventureChoiceItem, AdventureQuestStageProps } from './components/AdventureQuestStage';
+export { default as AdventureQuestStage } from './components/AdventureQuestStage';
 export type { ConnectFourBoardProps } from './components/ConnectFourBoard';
 export { default as ConnectFourBoard } from './components/ConnectFourBoard';
 export type { GameArenaHeaderProps } from './components/GameArenaHeader';
@@ -8,5 +10,9 @@ export type { NumberSlideBoardProps } from './components/NumberSlideBoard';
 export { default as NumberSlideBoard } from './components/NumberSlideBoard';
 export type { ReactionReflexPadProps } from './components/ReactionReflexPad';
 export { default as ReactionReflexPad } from './components/ReactionReflexPad';
+export type { Scene3DStageWidgetProps } from './components/Scene3DStageWidget';
+export { default as Scene3DStageWidget } from './components/Scene3DStageWidget';
+export type { Sprite2DAnimatorProps } from './components/Sprite2DAnimator';
+export { default as Sprite2DAnimator } from './components/Sprite2DAnimator';
 export type { TicTacToeBoardProps } from './components/TicTacToeBoard';
 export { default as TicTacToeBoard } from './components/TicTacToeBoard';
