@@ -49,6 +49,9 @@
       ],
       "@rudra-libraries/core-layout-kit": [
         "./libs/core-layout-kit/src/index.ts"
+      ],
+      "@rudra-libraries/rudra-mui-complete": [
+        "./libs/rudra-mui-complete/src/index.ts"
       ]
     }
   },
