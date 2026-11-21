@@ -1,0 +1,56 @@
+:root {
+  --spacing-header: 4rem;
+  --spacing-sidebar: 16rem;
+  --spacing-sidebar-collapsed: 4.5rem;
+  --spacing-aside: 20rem;
+
+  --container-prose: 48rem;
+  --container-page: 80rem;
+
+  --z-base: 0;
+  --z-sticky: 20;
+  --z-drawer: 40;
+  --z-modal: 50;
+  --z-toast: 60;
+}
+
+.layoutThemeDark {
+  color-scheme: dark;
+}
+
+.layoutThemeLight {
+  color-scheme: light;
+}
+
+.scrollStrip {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scrollStrip > * {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+@keyframes layoutFadeEnter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.layoutAnimateEnter {
+  animation: layoutFadeEnter 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .layoutAnimateEnter {
+    animation: none;
+  }
+}

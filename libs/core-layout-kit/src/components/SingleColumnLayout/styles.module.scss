@@ -1,0 +1,10 @@
+.singleColRoot {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.singleColMain {
+  flex: 1 1 auto;
+  min-width: 0;
+}

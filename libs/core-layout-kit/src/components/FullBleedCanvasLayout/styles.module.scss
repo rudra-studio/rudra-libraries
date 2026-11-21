@@ -1,0 +1,56 @@
+.canvasRoot {
+  height: 100dvh;
+  width: 100vw;
+  overflow: hidden;
+  position: relative;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.canvasBody {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.panelRail {
+  width: var(--spacing-sidebar, 16rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.inspectorRail {
+  width: var(--spacing-aside, 20rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.canvasStage {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+@media (max-width: 1023px) {
+  .canvasBody {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .panelRail,
+  .inspectorRail {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: var(--z-drawer, 40);
+    max-width: 85vw;
+  }
+  .panelRail {
+    left: 0;
+  }
+  .inspectorRail {
+    right: 0;
+  }
+}

@@ -1,0 +1,21 @@
+.dividerWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.line {
+  background-color: currentColor;
+  opacity: 0.2;
+}
+
+.horizontalLine {
+  flex: 1 1 0%;
+  height: 1px;
+}
+
+.verticalLine {
+  width: 1px;
+  min-height: 1.25rem;
+  align-self: stretch;
+}

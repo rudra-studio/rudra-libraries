@@ -1,0 +1,89 @@
+.shellRoot {
+  height: 100dvh;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.skipLink {
+  position: fixed;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: var(--z-toast, 60);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+}
+
+.headerBar {
+  grid-column: 1 / -1;
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky, 20);
+  min-height: var(--spacing-header, 4rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+}
+
+.sidebarDesktop {
+  width: var(--spacing-sidebar, 16rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  transition: width 0.22s ease;
+}
+
+.sidebarCollapsed {
+  width: var(--spacing-sidebar-collapsed, 4.5rem);
+}
+
+.mainPane {
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+}
+
+.mainContent {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.drawerBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-drawer, 40);
+  background: rgba(15, 23, 42, 0.55);
+  display: flex;
+}
+
+.drawerPanel {
+  width: var(--spacing-sidebar, 16rem);
+  max-width: 85vw;
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  transition: transform 0.22s ease;
+}
+
+@media (max-width: 1023px) {
+  .sidebarDesktop {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .drawerBackdrop {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebarDesktop,
+  .drawerPanel {
+    transition: none;
+  }
+}

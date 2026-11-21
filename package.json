@@ -13,6 +13,8 @@
     "@react-three/postprocessing": "latest",
     "@tanstack/react-table": "8.21.3",
     "@uiw/react-textarea-code-editor": "latest",
+    "class-variance-authority": "0.7.1",
+    "clsx": "2.1.1",
     "d3": "7",
     "dayjs": "1.11.23",
     "gsap": "3.12.5",
@@ -24,6 +26,7 @@
     "react-dom": "^19.0.0",
     "react-player": "latest",
     "styled-components": "5.3.6",
+    "tailwind-merge": "2.6.0",
     "tailwindcss": "3.4.4",
     "three": "0.184.0"
   },

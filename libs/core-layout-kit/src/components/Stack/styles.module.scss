@@ -1,0 +1,15 @@
+.dividerLine {
+  flex-shrink: 0;
+  background-color: currentColor;
+  opacity: 0.18;
+}
+
+.dividerHorizontal {
+  width: 100%;
+  height: 1px;
+}
+
+.dividerVertical {
+  width: 1px;
+  align-self: stretch;
+}
