@@ -1,0 +1,42 @@
+.root {
+  --overlay-bg: rgba(255, 255, 255, 0.72);
+  --overlay-track: #e2e8f0;
+  --overlay-accent: #2563eb;
+  --overlay-label: #475569;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.mode_dark {
+  --overlay-bg: rgba(15, 23, 42, 0.76);
+  --overlay-track: #334155;
+  --overlay-accent: #60a5fa;
+  --overlay-label: #cbd5e1;
+}
+
+.overlay {
+  background-color: var(--overlay-bg);
+}
+
+.spinner {
+  border-color: var(--overlay-track);
+  border-top-color: var(--overlay-accent);
+  animation: commonLoaderOverlaySpin 0.75s linear infinite;
+  will-change: transform;
+}
+
+.label {
+  color: var(--overlay-label);
+}
+
+@keyframes commonLoaderOverlaySpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+}

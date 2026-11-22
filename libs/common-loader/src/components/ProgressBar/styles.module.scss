@@ -1,0 +1,35 @@
+.root {
+  --progress-track: #e2e8f0;
+  --progress-fill: #2563eb;
+  --progress-label: #475569;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.mode_dark {
+  --progress-track: #1e293b;
+  --progress-fill: #60a5fa;
+  --progress-label: #cbd5e1;
+}
+
+.labelRow {
+  color: var(--progress-label);
+  font-variant-numeric: tabular-nums;
+}
+
+.track {
+  background-color: var(--progress-track);
+}
+
+.fill {
+  width: 100%;
+  background-color: var(--progress-fill);
+  transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fill {
+    transition: none;
+  }
+}
