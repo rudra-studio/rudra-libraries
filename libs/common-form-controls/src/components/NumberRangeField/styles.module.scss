@@ -1,0 +1,49 @@
+.root {
+  --nr-text: #0f172a;
+  --nr-muted: #64748b;
+  --nr-accent: #2563eb;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  color: var(--nr-text);
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --nr-text: #f8fafc;
+  --nr-muted: #94a3b8;
+  --nr-accent: #60a5fa;
+}
+
+.topRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.readout {
+  font-size: 0.85rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--nr-accent);
+}
+
+.range {
+  width: 100%;
+  accent-color: var(--nr-accent);
+  cursor: pointer;
+}
+
+.bounds {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--nr-muted);
+}

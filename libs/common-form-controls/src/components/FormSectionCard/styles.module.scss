@@ -1,0 +1,74 @@
+.card {
+  --fs-bg: #ffffff;
+  --fs-border: #e2e8f0;
+  --fs-text: #0f172a;
+  --fs-muted: #64748b;
+  --fs-accent: #2563eb;
+  --fs-pill: rgba(37, 99, 235, 0.12);
+  padding: 1.15rem 1.25rem;
+  border-radius: 1rem;
+  border: 1px solid var(--fs-border);
+  background-color: var(--fs-bg);
+  color: var(--fs-text);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --fs-bg: #0f172a;
+  --fs-border: #334155;
+  --fs-text: #f8fafc;
+  --fs-muted: #94a3b8;
+  --fs-accent: #60a5fa;
+  --fs-pill: rgba(96, 165, 250, 0.18);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.badge {
+  padding: 0.12rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  background-color: var(--fs-pill);
+  color: var(--fs-accent);
+}
+
+.desc {
+  margin: 0;
+  font-size: 0.825rem;
+  line-height: 1.45;
+  color: var(--fs-muted);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.footer {
+  padding-top: 0.55rem;
+  border-top: 1px solid var(--fs-border);
+  font-size: 0.75rem;
+  color: var(--fs-muted);
+}

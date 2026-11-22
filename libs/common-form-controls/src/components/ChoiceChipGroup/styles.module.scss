@@ -1,0 +1,52 @@
+.root {
+  --cc-text: #0f172a;
+  --cc-border: #cbd5e1;
+  --cc-bg: #f8fafc;
+  --cc-accent: #2563eb;
+  --cc-active-bg: rgba(37, 99, 235, 0.14);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  color: var(--cc-text);
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --cc-text: #f8fafc;
+  --cc-border: #334155;
+  --cc-bg: #1e293b;
+  --cc-accent: #60a5fa;
+  --cc-active-bg: rgba(96, 165, 250, 0.2);
+}
+
+.label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.chip {
+  padding: 0.36rem 0.78rem;
+  border-radius: 9999px;
+  border: 1px solid var(--cc-border);
+  background-color: var(--cc-bg);
+  color: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.chip:hover {
+  border-color: var(--cc-accent);
+}
+
+.selected {
+  border-color: var(--cc-accent);
+  background-color: var(--cc-active-bg);
+  color: var(--cc-accent);
+}

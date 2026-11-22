@@ -70,6 +70,9 @@
       ],
       "@rudra-libraries/common-layout-containers": [
         "./libs/common-layout-containers/src/index.ts"
+      ],
+      "@rudra-libraries/common-form-controls": [
+        "./libs/common-form-controls/src/index.ts"
       ]
     }
   },
