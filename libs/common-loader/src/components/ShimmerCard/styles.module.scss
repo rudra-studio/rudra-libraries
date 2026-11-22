@@ -1,0 +1,105 @@
+.card {
+  --card-bg: #ffffff;
+  --card-border: #e2e8f0;
+  --shimmer-base: #e2e8f0;
+  --shimmer-highlight: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  padding: 1rem;
+  border: 1px solid var(--card-border);
+  border-radius: 0.875rem;
+  background-color: var(--card-bg);
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --card-bg: #0f172a;
+  --card-border: #334155;
+  --shimmer-base: #1e293b;
+  --shimmer-highlight: #334155;
+}
+
+.block {
+  background-color: var(--shimmer-base);
+  border-radius: 0.5rem;
+}
+
+.media {
+  width: 100%;
+  height: 8.5rem;
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  flex-shrink: 0;
+}
+
+.headerLines {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.titleLine {
+  width: 55%;
+  height: 0.875rem;
+}
+
+.subLine {
+  width: 35%;
+  height: 0.75rem;
+}
+
+.bodyLines {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.bodyLine {
+  width: 100%;
+  height: 0.75rem;
+}
+
+.shortLine {
+  width: 72%;
+}
+
+.animated {
+  background-image: linear-gradient(
+    90deg,
+    var(--shimmer-base) 0%,
+    var(--shimmer-highlight) 50%,
+    var(--shimmer-base) 100%
+  );
+  background-size: 200% 100%;
+  animation: commonShimmerCardSlide 1.45s ease-in-out infinite;
+  will-change: background-position;
+}
+
+@keyframes commonShimmerCardSlide {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated {
+    animation: none;
+    background-image: none;
+  }
+}

@@ -1,0 +1,47 @@
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.root {
+  --skeleton-base: #e2e8f0;
+  --skeleton-highlight: #f8fafc;
+  background-color: var(--skeleton-base);
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --skeleton-base: #1e293b;
+  --skeleton-highlight: #334155;
+}
+
+.animated {
+  background-image: linear-gradient(
+    90deg,
+    var(--skeleton-base) 0%,
+    var(--skeleton-highlight) 50%,
+    var(--skeleton-base) 100%
+  );
+  background-size: 200% 100%;
+  animation: commonLoaderShimmer 1.4s ease-in-out infinite;
+  will-change: background-position;
+}
+
+@keyframes commonLoaderShimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated {
+    animation: none;
+    background-image: none;
+  }
+}
