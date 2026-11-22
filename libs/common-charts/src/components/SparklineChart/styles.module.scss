@@ -1,0 +1,40 @@
+.wrap {
+  --sl-bg: #ffffff;
+  --sl-border: #e2e8f0;
+  --sl-text: #0f172a;
+  --sl-muted: #64748b;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--sl-border);
+  background-color: var(--sl-bg);
+  color: var(--sl-text);
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --sl-bg: #0f172a;
+  --sl-border: #334155;
+  --sl-text: #f8fafc;
+  --sl-muted: #94a3b8;
+}
+
+.label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--sl-muted);
+}
+
+.svg {
+  width: 6.5rem;
+  height: 1.75rem;
+  display: block;
+}
+
+.latest {
+  font-size: 0.8125rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}

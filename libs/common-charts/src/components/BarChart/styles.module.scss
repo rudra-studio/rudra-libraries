@@ -1,0 +1,117 @@
+.card {
+  --bc-bg: #ffffff;
+  --bc-border: #e2e8f0;
+  --bc-text: #0f172a;
+  --bc-muted: #64748b;
+  --bc-track: #f1f5f9;
+  --bc-bar: #2563eb;
+  padding: 1.15rem;
+  border-radius: 1rem;
+  border: 1px solid var(--bc-border);
+  background-color: var(--bc-bg);
+  color: var(--bc-text);
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --bc-bg: #0f172a;
+  --bc-border: #334155;
+  --bc-text: #f8fafc;
+  --bc-muted: #94a3b8;
+  --bc-track: #1e293b;
+  --bc-bar: #60a5fa;
+}
+
+.title {
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.verticalStage {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+}
+
+.vCol {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.vTrack {
+  width: 100%;
+  max-width: 3rem;
+  flex: 1;
+  border-radius: 0.5rem;
+  background-color: var(--bc-track);
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.vFill {
+  width: 100%;
+  border-radius: 0.5rem 0.5rem 0 0;
+  background-color: var(--bc-bar);
+  transition: height 240ms ease;
+}
+
+.vLabel {
+  font-size: 0.75rem;
+  color: var(--bc-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.horizontalList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.hRow {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.hLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--bc-muted);
+}
+
+.hTrack {
+  height: 0.75rem;
+  border-radius: 9999px;
+  background-color: var(--bc-track);
+  overflow: hidden;
+}
+
+.hFill {
+  height: 100%;
+  border-radius: 9999px;
+  background-color: var(--bc-bar);
+  transition: width 240ms ease;
+}
+
+.valText {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--bc-muted);
+}

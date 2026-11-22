@@ -1,0 +1,46 @@
+.card {
+  --rc-bg: #ffffff;
+  --rc-border: #e2e8f0;
+  --rc-text: #0f172a;
+  --rc-muted: #64748b;
+  --rc-grid: #cbd5e1;
+  padding: 1.15rem;
+  border-radius: 1rem;
+  border: 1px solid var(--rc-border);
+  background-color: var(--rc-bg);
+  color: var(--rc-text);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --rc-bg: #0f172a;
+  --rc-border: #334155;
+  --rc-text: #f8fafc;
+  --rc-muted: #94a3b8;
+  --rc-grid: #334155;
+}
+
+.title {
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.svg {
+  width: 100%;
+  max-height: 14rem;
+  display: block;
+}
+
+.gridRing {
+  stroke: var(--rc-grid);
+  stroke-width: 1;
+}
+
+.axisLabel {
+  fill: var(--rc-muted);
+  font-size: 0.625rem;
+  font-weight: 700;
+}

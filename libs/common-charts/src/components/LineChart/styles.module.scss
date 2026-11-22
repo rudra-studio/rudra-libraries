@@ -1,0 +1,65 @@
+.card {
+  --lc-bg: #ffffff;
+  --lc-border: #e2e8f0;
+  --lc-text: #0f172a;
+  --lc-muted: #64748b;
+  --lc-grid: #e2e8f0;
+  padding: 1.15rem;
+  border-radius: 1rem;
+  border: 1px solid var(--lc-border);
+  background-color: var(--lc-bg);
+  color: var(--lc-text);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --lc-bg: #0f172a;
+  --lc-border: #334155;
+  --lc-text: #f8fafc;
+  --lc-muted: #94a3b8;
+  --lc-grid: #1e293b;
+}
+
+.topRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.title {
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.rangeBadge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--lc-muted);
+}
+
+.svg {
+  width: 100%;
+  display: block;
+}
+
+.gridLine {
+  stroke: var(--lc-grid);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.xLabels {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0.5rem;
+}
+
+.xTick {
+  font-size: 0.75rem;
+  color: var(--lc-muted);
+}
