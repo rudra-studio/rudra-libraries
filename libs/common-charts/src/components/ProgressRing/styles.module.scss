@@ -1,0 +1,55 @@
+.wrap {
+  --pr-bg: #ffffff;
+  --pr-border: #e2e8f0;
+  --pr-text: #0f172a;
+  --pr-muted: #64748b;
+  --pr-track: #e2e8f0;
+  padding: 0.9rem 1rem;
+  border-radius: 1rem;
+  border: 1px solid var(--pr-border);
+  background-color: var(--pr-bg);
+  color: var(--pr-text);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --pr-bg: #0f172a;
+  --pr-border: #334155;
+  --pr-text: #f8fafc;
+  --pr-muted: #94a3b8;
+  --pr-track: #1e293b;
+}
+
+.ringBox {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.track {
+  stroke: var(--pr-track);
+}
+
+.pct {
+  position: absolute;
+  font-size: 0.85rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--pr-muted);
+}

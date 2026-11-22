@@ -1,0 +1,84 @@
+.card {
+  --dc-bg: #ffffff;
+  --dc-border: #e2e8f0;
+  --dc-text: #0f172a;
+  --dc-muted: #64748b;
+  padding: 1.15rem;
+  border-radius: 1rem;
+  border: 1px solid var(--dc-border);
+  background-color: var(--dc-bg);
+  color: var(--dc-text);
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --dc-bg: #0f172a;
+  --dc-border: #334155;
+  --dc-text: #f8fafc;
+  --dc-muted: #94a3b8;
+}
+
+.title {
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.svg {
+  width: 9.5rem;
+  height: 9.5rem;
+  flex-shrink: 0;
+}
+
+.totalVal {
+  fill: var(--dc-text);
+  font-size: 1.1rem;
+  font-weight: 900;
+}
+
+.centerLbl {
+  fill: var(--dc-muted);
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.legend {
+  flex: 1;
+  min-width: 10rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.legendRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+}
+
+.dot {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 9999px;
+  flex-shrink: 0;
+}
+
+.lbl {
+  flex: 1;
+  font-weight: 600;
+}
+
+.val {
+  font-variant-numeric: tabular-nums;
+  color: var(--dc-muted);
+}

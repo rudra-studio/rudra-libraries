@@ -1,0 +1,45 @@
+.card {
+  --sc-bg: #ffffff;
+  --sc-border: #e2e8f0;
+  --sc-text: #0f172a;
+  --sc-muted: #64748b;
+  --sc-axis: #cbd5e1;
+  padding: 1.15rem;
+  border-radius: 1rem;
+  border: 1px solid var(--sc-border);
+  background-color: var(--sc-bg);
+  color: var(--sc-text);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --sc-bg: #0f172a;
+  --sc-border: #334155;
+  --sc-text: #f8fafc;
+  --sc-muted: #94a3b8;
+  --sc-axis: #475569;
+}
+
+.title {
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.svg {
+  width: 100%;
+  display: block;
+}
+
+.axis {
+  stroke: var(--sc-axis);
+  stroke-width: 1.2;
+}
+
+.ptLabel {
+  fill: var(--sc-muted);
+  font-size: 0.625rem;
+  font-weight: 700;
+}

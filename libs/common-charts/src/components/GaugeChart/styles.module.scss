@@ -1,0 +1,67 @@
+.card {
+  --gc-bg: #ffffff;
+  --gc-border: #e2e8f0;
+  --gc-text: #0f172a;
+  --gc-muted: #64748b;
+  --gc-track: #e2e8f0;
+  padding: 1.15rem;
+  border-radius: 1rem;
+  border: 1px solid var(--gc-border);
+  background-color: var(--gc-bg);
+  color: var(--gc-text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --gc-bg: #0f172a;
+  --gc-border: #334155;
+  --gc-text: #f8fafc;
+  --gc-muted: #94a3b8;
+  --gc-track: #1e293b;
+}
+
+.title {
+  width: 100%;
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.gaugeBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.svg {
+  width: 11rem;
+  height: auto;
+  display: block;
+}
+
+.trackArc {
+  stroke: var(--gc-track);
+}
+
+.readout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -0.5rem;
+}
+
+.value {
+  font-size: 1.45rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.bounds {
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--gc-muted);
+}

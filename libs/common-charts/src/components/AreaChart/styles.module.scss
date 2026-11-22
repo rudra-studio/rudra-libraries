@@ -1,0 +1,57 @@
+.card {
+  --ac-bg: #ffffff;
+  --ac-border: #e2e8f0;
+  --ac-text: #0f172a;
+  --ac-muted: #64748b;
+  padding: 1.15rem;
+  border-radius: 1rem;
+  border: 1px solid var(--ac-border);
+  background-color: var(--ac-bg);
+  color: var(--ac-text);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --ac-bg: #0f172a;
+  --ac-border: #334155;
+  --ac-text: #f8fafc;
+  --ac-muted: #94a3b8;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.title {
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.latest {
+  font-size: 0.875rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--ac-muted);
+}
+
+.svg {
+  width: 100%;
+  display: block;
+}
+
+.labels {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0.35rem;
+}
+
+.label {
+  font-size: 0.75rem;
+  color: var(--ac-muted);
+}

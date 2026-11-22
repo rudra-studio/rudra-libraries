@@ -1,0 +1,78 @@
+.card {
+  --pc-bg: #ffffff;
+  --pc-border: #e2e8f0;
+  --pc-text: #0f172a;
+  --pc-muted: #64748b;
+  padding: 1.15rem;
+  border-radius: 1rem;
+  border: 1px solid var(--pc-border);
+  background-color: var(--pc-bg);
+  color: var(--pc-text);
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --pc-bg: #0f172a;
+  --pc-border: #334155;
+  --pc-text: #f8fafc;
+  --pc-muted: #94a3b8;
+}
+
+.title {
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.svg {
+  width: 9.5rem;
+  height: 9.5rem;
+  flex-shrink: 0;
+}
+
+.centerText {
+  fill: var(--pc-text);
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.legend {
+  flex: 1;
+  min-width: 10rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+}
+
+.swatch {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 9999px;
+  flex-shrink: 0;
+}
+
+.legendLabel {
+  flex: 1;
+  font-weight: 600;
+}
+
+.legendVal {
+  font-variant-numeric: tabular-nums;
+  color: var(--pc-muted);
+}
