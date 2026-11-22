@@ -1,0 +1,266 @@
+.wrapper {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  gap: 22px;
+  padding: 22px;
+  border-radius: 22px;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.mode_light {
+  background: #ffffff;
+  border: 1px solid #f1d4e5;
+  color: #1e293b;
+}
+
+.mode_dark {
+  background: #0f172a;
+  border: 1px solid rgba(244, 114, 182, 0.25);
+  color: #f8fafc;
+}
+
+.editorCol {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sectionHead {
+  margin-bottom: 4px;
+}
+
+.heading {
+  margin: 0 0 4px;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.sub {
+  margin: 0;
+  font-size: 0.85rem;
+  opacity: 0.78;
+}
+
+.row2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  background: transparent;
+  color: inherit;
+  font-size: 0.88rem;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.mode_dark .field select option {
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+.toggleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.86rem;
+  font-weight: 700;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(236, 72, 153, 0.1);
+  cursor: pointer;
+}
+
+.actionRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.primaryBtn {
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #ec4899, #f59e0b);
+  color: #ffffff;
+  font-size: 0.86rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.secondaryBtn {
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(236, 72, 153, 0.4);
+  background: transparent;
+  color: inherit;
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.toast {
+  padding: 9px 14px;
+  border-radius: 10px;
+  background: rgba(16, 185, 129, 0.16);
+  border: 1px solid rgba(16, 185, 129, 0.45);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.previewCol {
+  display: flex;
+  align-items: stretch;
+}
+
+.inviteCard {
+  width: 100%;
+  border-radius: 22px;
+  padding: 26px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  gap: 14px;
+  box-sizing: border-box;
+  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.14);
+}
+
+.pal_rosegold {
+  background: linear-gradient(155deg, #fff1f2 0%, #fce7f3 50%, #fef3c7 100%);
+  border: 2px solid #f9a8d4;
+  color: #4c0519;
+}
+
+.pal_emerald {
+  background: linear-gradient(155deg, #064e3b 0%, #065f46 55%, #0f766e 100%);
+  border: 2px solid #34d399;
+  color: #ecfdf5;
+}
+
+.pal_starlight {
+  background: linear-gradient(155deg, #0f172a 0%, #312e81 55%, #581c87 100%);
+  border: 2px solid #a78bfa;
+  color: #f5f3ff;
+}
+
+.pal_sunset {
+  background: linear-gradient(155deg, #fff7ed 0%, #ffedd5 50%, #fecdd3 100%);
+  border: 2px solid #fb923c;
+  color: #7c2d12;
+}
+
+.cardTopMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.badge,
+.countdown {
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid currentColor;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.coverWrap {
+  width: 100%;
+  height: 160px;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.coverImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ornament {
+  font-size: 1.1rem;
+  letter-spacing: 0.4em;
+  opacity: 0.78;
+}
+
+.couple {
+  margin: 0;
+  font-size: 1.9rem;
+  font-weight: 900;
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.cardHeadline {
+  margin: 0;
+  font-size: 0.96rem;
+  font-weight: 700;
+  opacity: 0.92;
+}
+
+.cardMessage {
+  margin: 0 auto;
+  max-width: 440px;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  opacity: 0.9;
+}
+
+.detailGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.detailBox,
+.venueBox {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 0.88rem;
+}
+
+.detailLabel {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  opacity: 0.75;
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  opacity: 0.82;
+  padding-top: 8px;
+  border-top: 1px dashed currentColor;
+}
