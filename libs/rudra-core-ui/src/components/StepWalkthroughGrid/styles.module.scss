@@ -1,0 +1,60 @@
+.section {
+  width: 100%;
+  padding: 22px;
+  border-radius: 22px;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.mode_light {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #0f172a;
+}
+
+.mode_dark {
+  background: #0f172a;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  color: #f8fafc;
+}
+
+.heading {
+  margin: 0 0 14px;
+  font-size: 1.3rem;
+  font-weight: 900;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.card {
+  padding: 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: rgba(139, 92, 246, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.num {
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: #ec4899;
+}
+
+.title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.desc {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  opacity: 0.82;
+}
