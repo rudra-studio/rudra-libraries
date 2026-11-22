@@ -1,4 +1,7 @@
 export { default as FloatingHeartsCanvas } from './components/FloatingHeartsCanvas';
+export { default as GoogleSignInButton } from './components/GoogleSignInButton';
+export type { SmileyyfyDashboardInvitation } from './components/InvitationDashboardOverview';
+export { default as InvitationDashboardOverview } from './components/InvitationDashboardOverview';
 export { default as LoveProposalStage } from './components/LoveProposalStage';
 export { default as OccasionTemplateGallery } from './components/OccasionTemplateGallery';
 export { default as PageCanvasBuilder } from './components/PageCanvasBuilder';
@@ -7,7 +10,6 @@ export { default as RsvpParticipantTracker } from './components/RsvpParticipantT
 export { default as SmileyyfyNavbar } from './components/SmileyyfyNavbar';
 export { default as WeddingInviteBuilder } from './components/WeddingInviteBuilder';
 export { default as YouTubeMediaWidget } from './components/YouTubeMediaWidget';
-export type { InviteConfigPayload } from './utils/InviteConfigPayload';
 export type { OccasionTemplateItem } from './utils/OccasionTemplateItem';
 export type { ProposalPhotoItem } from './utils/ProposalPhotoItem';
 export type { RsvpGuestRecord } from './utils/RsvpGuestRecord';

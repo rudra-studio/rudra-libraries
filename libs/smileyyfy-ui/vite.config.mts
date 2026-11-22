@@ -29,6 +29,8 @@ export default defineConfig(() => ({
       entry: {
       'index': path.resolve(import.meta.dirname, 'src/index.ts'),
       "components/FloatingHeartsCanvas/styles": path.resolve(import.meta.dirname, "src/components/FloatingHeartsCanvas/styles.module.scss"),
+      "components/GoogleSignInButton/styles": path.resolve(import.meta.dirname, "src/components/GoogleSignInButton/styles.module.scss"),
+      "components/InvitationDashboardOverview/styles": path.resolve(import.meta.dirname, "src/components/InvitationDashboardOverview/styles.module.scss"),
       "components/LoveProposalStage/styles": path.resolve(import.meta.dirname, "src/components/LoveProposalStage/styles.module.scss"),
       "components/OccasionTemplateGallery/styles": path.resolve(import.meta.dirname, "src/components/OccasionTemplateGallery/styles.module.scss"),
       "components/PageCanvasBuilder/styles": path.resolve(import.meta.dirname, "src/components/PageCanvasBuilder/styles.module.scss"),
