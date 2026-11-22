@@ -1,0 +1,81 @@
+.toast {
+  --tb-bg: #ffffff;
+  --tb-border: #e2e8f0;
+  --tb-text: #0f172a;
+  --tb-accent: #2563eb;
+  padding: 0.65rem 0.9rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--tb-border);
+  background-color: var(--tb-bg);
+  color: var(--tb-text);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.mode_dark {
+  --tb-bg: #1e293b;
+  --tb-border: #334155;
+  --tb-text: #f8fafc;
+  --tb-accent: #60a5fa;
+}
+
+.sev_info {
+  --tb-accent: #2563eb;
+}
+
+.sev_success {
+  --tb-accent: #059669;
+}
+
+.sev_warning {
+  --tb-accent: #d97706;
+}
+
+.sev_error {
+  --tb-accent: #dc2626;
+}
+
+.icon {
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.msg {
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: 0.25rem;
+}
+
+.actionBtn {
+  border: 0;
+  background: transparent;
+  color: var(--tb-accent);
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+}
+
+.closeBtn {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 0.78rem;
+  opacity: 0.7;
+  cursor: pointer;
+  padding: 0.2rem 0.35rem;
+}
+
+.closeBtn:hover {
+  opacity: 1;
+}

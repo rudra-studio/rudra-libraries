@@ -1,0 +1,54 @@
+.wrap {
+  --tt-bg: #0f172a;
+  --tt-text: #ffffff;
+  --tt-trigger-bg: #f1f5f9;
+  --tt-trigger-border: #cbd5e1;
+  --tt-trigger-text: #0f172a;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --tt-bg: #f8fafc;
+  --tt-text: #0f172a;
+  --tt-trigger-bg: #1e293b;
+  --tt-trigger-border: #475569;
+  --tt-trigger-text: #f8fafc;
+}
+
+.trigger {
+  padding: 0.35rem 0.7rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--tt-trigger-border);
+  background-color: var(--tt-trigger-bg);
+  color: var(--tt-trigger-text);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.bubble {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  padding: 0.35rem 0.65rem;
+  border-radius: 0.5rem;
+  background-color: var(--tt-bg);
+  color: var(--tt-text);
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.2);
+}
+
+.pos_top .bubble {
+  bottom: calc(100% + 0.4rem);
+}
+
+.pos_bottom .bubble {
+  top: calc(100% + 0.4rem);
+}
