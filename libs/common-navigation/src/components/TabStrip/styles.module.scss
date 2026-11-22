@@ -1,0 +1,84 @@
+.bar {
+  --ts-border: #e2e8f0;
+  --ts-text: #0f172a;
+  --ts-muted: #64748b;
+  --ts-accent: #2563eb;
+  --ts-pill: rgba(37, 99, 235, 0.12);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --ts-border: #334155;
+  --ts-text: #f8fafc;
+  --ts-muted: #94a3b8;
+  --ts-accent: #60a5fa;
+  --ts-pill: rgba(96, 165, 250, 0.18);
+}
+
+.var_underline {
+  border-bottom: 1px solid var(--ts-border);
+  padding-bottom: 0.25rem;
+}
+
+.var_pills {
+  gap: 0.45rem;
+}
+
+.tab {
+  border: 0;
+  background: transparent;
+  color: var(--ts-muted);
+  padding: 0.5rem 0.8rem;
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  position: relative;
+}
+
+.var_pills .tab {
+  border-radius: 9999px;
+}
+
+.tab:hover:not(:disabled) {
+  color: var(--ts-text);
+}
+
+.var_underline .active {
+  color: var(--ts-accent);
+}
+
+.var_underline .active::after {
+  content: "";
+  position: absolute;
+  left: 0.5rem;
+  right: 0.5rem;
+  bottom: -0.25rem;
+  height: 2px;
+  background-color: var(--ts-accent);
+}
+
+.var_pills .active {
+  color: var(--ts-accent);
+  background-color: var(--ts-pill);
+}
+
+.disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.badge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.08rem 0.45rem;
+  border-radius: 9999px;
+  background-color: var(--ts-pill);
+  color: var(--ts-accent);
+}

@@ -1,0 +1,116 @@
+.nav {
+  --sn-bg: #ffffff;
+  --sn-border: #e2e8f0;
+  --sn-text: #0f172a;
+  --sn-muted: #64748b;
+  --sn-accent: #2563eb;
+  --sn-pill: rgba(37, 99, 235, 0.12);
+  width: 15rem;
+  padding: 0.9rem;
+  border-radius: 1rem;
+  border: 1px solid var(--sn-border);
+  background-color: var(--sn-bg);
+  color: var(--sn-text);
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  box-sizing: border-box;
+  transition: width 180ms ease;
+}
+
+.mode_dark {
+  --sn-bg: #0f172a;
+  --sn-border: #334155;
+  --sn-text: #f8fafc;
+  --sn-muted: #94a3b8;
+  --sn-accent: #60a5fa;
+  --sn-pill: rgba(96, 165, 250, 0.18);
+}
+
+.collapsed {
+  width: 4.25rem;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
+.title {
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--sn-muted);
+}
+
+.toggleBtn {
+  border: 1px solid var(--sn-border);
+  background: transparent;
+  color: inherit;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 0.45rem;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.itemBtn {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--sn-muted);
+  padding: 0.52rem 0.65rem;
+  border-radius: 0.55rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: left;
+}
+
+.itemBtn:hover {
+  color: var(--sn-text);
+  background-color: rgba(148, 163, 184, 0.12);
+}
+
+.active {
+  color: var(--sn-accent);
+  background-color: var(--sn-pill);
+}
+
+.icon {
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  padding: 0.1rem 0.45rem;
+  border-radius: 9999px;
+  background-color: var(--sn-pill);
+  color: var(--sn-accent);
+}
