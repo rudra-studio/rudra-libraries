@@ -55,7 +55,8 @@
       ],
       "@rudra-libraries/rudra-games-kit": [
         "./libs/rudra-games-kit/src/index.ts"
-      ]
+      ],
+      "@rudra-libraries/smileyyfy-ui": ["./libs/smileyyfy-ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
