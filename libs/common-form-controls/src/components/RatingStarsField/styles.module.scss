@@ -1,0 +1,58 @@
+.root {
+  --rs-text: #0f172a;
+  --rs-muted: #64748b;
+  --rs-star: #f59e0b;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  color: var(--rs-text);
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --rs-text: #f8fafc;
+  --rs-muted: #94a3b8;
+  --rs-star: #fbbf24;
+}
+
+.label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.starBtn {
+  border: 0;
+  background: transparent;
+  color: var(--rs-muted);
+  font-size: 1.3rem;
+  line-height: 1;
+  padding: 0.1rem;
+  cursor: pointer;
+}
+
+.starBtn:disabled {
+  cursor: default;
+}
+
+.active {
+  color: var(--rs-star);
+}
+
+.score {
+  font-size: 0.8rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--rs-muted);
+}

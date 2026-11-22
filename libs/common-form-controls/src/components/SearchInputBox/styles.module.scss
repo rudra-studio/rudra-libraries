@@ -1,0 +1,70 @@
+.root {
+  --si-bg: #ffffff;
+  --si-border: #cbd5e1;
+  --si-text: #0f172a;
+  --si-muted: #64748b;
+  --si-focus: #2563eb;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  color: var(--si-text);
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --si-bg: #0f172a;
+  --si-border: #334155;
+  --si-text: #f8fafc;
+  --si-muted: #94a3b8;
+  --si-focus: #60a5fa;
+}
+
+.label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.inputBox {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: 0.6rem;
+  border: 1px solid var(--si-border);
+  background-color: var(--si-bg);
+}
+
+.inputBox:focus-within {
+  outline: 2px solid var(--si-focus);
+  outline-offset: 1px;
+  border-color: var(--si-focus);
+}
+
+.icon {
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--si-text);
+  font-size: 0.875rem;
+}
+
+.clearBtn {
+  border: 0;
+  background: transparent;
+  color: var(--si-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0.15rem 0.3rem;
+}
+
+.clearBtn:hover {
+  color: var(--si-text);
+}
