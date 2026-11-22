@@ -60,7 +60,8 @@
       "@rudra-libraries/rudra-core-ui": ["./libs/rudra-core-ui/src/index.ts"],
       "@rudra-libraries/common-loader": ["./libs/common-loader/src/index.ts"],
       "@rudra-libraries/common-editor": ["./libs/common-editor/src/index.ts"],
-      "@rudra-libraries/common-layout": ["./libs/common-layout/src/index.ts"]
+      "@rudra-libraries/common-layout": ["./libs/common-layout/src/index.ts"],
+      "@rudra-libraries/common-core": ["./libs/common-core/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

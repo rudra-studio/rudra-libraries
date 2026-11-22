@@ -1,0 +1,106 @@
+.bar {
+  --nav-bg: rgba(255, 255, 255, 0.94);
+  --nav-border: #e2e8f0;
+  --nav-text: #0f172a;
+  --nav-muted: #64748b;
+  --nav-accent-start: #2563eb;
+  --nav-accent-end: #7c3aed;
+  --nav-btn-bg: rgba(37, 99, 235, 0.08);
+  padding: 0.875rem 1.25rem;
+  border-radius: 1rem;
+  border: 1px solid var(--nav-border);
+  background: var(--nav-bg);
+  color: var(--nav-text);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.875rem;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --nav-bg: rgba(15, 23, 42, 0.94);
+  --nav-border: #334155;
+  --nav-text: #f8fafc;
+  --nav-muted: #94a3b8;
+  --nav-accent-start: #3b82f6;
+  --nav-accent-end: #8b5cf6;
+  --nav-btn-bg: rgba(96, 165, 250, 0.14);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.mark {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  background: linear-gradient(135deg, var(--nav-accent-start), var(--nav-accent-end));
+  color: #ffffff;
+}
+
+.brandName {
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.tagline {
+  font-size: 0.78rem;
+  color: var(--nav-muted);
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.navBtn {
+  padding: 0.45rem 0.875rem;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: inherit;
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 150ms ease, border-color 150ms ease, background-color 150ms ease;
+}
+
+.navBtn:hover {
+  transform: translateY(-1px);
+  border-color: var(--nav-border);
+  background: var(--nav-btn-bg);
+}
+
+.activeBtn {
+  background: linear-gradient(135deg, var(--nav-accent-start), var(--nav-accent-end));
+  color: #ffffff;
+  border-color: transparent;
+}
+
+.themeBtn {
+  padding: 0.45rem 0.85rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--nav-border);
+  background: var(--nav-btn-bg);
+  color: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navBtn {
+    transition: none;
+  }
+}

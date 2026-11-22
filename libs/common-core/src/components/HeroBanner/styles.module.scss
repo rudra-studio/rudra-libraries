@@ -1,0 +1,102 @@
+.banner {
+  --hero-bg: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 55%, #ecfeff 100%);
+  --hero-border: #dbeafe;
+  --hero-text: #0f172a;
+  --hero-muted: #475569;
+  --hero-badge-bg: rgba(37, 99, 235, 0.1);
+  --hero-badge-border: rgba(37, 99, 235, 0.25);
+  --hero-cta-start: #2563eb;
+  --hero-cta-end: #7c3aed;
+  --hero-sec-bg: rgba(255, 255, 255, 0.72);
+  width: 100%;
+  padding: 2.25rem 1.75rem;
+  border-radius: 1.5rem;
+  border: 1px solid var(--hero-border);
+  background: var(--hero-bg);
+  color: var(--hero-text);
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --hero-bg: linear-gradient(135deg, #0f172a 0%, #1e1b4b 55%, #172554 100%);
+  --hero-border: #334155;
+  --hero-text: #f8fafc;
+  --hero-muted: #cbd5e1;
+  --hero-badge-bg: rgba(96, 165, 250, 0.16);
+  --hero-badge-border: rgba(96, 165, 250, 0.35);
+  --hero-cta-start: #3b82f6;
+  --hero-cta-end: #8b5cf6;
+  --hero-sec-bg: rgba(15, 23, 42, 0.55);
+}
+
+.copy {
+  max-width: 46rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.9rem;
+}
+
+.lay_center .copy {
+  margin: 0 auto;
+  align-items: center;
+  text-align: center;
+}
+
+.badge {
+  display: inline-flex;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  background: var(--hero-badge-bg);
+  border: 1px solid var(--hero-badge-border);
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.8rem, 3.8vw, 2.85rem);
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+
+.desc {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--hero-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.lay_center .actions {
+  justify-content: center;
+}
+
+.primaryBtn {
+  padding: 0.75rem 1.4rem;
+  border-radius: 9999px;
+  border: 0;
+  background: linear-gradient(135deg, var(--hero-cta-start), var(--hero-cta-end));
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.secondaryBtn {
+  padding: 0.7rem 1.25rem;
+  border-radius: 9999px;
+  border: 1px solid var(--hero-border);
+  background: var(--hero-sec-bg);
+  color: inherit;
+  font-size: 0.88rem;
+  font-weight: 800;
+  cursor: pointer;
+}
