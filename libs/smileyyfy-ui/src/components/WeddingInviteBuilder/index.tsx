@@ -1,20 +1,8 @@
 import React, { useMemo, useState } from 'react';
+import type InviteConfigPayload from '../../utils/InviteConfigPayload';
 import styles from './styles.module.scss';
 
-export interface InviteConfigPayload {
-  eventType: string;
-  palette: string;
-  hostNames: string;
-  eventTitle: string;
-  eventDate: string;
-  eventTime: string;
-  venue: string;
-  message: string;
-  coverPhotoUrl: string;
-  enableRsvpTracking: boolean;
-}
-
-export interface WeddingInviteBuilderProps {
+interface WeddingInviteBuilderProps {
   /** @select|light|dark */
   themeMode?: 'light' | 'dark';
   /** @select|Wedding|Engagement|Birthday|Anniversary|Party */
@@ -44,7 +32,7 @@ const PALETTES = [
   { id: 'sunset', label: 'Sunset Peach' },
 ];
 
-export function WeddingInviteBuilder({
+function WeddingInviteBuilder({
   themeMode = 'light',
   defaultEventType = 'Wedding',
   defaultHostNames = 'Aarav & Meera',

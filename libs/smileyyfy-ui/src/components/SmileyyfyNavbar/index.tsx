@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './styles.module.scss';
 
-export interface SmileyyfyNavbarProps {
+interface SmileyyfyNavbarProps {
   /** @select|light|dark */
   themeMode?: 'light' | 'dark';
   /** @translate */
@@ -23,7 +23,7 @@ const NAV_ITEMS = [
   { id: 'occasions', label: '🎉 Occasions' },
 ];
 
-export function SmileyyfyNavbar({
+function SmileyyfyNavbar({
   themeMode = 'light',
   brandName = 'Smileyyfy',
   tagline = 'Invites, Proposals & Joyful Moments',

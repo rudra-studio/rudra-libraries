@@ -1,17 +1,8 @@
 import React, { useState } from 'react';
+import type OccasionTemplateItem from '../../utils/OccasionTemplateItem';
 import styles from './styles.module.scss';
 
-export interface OccasionTemplateItem {
-  id: string;
-  title: string;
-  category: 'Weddings & Events' | 'Romance' | 'Milestones';
-  emoji: string;
-  description: string;
-  tags: string[];
-  routeHint: string;
-}
-
-export interface OccasionTemplateGalleryProps {
+interface OccasionTemplateGalleryProps {
   /** @select|light|dark */
   themeMode?: 'light' | 'dark';
   /** @translate */
@@ -79,7 +70,7 @@ const TEMPLATES: OccasionTemplateItem[] = [
   },
 ];
 
-export function OccasionTemplateGallery({
+function OccasionTemplateGallery({
   themeMode = 'light',
   heading = 'Celebration Templates — Invites, Proposals & Many More',
   subheading = 'Pick a reusable Smileyyfy experience to customize with your own text, photos, and animations.',

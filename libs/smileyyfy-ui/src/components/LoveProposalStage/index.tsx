@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
+import type ProposalPhotoItem from '../../utils/ProposalPhotoItem';
 import styles from './styles.module.scss';
 
-export interface ProposalPhotoItem {
-  url: string;
-  caption: string;
-}
-
-export interface LoveProposalStageProps {
+interface LoveProposalStageProps {
   /** @select|light|dark */
   themeMode?: 'light' | 'dark';
   /** @select|blush|starlit|golden */
@@ -43,7 +39,7 @@ const DEFAULT_PHOTOS: ProposalPhotoItem[] = [
   { url: '', caption: 'Forever Starts Now 💍' },
 ];
 
-export function LoveProposalStage({
+function LoveProposalStage({
   themeMode = 'light',
   romanticTheme = 'blush',
   recipientName = 'My Favorite Person',

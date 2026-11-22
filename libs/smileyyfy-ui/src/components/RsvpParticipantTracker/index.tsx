@@ -1,16 +1,8 @@
 import React, { useMemo, useState } from 'react';
+import type RsvpGuestRecord from '../../utils/RsvpGuestRecord';
 import styles from './styles.module.scss';
 
-export interface RsvpGuestRecord {
-  id: string;
-  name: string;
-  contact: string;
-  status: 'attending' | 'maybe' | 'declined';
-  guests: number;
-  note?: string;
-}
-
-export interface RsvpParticipantTrackerProps {
+interface RsvpParticipantTrackerProps {
   /** @select|light|dark */
   themeMode?: 'light' | 'dark';
   /** @schema {"type":"boolean"} */
@@ -31,7 +23,7 @@ const DEFAULT_GUESTS: RsvpGuestRecord[] = [
   { id: 'g3', name: 'Divya Menon', contact: 'divya@example.com', status: 'maybe', guests: 2, note: 'Confirming flight soon' },
 ];
 
-export function RsvpParticipantTracker({
+function RsvpParticipantTracker({
   themeMode = 'light',
   enabled = true,
   eventLabel = 'Wedding & Event Guest List',
