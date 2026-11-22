@@ -1,0 +1,27 @@
+.root {
+  --box-bg: transparent;
+  --box-border: #e2e8f0;
+  --box-text: #0f172a;
+  --box-muted: #64748b;
+  background-color: var(--box-bg);
+  color: var(--box-text);
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --box-border: #334155;
+  --box-text: #f1f5f9;
+  --box-muted: #94a3b8;
+}
+
+.placeholder {
+  min-height: 4rem;
+  padding: 1rem;
+  border: 1px dashed var(--box-border);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--box-muted);
+  font-size: 0.875rem;
+}

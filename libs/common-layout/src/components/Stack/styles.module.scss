@@ -1,0 +1,24 @@
+.root {
+  --stack-bg: #f8fafc;
+  --stack-border: #cbd5e1;
+  --stack-text: #475569;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --stack-bg: #1e293b;
+  --stack-border: #475569;
+  --stack-text: #cbd5e1;
+}
+
+.sampleItem {
+  min-height: 2.75rem;
+  padding: 0.625rem 0.875rem;
+  border: 1px dashed var(--stack-border);
+  border-radius: 0.5rem;
+  background-color: var(--stack-bg);
+  color: var(--stack-text);
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+}

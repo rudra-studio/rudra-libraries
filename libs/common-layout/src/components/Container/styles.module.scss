@@ -1,0 +1,22 @@
+.root {
+  --container-border: #e2e8f0;
+  --container-muted: #64748b;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --container-border: #334155;
+  --container-muted: #94a3b8;
+}
+
+.placeholder {
+  min-height: 4rem;
+  padding: 1rem;
+  border: 1px dashed var(--container-border);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--container-muted);
+  font-size: 0.875rem;
+}

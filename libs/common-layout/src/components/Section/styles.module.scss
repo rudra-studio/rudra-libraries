@@ -1,0 +1,22 @@
+.root {
+  --section-border: #cbd5e1;
+  --section-text: #475569;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --section-border: #475569;
+  --section-text: #cbd5e1;
+}
+
+.placeholder {
+  min-height: 5rem;
+  padding: 1.25rem;
+  border: 1px dashed var(--section-border);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--section-text);
+  font-size: 0.875rem;
+}
