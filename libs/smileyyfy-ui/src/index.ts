@@ -2,6 +2,7 @@ export { default as FloatingHeartsCanvas } from './components/FloatingHeartsCanv
 export { default as LoveProposalStage } from './components/LoveProposalStage';
 export { default as OccasionTemplateGallery } from './components/OccasionTemplateGallery';
 export { default as PageCanvasBuilder } from './components/PageCanvasBuilder';
+export { default as PublishedPageViewer } from './components/PublishedPageViewer';
 export { default as RsvpParticipantTracker } from './components/RsvpParticipantTracker';
 export { default as SmileyyfyNavbar } from './components/SmileyyfyNavbar';
 export { default as WeddingInviteBuilder } from './components/WeddingInviteBuilder';
@@ -14,6 +15,7 @@ export type { SmileyyfyBaseTemplate } from './utils/SmileyyfyBaseTemplate';
 export type { SmileyyfyCanvasBlock } from './utils/SmileyyfyCanvasBlock';
 export type { SmileyyfyLanguageOption } from './utils/SmileyyfyLanguageOption';
 export type { SmileyyfyPageSnapshot } from './utils/SmileyyfyPageSnapshot';
+export type { SmileyyfyPublishedPageData } from './utils/SmileyyfyPublishedPageData';
 export type { SmileyyfyWidgetDefinition } from './utils/SmileyyfyWidgetDefinition';
 export type { SmileyyfyWidgetField } from './utils/SmileyyfyWidgetField';
 export { default as buildStarterBlocks } from './utils/buildStarterBlocks';
