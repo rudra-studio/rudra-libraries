@@ -1,0 +1,65 @@
+.split {
+  --sp-bg: #ffffff;
+  --sp-pane: #f8fafc;
+  --sp-border: #e2e8f0;
+  --sp-text: #0f172a;
+  --sp-muted: #64748b;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 1px solid var(--sp-border);
+  background-color: var(--sp-bg);
+  color: var(--sp-text);
+  display: grid;
+  gap: 1rem;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --sp-bg: #0f172a;
+  --sp-pane: #1e293b;
+  --sp-border: #334155;
+  --sp-text: #f8fafc;
+  --sp-muted: #94a3b8;
+}
+
+.ratio_50_50 {
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+}
+
+.ratio_65_35 {
+  grid-template-columns: minmax(0, 1.85fr) minmax(0, 1fr);
+}
+
+.ratio_35_65 {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.85fr);
+}
+
+@media (max-width: 768px) {
+  .ratio_65_35,
+  .ratio_35_65 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.pane {
+  padding: 0.9rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--sp-border);
+  background-color: var(--sp-pane);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.paneTitle {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.paneBody {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--sp-muted);
+}

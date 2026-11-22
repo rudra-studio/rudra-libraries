@@ -1,0 +1,56 @@
+.card {
+  --sc-bg: #ffffff;
+  --sc-border: #e2e8f0;
+  --sc-text: #0f172a;
+  --sc-muted: #64748b;
+  padding: 1.15rem 1.25rem;
+  border-radius: 1rem;
+  background-color: var(--sc-bg);
+  color: var(--sc-text);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --sc-bg: #0f172a;
+  --sc-border: #334155;
+  --sc-text: #f8fafc;
+  --sc-muted: #94a3b8;
+}
+
+.elev_flat {
+  border: 1px solid transparent;
+  box-shadow: none;
+}
+
+.elev_bordered {
+  border: 1px solid var(--sc-border);
+  box-shadow: none;
+}
+
+.elev_elevated {
+  border: 1px solid var(--sc-border);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.1);
+}
+
+.header {
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.body {
+  margin: 0;
+  font-size: 0.825rem;
+  line-height: 1.5;
+  color: var(--sc-muted);
+}
+
+.footer {
+  padding-top: 0.45rem;
+  border-top: 1px solid var(--sc-border);
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--sc-muted);
+}
