@@ -1,0 +1,86 @@
+.stage {
+  --pd-bg: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%);
+  --pd-border: #dbeafe;
+  --pd-text: #0f172a;
+  --pd-muted: #475569;
+  position: relative;
+  min-height: 11rem;
+  padding: 1.5rem 1.25rem;
+  border-radius: 1rem;
+  border: 1px solid var(--pd-border);
+  background: var(--pd-bg);
+  color: var(--pd-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --pd-bg: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+  --pd-border: #334155;
+  --pd-text: #f8fafc;
+  --pd-muted: #cbd5e1;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.glyph {
+  position: absolute;
+  bottom: -1.75rem;
+  font-size: 1.15rem;
+  opacity: 0;
+  animation-name: commonParticleDrift;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.foreground {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-width: 30rem;
+}
+
+.heading {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.caption {
+  margin: 0;
+  font-size: 0.84rem;
+  color: var(--pd-muted);
+}
+
+@keyframes commonParticleDrift {
+  0% {
+    transform: translateY(0) scale(0.8);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(-13rem) translateX(12px) scale(1.1);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glyph {
+    animation: none;
+    bottom: 0.75rem;
+    opacity: 0.35;
+  }
+}

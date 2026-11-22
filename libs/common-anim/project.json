@@ -1,0 +1,9 @@
+{
+  "name": "common-anim",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/common-anim/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project common-anim --web",
+  "targets": {}
+}

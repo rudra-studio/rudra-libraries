@@ -1,0 +1,112 @@
+.box {
+  --fr-bg: #ffffff;
+  --fr-border: #e2e8f0;
+  --fr-text: #0f172a;
+  --fr-muted: #64748b;
+  --fr-accent: #2563eb;
+  padding: 1rem 1.15rem;
+  border-radius: 1rem;
+  border: 1px solid var(--fr-border);
+  background-color: var(--fr-bg);
+  color: var(--fr-text);
+  box-sizing: border-box;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+}
+
+.mode_dark {
+  --fr-bg: #0f172a;
+  --fr-border: #334155;
+  --fr-text: #f8fafc;
+  --fr-muted: #94a3b8;
+  --fr-accent: #60a5fa;
+}
+
+.eff_fade {
+  animation-name: commonAnimFade;
+}
+
+.eff_slide_up {
+  animation-name: commonAnimSlideUp;
+}
+
+.eff_scale {
+  animation-name: commonAnimScale;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.textCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+.message {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--fr-muted);
+}
+
+.replayBtn {
+  padding: 0.35rem 0.7rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--fr-border);
+  background: transparent;
+  color: var(--fr-accent);
+  font-size: 0.75rem;
+  font-weight: 800;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+@keyframes commonAnimFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes commonAnimSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes commonAnimScale {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .box {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+}
