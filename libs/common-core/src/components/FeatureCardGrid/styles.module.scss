@@ -1,0 +1,115 @@
+.section {
+  --fg-bg: #ffffff;
+  --fg-border: #e2e8f0;
+  --fg-text: #0f172a;
+  --fg-muted: #64748b;
+  --fg-accent: #2563eb;
+  --fg-card-bg: rgba(37, 99, 235, 0.03);
+  --fg-pill-bg: rgba(37, 99, 235, 0.1);
+  width: 100%;
+  padding: 1.5rem;
+  border-radius: 1.375rem;
+  border: 1px solid var(--fg-border);
+  background: var(--fg-bg);
+  color: var(--fg-text);
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --fg-bg: #0f172a;
+  --fg-border: #334155;
+  --fg-text: #f8fafc;
+  --fg-muted: #94a3b8;
+  --fg-accent: #60a5fa;
+  --fg-card-bg: rgba(96, 165, 250, 0.06);
+  --fg-pill-bg: rgba(96, 165, 250, 0.16);
+}
+
+.head {
+  max-width: 45rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+}
+
+.kicker {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--fg-accent);
+}
+
+.heading {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 900;
+}
+
+.sub {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--fg-muted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  padding: 1.25rem;
+  border-radius: 1.125rem;
+  border: 1px solid var(--fg-border);
+  background: var(--fg-card-bg);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.topRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.icon {
+  font-size: 1.5rem;
+}
+
+.badge {
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  background: var(--fg-pill-bg);
+  color: var(--fg-accent);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.cardDesc {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--fg-muted);
+  flex: 1;
+}
+
+.cardBtn {
+  align-self: flex-start;
+  padding: 0.45rem 0.9rem;
+  border-radius: 9999px;
+  border: 0;
+  background: var(--fg-pill-bg);
+  color: var(--fg-accent);
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+}

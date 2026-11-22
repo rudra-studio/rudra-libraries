@@ -1,0 +1,68 @@
+.card {
+  --sc-bg: #ffffff;
+  --sc-border: #e2e8f0;
+  --sc-text: #0f172a;
+  --sc-muted: #64748b;
+  --sc-accent: #2563eb;
+  --sc-btn-start: #2563eb;
+  --sc-btn-end: #7c3aed;
+  width: 100%;
+  padding: 1.25rem 1.5rem;
+  border-radius: 1.25rem;
+  border: 1px solid var(--sc-border);
+  background: var(--sc-bg);
+  color: var(--sc-text);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --sc-bg: #0f172a;
+  --sc-border: #334155;
+  --sc-text: #f8fafc;
+  --sc-muted: #94a3b8;
+  --sc-accent: #60a5fa;
+  --sc-btn-start: #3b82f6;
+  --sc-btn-end: #8b5cf6;
+}
+
+.copy {
+  max-width: 35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.status {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--sc-accent);
+}
+
+.title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.desc {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--sc-muted);
+}
+
+.btn {
+  padding: 0.625rem 1.15rem;
+  border-radius: 9999px;
+  border: 0;
+  background: linear-gradient(135deg, var(--sc-btn-start), var(--sc-btn-end));
+  color: #ffffff;
+  font-size: 0.86rem;
+  font-weight: 800;
+  cursor: pointer;
+}
