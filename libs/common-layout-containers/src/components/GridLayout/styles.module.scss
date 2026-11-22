@@ -1,0 +1,86 @@
+.grid {
+  --gl-bg: #ffffff;
+  --gl-tile: #f8fafc;
+  --gl-border: #e2e8f0;
+  --gl-text: #0f172a;
+  --gl-muted: #64748b;
+  --gl-accent: #2563eb;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 1px solid var(--gl-border);
+  background-color: var(--gl-bg);
+  color: var(--gl-text);
+  display: grid;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --gl-bg: #0f172a;
+  --gl-tile: #1e293b;
+  --gl-border: #334155;
+  --gl-text: #f8fafc;
+  --gl-muted: #94a3b8;
+  --gl-accent: #60a5fa;
+}
+
+.cols_1 {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.cols_2 {
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+}
+
+.cols_3 {
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+}
+
+.cols_4 {
+  grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+}
+
+.gap_sm {
+  gap: 0.6rem;
+}
+
+.gap_md {
+  gap: 0.95rem;
+}
+
+.gap_lg {
+  gap: 1.4rem;
+}
+
+.tile {
+  padding: 0.85rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--gl-border);
+  background-color: var(--gl-tile);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.tileTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.tileTitle {
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.tileVal {
+  font-size: 1rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  color: var(--gl-accent);
+}
+
+.tileSub {
+  font-size: 0.76rem;
+  color: var(--gl-muted);
+}

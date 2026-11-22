@@ -67,6 +67,9 @@
       "@rudra-libraries/common-charts": ["./libs/common-charts/src/index.ts"],
       "@rudra-libraries/common-feedback": [
         "./libs/common-feedback/src/index.ts"
+      ],
+      "@rudra-libraries/common-layout-containers": [
+        "./libs/common-layout-containers/src/index.ts"
       ]
     }
   },

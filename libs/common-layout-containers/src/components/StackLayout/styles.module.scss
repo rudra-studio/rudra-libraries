@@ -1,0 +1,87 @@
+.stack {
+  --sl-bg: #ffffff;
+  --sl-surface: #f8fafc;
+  --sl-border: #e2e8f0;
+  --sl-text: #0f172a;
+  --sl-muted: #64748b;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 1px solid var(--sl-border);
+  background-color: var(--sl-bg);
+  color: var(--sl-text);
+  display: flex;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --sl-bg: #0f172a;
+  --sl-surface: #1e293b;
+  --sl-border: #334155;
+  --sl-text: #f8fafc;
+  --sl-muted: #94a3b8;
+}
+
+.dir_row {
+  flex-direction: row;
+}
+
+.dir_col {
+  flex-direction: column;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+.gap_xs {
+  gap: 0.35rem;
+}
+
+.gap_sm {
+  gap: 0.6rem;
+}
+
+.gap_md {
+  gap: 0.9rem;
+}
+
+.gap_lg {
+  gap: 1.35rem;
+}
+
+.align_start {
+  align-items: flex-start;
+}
+
+.align_center {
+  align-items: center;
+}
+
+.align_end {
+  align-items: flex-end;
+}
+
+.align_stretch {
+  align-items: stretch;
+}
+
+.cell {
+  flex: 1 1 11rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 0.65rem;
+  border: 1px dashed var(--sl-border);
+  background-color: var(--sl-surface);
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.cellTitle {
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.cellDetail {
+  font-size: 0.78rem;
+  color: var(--sl-muted);
+}
