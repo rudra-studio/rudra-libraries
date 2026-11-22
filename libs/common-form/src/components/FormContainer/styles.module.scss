@@ -1,0 +1,91 @@
+.form {
+  --fc-bg: #ffffff;
+  --fc-border: #e2e8f0;
+  --fc-text: #0f172a;
+  --fc-muted: #64748b;
+  --fc-surface: #f8fafc;
+  --fc-accent: #2563eb;
+  padding: 1.35rem;
+  border-radius: 1rem;
+  border: 1px solid var(--fc-border);
+  background-color: var(--fc-bg);
+  color: var(--fc-text);
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --fc-bg: #0f172a;
+  --fc-border: #334155;
+  --fc-text: #f8fafc;
+  --fc-muted: #94a3b8;
+  --fc-surface: #1e293b;
+  --fc-accent: #60a5fa;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.desc {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--fc-muted);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.sampleBody {
+  padding: 1rem;
+  border-radius: 0.625rem;
+  border: 1px dashed var(--fc-border);
+  background-color: var(--fc-surface);
+  color: var(--fc-muted);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--fc-border);
+}
+
+.resetBtn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--fc-border);
+  background: transparent;
+  color: inherit;
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.submitBtn {
+  padding: 0.5rem 1.15rem;
+  border-radius: 0.5rem;
+  border: 0;
+  background-color: var(--fc-accent);
+  color: #ffffff;
+  font-size: 0.84rem;
+  font-weight: 800;
+  cursor: pointer;
+}

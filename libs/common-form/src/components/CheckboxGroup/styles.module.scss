@@ -1,0 +1,50 @@
+.fieldset {
+  --cg-text: #0f172a;
+  --cg-accent: #2563eb;
+  --cg-hover: rgba(37, 99, 235, 0.06);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: var(--cg-text);
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --cg-text: #f8fafc;
+  --cg-accent: #60a5fa;
+  --cg-hover: rgba(96, 165, 250, 0.1);
+}
+
+.legend {
+  padding: 0;
+  margin-bottom: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.item:hover {
+  background-color: var(--cg-hover);
+}
+
+.checkbox {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--cg-accent);
+  cursor: pointer;
+}
