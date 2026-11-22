@@ -1,0 +1,47 @@
+.card {
+  --tk-bg: #ffffff;
+  --tk-border: #e2e8f0;
+  --tk-text: #0f172a;
+  --tk-muted: #64748b;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 1px solid var(--tk-border);
+  background-color: var(--tk-bg);
+  color: var(--tk-text);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --tk-bg: #0f172a;
+  --tk-border: #334155;
+  --tk-text: #f8fafc;
+  --tk-muted: #94a3b8;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.title {
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.meta {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--tk-muted);
+}
+
+.stage {
+  width: 100%;
+  height: 13.5rem;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}

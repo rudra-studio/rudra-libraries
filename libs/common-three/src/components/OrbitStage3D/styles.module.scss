@@ -1,0 +1,50 @@
+.card {
+  --o3-bg: #ffffff;
+  --o3-border: #e2e8f0;
+  --o3-text: #0f172a;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 1px solid var(--o3-border);
+  background-color: var(--o3-bg);
+  color: var(--o3-text);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --o3-bg: #0f172a;
+  --o3-border: #334155;
+  --o3-text: #f8fafc;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.title {
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.btn {
+  padding: 0.32rem 0.7rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--o3-border);
+  background: transparent;
+  color: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.viewport {
+  width: 100%;
+  height: 14rem;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}

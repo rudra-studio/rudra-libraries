@@ -1,0 +1,9 @@
+{
+  "name": "common-three",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/common-three/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project common-three --web",
+  "targets": {}
+}
