@@ -1,0 +1,119 @@
+.bar {
+  --ap-bg: #ffffff;
+  --ap-border: #e2e8f0;
+  --ap-text: #0f172a;
+  --ap-muted: #64748b;
+  --ap-accent: #2563eb;
+  --ap-ghost-bg: rgba(37, 99, 235, 0.08);
+  padding: 0.75rem 1rem;
+  border-radius: 0.875rem;
+  border: 1px solid var(--ap-border);
+  background-color: var(--ap-bg);
+  color: var(--ap-text);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --ap-bg: #0f172a;
+  --ap-border: #334155;
+  --ap-text: #f8fafc;
+  --ap-muted: #94a3b8;
+  --ap-accent: #60a5fa;
+  --ap-ghost-bg: rgba(96, 165, 250, 0.14);
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.eq {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.625rem;
+  background-color: var(--ap-accent);
+  display: inline-flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0.18rem;
+  padding-bottom: 0.5rem;
+  box-sizing: border-box;
+}
+
+.eq span {
+  width: 0.2rem;
+  height: 0.38rem;
+  border-radius: 9999px;
+  background-color: #ffffff;
+}
+
+.eqActive span {
+  animation: commonAudioEq 0.85s ease-in-out infinite alternate;
+}
+
+.eqActive span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.eqActive span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes commonAudioEq {
+  0% {
+    height: 0.35rem;
+  }
+  100% {
+    height: 1.05rem;
+  }
+}
+
+.title {
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.subtitle {
+  font-size: 0.75rem;
+  color: var(--ap-muted);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.playBtn {
+  padding: 0.4rem 0.9rem;
+  border-radius: 9999px;
+  border: 0;
+  background-color: var(--ap-accent);
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.iconBtn {
+  padding: 0.4rem 0.75rem;
+  border-radius: 9999px;
+  border: 1px solid var(--ap-border);
+  background-color: var(--ap-ghost-bg);
+  color: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eqActive span {
+    animation: none;
+  }
+}
