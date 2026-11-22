@@ -1,0 +1,95 @@
+.root {
+  --editor-bg: #ffffff;
+  --editor-header-bg: #f8fafc;
+  --editor-gutter-bg: #f1f5f9;
+  --editor-border: #e2e8f0;
+  --editor-text: #0f172a;
+  --editor-muted: #64748b;
+  --editor-badge-bg: #dbeafe;
+  --editor-badge-text: #1d4ed8;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--editor-border);
+  border-radius: 0.75rem;
+  background-color: var(--editor-bg);
+  color: var(--editor-text);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --editor-bg: #0f172a;
+  --editor-header-bg: #1e293b;
+  --editor-gutter-bg: #0b1220;
+  --editor-border: #334155;
+  --editor-text: #f1f5f9;
+  --editor-muted: #94a3b8;
+  --editor-badge-bg: rgba(59, 130, 246, 0.2);
+  --editor-badge-text: #93c5fd;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 0.875rem;
+  border-bottom: 1px solid var(--editor-border);
+  background-color: var(--editor-header-bg);
+}
+
+.title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--editor-text);
+}
+
+.badge {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.375rem;
+  background-color: var(--editor-badge-bg);
+  color: var(--editor-badge-text);
+}
+
+.editorBody {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+}
+
+.gutter {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 0.75rem 0.6rem;
+  background-color: var(--editor-gutter-bg);
+  border-right: 1px solid var(--editor-border);
+  user-select: none;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--editor-muted);
+}
+
+.lineNumber {
+  height: 1.21875rem;
+}
+
+.textarea {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  resize: none;
+  border: 0;
+  outline: none;
+  padding: 0.75rem 0.875rem;
+  background: transparent;
+  color: var(--editor-text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  overflow: auto;
+  box-sizing: border-box;
+}

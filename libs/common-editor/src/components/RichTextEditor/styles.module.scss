@@ -1,0 +1,90 @@
+.root {
+  --rte-bg: #ffffff;
+  --rte-toolbar-bg: #f8fafc;
+  --rte-border: #e2e8f0;
+  --rte-text: #0f172a;
+  --rte-btn-hover: #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--rte-border);
+  border-radius: 0.75rem;
+  background-color: var(--rte-bg);
+  color: var(--rte-text);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --rte-bg: #0f172a;
+  --rte-toolbar-bg: #1e293b;
+  --rte-border: #334155;
+  --rte-text: #f1f5f9;
+  --rte-btn-hover: #334155;
+}
+
+.disabled {
+  opacity: 0.65;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--rte-border);
+  background-color: var(--rte-toolbar-bg);
+}
+
+.toolBtn {
+  padding: 0.25rem 0.55rem;
+  border-radius: 0.375rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--rte-text);
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 140ms ease;
+}
+
+.toolBtn:hover:not(:disabled) {
+  background-color: var(--rte-btn-hover);
+}
+
+.toolBtn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.divider {
+  width: 1px;
+  height: 1.125rem;
+  background-color: var(--rte-border);
+  margin: 0 0.15rem;
+}
+
+.content {
+  padding: 0.875rem 1rem;
+  outline: none;
+  overflow-y: auto;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--rte-text);
+}
+
+.content :global(p) {
+  margin: 0 0 0.5rem;
+}
+
+.content :global(ul),
+.content :global(ol) {
+  padding-left: 1.25rem;
+  margin: 0.35rem 0 0.65rem;
+}
+
+.content :global(blockquote) {
+  border-left: 3px solid #3b82f6;
+  padding-left: 0.75rem;
+  margin: 0.5rem 0;
+  opacity: 0.9;
+}
