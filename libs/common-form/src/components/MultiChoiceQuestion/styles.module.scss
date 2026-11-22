@@ -1,0 +1,112 @@
+.card {
+  --mcq-bg: #ffffff;
+  --mcq-border: #e2e8f0;
+  --mcq-text: #0f172a;
+  --mcq-accent: #2563eb;
+  --mcq-opt-bg: #f8fafc;
+  --mcq-opt-active-bg: rgba(37, 99, 235, 0.12);
+  padding: 1.25rem;
+  border-radius: 1rem;
+  border: 1px solid var(--mcq-border);
+  background-color: var(--mcq-bg);
+  color: var(--mcq-text);
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --mcq-bg: #0f172a;
+  --mcq-border: #334155;
+  --mcq-text: #f8fafc;
+  --mcq-accent: #60a5fa;
+  --mcq-opt-bg: #1e293b;
+  --mcq-opt-active-bg: rgba(96, 165, 250, 0.18);
+}
+
+.question {
+  font-size: 0.9625rem;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.optBtn {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border-radius: 0.625rem;
+  border: 1px solid var(--mcq-border);
+  background-color: var(--mcq-opt-bg);
+  color: inherit;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-align: left;
+  font-size: 0.8625rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 140ms ease, background-color 140ms ease;
+}
+
+.optBtn:hover {
+  border-color: var(--mcq-accent);
+}
+
+.activeOpt {
+  border-color: var(--mcq-accent);
+  background-color: var(--mcq-opt-active-bg);
+}
+
+.marker {
+  font-size: 0.95rem;
+  color: var(--mcq-accent);
+  flex-shrink: 0;
+}
+
+.actions {
+  display: flex;
+}
+
+.checkBtn {
+  padding: 0.48rem 1rem;
+  border-radius: 0.5rem;
+  border: 0;
+  background-color: var(--mcq-accent);
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.feedback {
+  padding: 0.7rem 0.9rem;
+  border-radius: 0.625rem;
+  font-size: 0.825rem;
+  line-height: 1.45;
+}
+
+.correctBox {
+  background-color: rgba(16, 185, 129, 0.14);
+  border: 1px solid rgba(16, 185, 129, 0.45);
+  color: #047857;
+}
+
+.mode_dark .correctBox {
+  color: #6ee7b7;
+}
+
+.reviewBox {
+  background-color: rgba(245, 158, 11, 0.14);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  color: #b45309;
+}
+
+.mode_dark .reviewBox {
+  color: #fcd34d;
+}

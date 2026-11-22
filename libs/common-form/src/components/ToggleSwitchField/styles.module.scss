@@ -1,0 +1,83 @@
+.root {
+  --ts-text: #0f172a;
+  --ts-muted: #64748b;
+  --ts-track-off: #cbd5e1;
+  --ts-track-on: #2563eb;
+  --ts-thumb: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  color: var(--ts-text);
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --ts-text: #f8fafc;
+  --ts-muted: #94a3b8;
+  --ts-track-off: #475569;
+  --ts-track-on: #60a5fa;
+  --ts-thumb: #0f172a;
+}
+
+.row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.track {
+  position: relative;
+  width: 2.5rem;
+  height: 1.375rem;
+  border-radius: 9999px;
+  border: 0;
+  padding: 0;
+  background-color: var(--ts-track-off);
+  cursor: pointer;
+  transition: background-color 160ms ease;
+  flex-shrink: 0;
+}
+
+.track:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.checked {
+  background-color: var(--ts-track-on);
+}
+
+.thumb {
+  position: absolute;
+  top: 0.1875rem;
+  left: 0.1875rem;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 9999px;
+  background-color: var(--ts-thumb);
+  transition: transform 160ms ease;
+  will-change: transform;
+}
+
+.checked .thumb {
+  transform: translateX(1.125rem);
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.helper {
+  padding-left: 3.1rem;
+  font-size: 0.75rem;
+  color: var(--ts-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track,
+  .thumb {
+    transition: none;
+  }
+}

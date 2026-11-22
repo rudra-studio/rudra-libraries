@@ -62,7 +62,8 @@
       "@rudra-libraries/common-editor": ["./libs/common-editor/src/index.ts"],
       "@rudra-libraries/common-layout": ["./libs/common-layout/src/index.ts"],
       "@rudra-libraries/common-core": ["./libs/common-core/src/index.ts"],
-      "@rudra-libraries/common-media": ["./libs/common-media/src/index.ts"]
+      "@rudra-libraries/common-media": ["./libs/common-media/src/index.ts"],
+      "@rudra-libraries/common-form": ["./libs/common-form/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
