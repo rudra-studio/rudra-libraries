@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './styles.module.scss';
 
-export interface FloatingHeartsCanvasProps {
+interface FloatingHeartsCanvasProps {
   /** @select|light|dark */
   themeMode?: 'light' | 'dark';
   /** @select|hearts|confetti|sparkles|petals */
@@ -23,7 +23,7 @@ const SYMBOL_MAP: Record<string, string[]> = {
   petals: ['🌸', '🌹', '🌺', '🌷', '💮'],
 };
 
-export function FloatingHeartsCanvas({
+function FloatingHeartsCanvas({
   themeMode = 'light',
   effectType = 'hearts',
   intensity = 'festive',

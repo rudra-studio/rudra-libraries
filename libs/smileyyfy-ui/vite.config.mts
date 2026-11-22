@@ -31,9 +31,11 @@ export default defineConfig(() => ({
       "components/FloatingHeartsCanvas/styles": path.resolve(import.meta.dirname, "src/components/FloatingHeartsCanvas/styles.module.scss"),
       "components/LoveProposalStage/styles": path.resolve(import.meta.dirname, "src/components/LoveProposalStage/styles.module.scss"),
       "components/OccasionTemplateGallery/styles": path.resolve(import.meta.dirname, "src/components/OccasionTemplateGallery/styles.module.scss"),
+      "components/PageCanvasBuilder/styles": path.resolve(import.meta.dirname, "src/components/PageCanvasBuilder/styles.module.scss"),
       "components/RsvpParticipantTracker/styles": path.resolve(import.meta.dirname, "src/components/RsvpParticipantTracker/styles.module.scss"),
       "components/SmileyyfyNavbar/styles": path.resolve(import.meta.dirname, "src/components/SmileyyfyNavbar/styles.module.scss"),
-      "components/WeddingInviteBuilder/styles": path.resolve(import.meta.dirname, "src/components/WeddingInviteBuilder/styles.module.scss")
+      "components/WeddingInviteBuilder/styles": path.resolve(import.meta.dirname, "src/components/WeddingInviteBuilder/styles.module.scss"),
+      "components/YouTubeMediaWidget/styles": path.resolve(import.meta.dirname, "src/components/YouTubeMediaWidget/styles.module.scss")
     },
       name: 'smileyyfy-ui',
       fileName: 'index',
