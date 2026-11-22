@@ -1,0 +1,27 @@
+.root {
+  --scroll-border: #e2e8f0;
+  --scroll-text: #475569;
+  box-sizing: border-box;
+  border-color: var(--scroll-border);
+  scroll-behavior: smooth;
+}
+
+.mode_dark {
+  --scroll-border: #334155;
+  --scroll-text: #cbd5e1;
+}
+
+.sampleContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: var(--scroll-text);
+  font-size: 0.875rem;
+}
+
+.sampleContent p {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  background-color: rgba(148, 163, 184, 0.12);
+}

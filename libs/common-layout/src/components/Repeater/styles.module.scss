@@ -1,0 +1,26 @@
+.root {
+  --rep-bg: #f8fafc;
+  --rep-border: #cbd5e1;
+  --rep-text: #475569;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --rep-bg: #1e293b;
+  --rep-border: #475569;
+  --rep-text: #cbd5e1;
+}
+
+.defaultCard,
+.emptyState {
+  min-height: 3.5rem;
+  padding: 0.75rem 1rem;
+  border: 1px dashed var(--rep-border);
+  border-radius: 0.5rem;
+  background-color: var(--rep-bg);
+  color: var(--rep-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+}

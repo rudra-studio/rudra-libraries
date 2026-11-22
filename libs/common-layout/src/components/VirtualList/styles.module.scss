@@ -1,0 +1,48 @@
+.root {
+  --vl-bg: #ffffff;
+  --vl-row-bg: #f8fafc;
+  --vl-border: #e2e8f0;
+  --vl-text: #0f172a;
+  --vl-muted: #64748b;
+  position: relative;
+  overflow-y: auto;
+  border: 1px solid var(--vl-border);
+  border-radius: 0.75rem;
+  background-color: var(--vl-bg);
+  color: var(--vl-text);
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --vl-bg: #0f172a;
+  --vl-row-bg: #1e293b;
+  --vl-border: #334155;
+  --vl-text: #f1f5f9;
+  --vl-muted: #94a3b8;
+}
+
+.spacer {
+  position: relative;
+  width: 100%;
+}
+
+.row {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 0 0.875rem;
+  display: flex;
+  align-items: center;
+  background-color: var(--vl-row-bg);
+  border-bottom: 1px solid var(--vl-border);
+  font-size: 0.875rem;
+  will-change: transform;
+}
+
+.empty {
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--vl-muted);
+  font-size: 0.875rem;
+}
