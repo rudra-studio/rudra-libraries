@@ -1,0 +1,77 @@
+.card {
+  --vg-bg: #ffffff;
+  --vg-border: #e2e8f0;
+  --vg-text: #0f172a;
+  --vg-accent: #2563eb;
+  --vg-pill: rgba(37, 99, 235, 0.12);
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 1px solid var(--vg-border);
+  background-color: var(--vg-bg);
+  color: var(--vg-text);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  box-sizing: border-box;
+}
+
+.mode_dark {
+  --vg-bg: #0f172a;
+  --vg-border: #334155;
+  --vg-text: #f8fafc;
+  --vg-accent: #60a5fa;
+  --vg-pill: rgba(96, 165, 250, 0.18);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.title {
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.badge {
+  padding: 0.12rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  background-color: var(--vg-pill);
+  color: var(--vg-accent);
+}
+
+.stage {
+  width: 100%;
+  height: 13rem;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.pickerRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.chip {
+  padding: 0.25rem 0.55rem;
+  border-radius: 0.45rem;
+  border: 1px solid var(--vg-border);
+  background: transparent;
+  color: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.activeChip {
+  border-color: var(--vg-accent);
+  background-color: var(--vg-pill);
+  color: var(--vg-accent);
+}

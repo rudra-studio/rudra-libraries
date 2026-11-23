@@ -6,3 +6,7 @@ export type { SpatialCard3DProps, SpatialCardThemeMode } from './components/Spat
 export { default as SpatialCard3D } from './components/SpatialCard3D';
 export type { TorusKnotCameraAngle, TorusKnotStage3DProps, TorusKnotThemeMode } from './components/TorusKnotStage3D';
 export { default as TorusKnotStage3D } from './components/TorusKnotStage3D';
+export type { TurntableArena3DProps, TurntableThemeMode } from './components/TurntableArena3D';
+export { default as TurntableArena3D } from './components/TurntableArena3D';
+export type { VoxelGridStage3DProps, VoxelGridThemeMode } from './components/VoxelGridStage3D';
+export { default as VoxelGridStage3D } from './components/VoxelGridStage3D';

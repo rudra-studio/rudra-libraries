@@ -31,7 +31,9 @@ export default defineConfig(() => ({
       "components/OrbitStage3D/styles": path.resolve(import.meta.dirname, "src/components/OrbitStage3D/styles.module.scss"),
       "components/PolyhedronShowcase3D/styles": path.resolve(import.meta.dirname, "src/components/PolyhedronShowcase3D/styles.module.scss"),
       "components/SpatialCard3D/styles": path.resolve(import.meta.dirname, "src/components/SpatialCard3D/styles.module.scss"),
-      "components/TorusKnotStage3D/styles": path.resolve(import.meta.dirname, "src/components/TorusKnotStage3D/styles.module.scss")
+      "components/TorusKnotStage3D/styles": path.resolve(import.meta.dirname, "src/components/TorusKnotStage3D/styles.module.scss"),
+      "components/TurntableArena3D/styles": path.resolve(import.meta.dirname, "src/components/TurntableArena3D/styles.module.scss"),
+      "components/VoxelGridStage3D/styles": path.resolve(import.meta.dirname, "src/components/VoxelGridStage3D/styles.module.scss")
     },
       name: 'common-three',
       fileName: 'index',
