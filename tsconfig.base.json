@@ -74,7 +74,8 @@
       "@rudra-libraries/common-form-controls": [
         "./libs/common-form-controls/src/index.ts"
       ],
-      "@rudra-libraries/common-three": ["./libs/common-three/src/index.ts"]
+      "@rudra-libraries/common-three": ["./libs/common-three/src/index.ts"],
+      "@rudra-libraries/smileyyfy-core": ["./libs/smileyyfy-core/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

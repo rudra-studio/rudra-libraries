@@ -1,0 +1,260 @@
+.box {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.mode_light {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(236, 72, 153, 0.25);
+  color: #1f172a;
+}
+
+.mode_dark {
+  background: rgba(15, 23, 42, 0.86);
+  border: 1px solid rgba(244, 114, 182, 0.28);
+  color: #fdf2f8;
+}
+
+.stage {
+  position: relative;
+  height: 112px;
+  border-radius: 14px;
+  background: rgba(236, 72, 153, 0.08);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.paused * {
+  animation-play-state: paused !important;
+}
+
+.coupleScene {
+  position: relative;
+  width: 240px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.leftChar,
+.rightChar {
+  position: absolute;
+  font-size: 2.3rem;
+  bottom: 12px;
+}
+
+.leftChar {
+  left: 16px;
+  animation: coupleWalkLeft 3.4s ease-in-out infinite;
+}
+
+.rightChar {
+  right: 16px;
+  animation: coupleWalkRight 3.4s ease-in-out infinite;
+}
+
+.handsBridge {
+  position: absolute;
+  bottom: 18px;
+  font-size: 1.5rem;
+  opacity: 0;
+  animation: handsJoinPop 3.4s ease-in-out infinite;
+}
+
+.heartPop {
+  position: absolute;
+  top: 4px;
+  font-size: 1.6rem;
+  opacity: 0;
+  animation: heartBurstPop 3.4s ease-in-out infinite;
+}
+
+@keyframes coupleWalkLeft {
+  0%, 100% { transform: translateX(0) translateY(0); }
+  45%, 70% { transform: translateX(62px) translateY(-4px); }
+}
+
+@keyframes coupleWalkRight {
+  0%, 100% { transform: translateX(0) translateY(0); }
+  45%, 70% { transform: translateX(-62px) translateY(-4px); }
+}
+
+@keyframes handsJoinPop {
+  0%, 38% { opacity: 0; transform: scale(0.5); }
+  50%, 72% { opacity: 1; transform: scale(1.15); }
+  100% { opacity: 0; transform: scale(0.7); }
+}
+
+@keyframes heartBurstPop {
+  0%, 40% { opacity: 0; transform: translateY(14px) scale(0.5); }
+  55%, 75% { opacity: 1; transform: translateY(-6px) scale(1.25); }
+  100% { opacity: 0; transform: translateY(-22px) scale(0.9); }
+}
+
+.babyScene {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  height: 82px;
+  display: flex;
+  align-items: center;
+}
+
+.footprintTrail {
+  position: absolute;
+  bottom: 10px;
+  left: 24px;
+  font-size: 0.95rem;
+  opacity: 0.55;
+}
+
+.babyWalker {
+  position: absolute;
+  left: 16px;
+  bottom: 18px;
+  font-size: 2.3rem;
+  animation: babyWaddle 4.2s ease-in-out infinite;
+}
+
+.babyGoal {
+  position: absolute;
+  right: 18px;
+  bottom: 20px;
+  font-size: 1.7rem;
+}
+
+@keyframes babyWaddle {
+  0% { transform: translateX(0) rotate(-8deg) translateY(0); }
+  25% { transform: translateX(58px) rotate(8deg) translateY(-7px); }
+  50% { transform: translateX(116px) rotate(-8deg) translateY(0); }
+  75% { transform: translateX(174px) rotate(8deg) translateY(-7px); }
+  100% { transform: translateX(210px) rotate(0deg) translateY(0); }
+}
+
+.ringScene {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.ringHero {
+  font-size: 2.7rem;
+  animation: ringFloat 2.4s ease-in-out infinite;
+}
+
+.sparkleOrbit,
+.sparkleOrbitAlt {
+  font-size: 1.4rem;
+  animation: sparklePulse 1.6s ease-in-out infinite alternate;
+}
+
+.sparkleOrbitAlt {
+  animation-delay: 0.6s;
+}
+
+@keyframes ringFloat {
+  0%, 100% { transform: translateY(4px) scale(0.96); }
+  50% { transform: translateY(-8px) scale(1.1); }
+}
+
+@keyframes sparklePulse {
+  0% { opacity: 0.35; transform: scale(0.8) rotate(-10deg); }
+  100% { opacity: 1; transform: scale(1.25) rotate(12deg); }
+}
+
+.danceScene {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dancerA,
+.dancerB {
+  font-size: 2.3rem;
+  animation: danceSway 1.4s ease-in-out infinite alternate;
+}
+
+.dancerB {
+  animation-delay: 0.35s;
+}
+
+.musicFloat,
+.musicFloatAlt {
+  font-size: 1.35rem;
+  animation: ringFloat 1.8s ease-in-out infinite;
+}
+
+@keyframes danceSway {
+  0% { transform: rotate(-10deg) translateY(2px); }
+  100% { transform: rotate(10deg) translateY(-6px); }
+}
+
+.cakeScene {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.cakeHero {
+  font-size: 2.6rem;
+  animation: sparklePulse 1.8s ease-in-out infinite alternate;
+}
+
+.balloonLeft,
+.balloonRight {
+  font-size: 1.9rem;
+  animation: ringFloat 2.2s ease-in-out infinite;
+}
+
+.balloonRight {
+  animation-delay: 0.5s;
+}
+
+.customSpriteFrame {
+  width: 88px;
+  height: 88px;
+  background-repeat: no-repeat;
+}
+
+.customStub {
+  font-size: 0.82rem;
+  opacity: 0.8;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.caption {
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.toggleBtn {
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(236, 72, 153, 0.35);
+  background: transparent;
+  color: inherit;
+  font-size: 0.74rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage * {
+    animation: none !important;
+  }
+}

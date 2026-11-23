@@ -1,0 +1,171 @@
+.audioBar,
+.videoCard,
+.emptyBox {
+  width: 100%;
+  border-radius: 18px;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.mode_light {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid #f3d5e3;
+  color: #1f172a;
+}
+
+.mode_dark {
+  background: rgba(15, 23, 42, 0.92);
+  border: 1px solid rgba(244, 114, 182, 0.28);
+  color: #fdf2f8;
+}
+
+.emptyBox {
+  padding: 14px 16px;
+  font-size: 0.84rem;
+  text-align: center;
+  opacity: 0.85;
+}
+
+.audioBar {
+  position: relative;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  box-shadow: 0 10px 24px rgba(236, 72, 153, 0.12);
+}
+
+.audioLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.eqBadge {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ec4899, #8b5cf6);
+  display: inline-flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 3px;
+  padding-bottom: 9px;
+  box-sizing: border-box;
+}
+
+.eqBadge span {
+  width: 3px;
+  height: 6px;
+  border-radius: 99px;
+  background: #ffffff;
+}
+
+.eqActive span {
+  animation: smileyyfyEq 0.9s ease-in-out infinite alternate;
+}
+
+.eqActive span:nth-child(2) {
+  animation-delay: 0.22s;
+}
+
+.eqActive span:nth-child(3) {
+  animation-delay: 0.45s;
+}
+
+@keyframes smileyyfyEq {
+  0% {
+    height: 5px;
+  }
+  100% {
+    height: 17px;
+  }
+}
+
+.trackTitle {
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+.trackMeta {
+  font-size: 0.74rem;
+  opacity: 0.78;
+}
+
+.audioActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.controlBtn {
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #ec4899, #f43f5e);
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.ghostBtn {
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(236, 72, 153, 0.35);
+  background: transparent;
+  color: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.hiddenAudioFrame {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  border: 0;
+  overflow: hidden;
+}
+
+.videoCard {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.videoTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.loopChip {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(236, 72, 153, 0.14);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.videoFrameWrap {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #020617;
+}
+
+.videoFrame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
